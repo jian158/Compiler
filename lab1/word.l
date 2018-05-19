@@ -26,8 +26,8 @@ FLOAT   [+-]?[0-9]+\.[0-9]*
 STR		\"[^\"\n]*\"
 NULLPTR null
 BOOL    true|false
-ID [a-z_A-Z][a-zA-Z_0-9]*
-TYPE   int|float|void|bool|char 
+ID	   [a-z_A-Z][a-zA-Z_0-9]*
+TYPE   int|float|void|bool|String
 STRUCT struct
 CLASS  class
 RETURN return
@@ -60,7 +60,7 @@ LC \{
 RC \}
 AERROR .
 LINECOMMENT  "//"[^\n]*$
-WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
+WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"  
 %%
 {THIS} {yylval.node=newNode("THIS",0,yylineno); return THIS;}
 {NEW}  {yylval.node=newNode("NEW",0,yylineno); return NEW;}
@@ -109,7 +109,7 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {RB} {yylval.node=newNode("RB",0,yylineno); return RB;}
 {LC} {yylval.node=newNode("LC",0,yylineno); return LC;}
 {RC} {yylval.node=newNode("RC",0,yylineno); return RC;}
-{AERROR} { printf("Error type A at line %d: Mystirious charachter '%s'\n",yylineno,yytext);}
+{AERROR} {}
 
 %%
 int yywrap()

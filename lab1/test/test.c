@@ -1,6 +1,6 @@
 class Main{
-	int main(){
-		Main m=new Main();
+	Person main(){
+		int i=j=0;
 	}
 }
 

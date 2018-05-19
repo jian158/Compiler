@@ -16,9 +16,10 @@ TreeNode *node;
 /*declare tokens*/
 
 %token  <node> TYPE STRUCT EXTENDS CLASS RETURN IF ELSE ELIF WHILE ID SPACE SEMI COMMA ASSIGNOP RELOP PLUS MINUS STAR DIV AND OR DOT NOT LP RP LB RB LC RC AERROR DPLUS DMINUS
-%token  <node> INT FLOAT NULLPTR STR BOOL
+%token  <node> INT FLOAT NULLPTR STR BOOL 
 %token  <node> EOL NEW THIS
-%type   <node> Program Classes Class Exp Arg Args ClassStm Fun Lines Line IfStm ELIfStm ElseStm WhileStm VarStm DeclareStm EMPTY Call CallArgs CallArg Constant ReturnStm
+%type   <node> Program EMPTY ClassDefs Class Exp Arg Args ClassStm Fun Lines Line IfStm ELIfStm ElseStm WhileStm VarStm DeclareStm  Call CallArgs CallArg Constant ReturnStm VarType
+
 
 %right ASSIGNOP
 %left OR
@@ -31,15 +32,15 @@ TreeNode *node;
 %left LINECOMMENT WEAKCOMMENT
 %%
 
-Program:Classes{
+Program:ClassDefs{
 	$$=newNode("Program",1,$1);
 	printf("打印syntax tree:\n");  
 	TravelTree($$,0) ;  
 	printf("syntax tree打印完毕!\n\n");
 	};
 	
-Classes: Class{$$=newNode("Classes",1,$1);}
-	| Classes Class{$$=newNode("Classes",2,$1,$2);}
+ClassDefs: Class{$$=newNode("ClassDefs",1,$1);}
+	| ClassDefs Class{$$=newNode("ClassDefs",2,$1,$2);}
 	;
 	
 	
@@ -53,11 +54,11 @@ ClassStm:Fun{$$=newNode("ClassStm",1,$1);}
 	| ClassStm DeclareStm {$$=newNode("ClassStm",2,$1,$2);}
 	;
 
-Fun:ID LP Args RP LC Lines RC {$$=newNode("Fun",7,$1,$2,$3,$4,$5,$6,$7);} 
-	|TYPE Fun {$$=newNode("Fun",2,$1,$2);}
-	|ID Fun {$$=newNode("Fun",2,$1,$2);}
+Fun:VarType ID LP Args RP LC Lines RC {$$=newNode("Fun",8,$1,$2,$3,$4,$5,$6,$7,$8);} 
     |EMPTY{$$=newNode("Args",0,-1);};
 	
+VarType:TYPE{ $$=newNode("VarType",1,$1);}
+	| ID{$$=newNode("VarType",1,$1);};
 
 Lines: Line{ $$=newNode("Lines",1,$1);}
 	| Lines Line {$$=newNode("Lines",2,$1,$2);}
@@ -83,8 +84,8 @@ ElseStm:ELSE LC Lines RC{$$=newNode("ElseStm",3,$1,$2,$3);}
 
 WhileStm:WHILE LP Exp RP LC Lines RC{$$=newNode("WhileStm",7,$1,$2,$3,$4,$5,$6,$7);};
 
-DeclareStm:TYPE VarStm SEMI{$$=newNode("DeclareStm",3,$1,$2,$3);}
-	| ID VarStm SEMI{$$=newNode("DeclareStm",3,$1,$2,$3);};
+DeclareStm:VarType VarStm SEMI{$$=newNode("DeclareStm",3,$1,$2,$3);}
+	;
 
 VarStm: Exp {$$=newNode("VarStm",1,$1);}
 	| VarStm COMMA Exp {$$=newNode("VarStm",3,$1,$2,$3);}
@@ -98,8 +99,8 @@ Args:EMPTY{$$=newNode("Args",0,-1);}
 	;
 	
 
-Arg:TYPE ID{$$=newNode("Arg",2,$1,$2);}
-	|TYPE ID COMMA Arg{$$=newNode("Arg",4,$1,$2,$3,$4);
+Arg:VarType ID{$$=newNode("Arg",2,$1,$2);}
+	|VarType ID COMMA Arg{$$=newNode("Arg",4,$1,$2,$3,$4);
 	}
 ;
 
