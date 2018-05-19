@@ -24,7 +24,7 @@ INT8	[+-]?[0][0-9]+
 INT16   [+-]?0x[0-9a-fA-F]+[hH]?
 FLOAT   [+-]?[0-9]+\.[0-9]*
 STR		\"[^\"\n]*\"
-NULLPTR NULL
+NULLPTR null
 BOOL    true|false
 ID [a-z_A-Z][a-zA-Z_0-9]*
 TYPE   int|float|void|bool|char 
@@ -37,7 +37,8 @@ ELIF else[ ]*if
 WHILE while
 THIS  this
 NEW   new
-
+DPLUS \+\+
+DMINUS --
 EXTENDS extends
 SPACE [ \t\r]*
 EOL [ \n\t\r]*
@@ -63,6 +64,8 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 %%
 {THIS} {yylval.node=newNode("THIS",0,yylineno); return THIS;}
 {NEW}  {yylval.node=newNode("NEW",0,yylineno); return NEW;}
+{DPLUS} {yylval.node=newNode("DPLUS",0,yylineno); return DPLUS;}
+{DMINUS} {yylval.node=newNode("DMINUS",0,yylineno); return DMINUS;}
 {PLUS} {yylval.node=newNode("PLUS",0,yylineno); return PLUS;}
 {MINUS} {yylval.node=newNode("MINUS",0,yylineno); return MINUS;}
 {LINECOMMENT} { }
@@ -78,8 +81,8 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {EXTENDS} {yylval.node=newNode("EXTENDS",0,yylineno); return EXTENDS;}
 
 {INT} {yylval.node=newNode("INT",0,yylineno); return INT;}
-{INT8} {yylval.node=newNode("INT8",0,yylineno); return INT8;}
-{INT16} {yylval.node=newNode("INT16",0,yylineno); return INT16;}
+{INT8} {yylval.node=newNode("INT8",0,yylineno); return INT;}
+{INT16} {yylval.node=newNode("INT16",0,yylineno); return INT;}
 {FLOAT}  {yylval.node=newNode("FLOAT",0,yylineno); return FLOAT;}
 {STR}		{yylval.node=newNode("STR",0,yylineno); return STR;}
 {NULLPTR} {yylval.node=newNode("NULLPTR",0,yylineno); return NULLPTR;}

@@ -27,14 +27,20 @@ TreeNode* newNode(const char* name,int argc,...){
         string pname=*(newNode->name);
         if(pname=="INT")
             newNode->int_value=strtol(yytext,NULL,10);
-        else if(pname=="INT8")
+        else if(pname=="INT8"){
             newNode->int_value=strtol(yytext,NULL,8);
-        else if(pname=="INT16")
+			*(newNode->name)="INT";
+		}
+        else if(pname=="INT16"){
             newNode->int_value=strtol(yytext,NULL,16);
+			*(newNode->name)="INT";
+		}
         else if(pname=="BOOL"||pname=="STR"||pname=="NULL"||pname=="ID")
             newNode->string_value=new string(yytext);
         else if(pname=="FLOAT")
             newNode->float_value=strtof(yytext,NULL);
+		else if(pname=="TYPE")
+			newNode->string_value=new string(yytext);
 
     }
     return newNode;
@@ -47,13 +53,13 @@ void TravelTree(TreeNode* node,int level){
         cout<<"  ";
 	
 	string pname=*(node->name);
-	cout<<pname<<" ";
+	cout<<pname;
     if(pname=="INT"||pname=="INT8"||pname=="INT16")
-        cout<<node->int_value;
-    else if(pname=="BOOL"||pname=="STR"||pname=="NULL"||pname=="ID")
-        cout<<*(node->string_value);
+        cout<<":"<<node->int_value;
+    else if(pname=="BOOL"||pname=="STR"||pname=="NULL"||pname=="ID"||pname=="TYPE")
+        cout<<":"<<*(node->string_value);
     else if(pname=="FLOAT")
-        cout<<node->float_value;
+        cout<<":"<<node->float_value;
 	cout<<endl;
 	TravelTree(node->lchild,level+1);
 	TravelTree(node->rchild,level);
