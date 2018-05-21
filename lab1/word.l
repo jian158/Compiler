@@ -28,12 +28,13 @@ NULLPTR null
 BOOL    true|false
 ID	   [a-z_A-Z][a-zA-Z_0-9]*
 TYPE   int|float|void|bool|String
-STRUCT struct
-CLASS  class
-RETURN return
-IF if
-ELSE else
-ELIF else[ ]*if
+STRUCT "struct"
+CLASS  "class"
+RETURN "return"
+STATIC "static"
+IF "if"
+ELSE "else"
+ELIF "else[ ]*if"
 WHILE while
 THIS  this
 NEW   new
@@ -60,16 +61,17 @@ LC \{
 RC \}
 AERROR .
 LINECOMMENT  "//"[^\n]*$
-WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"  
+WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 %%
+{STATIC} {yylval.node=newNode("STATIC",0,yylineno); return STATIC;}
 {THIS} {yylval.node=newNode("THIS",0,yylineno); return THIS;}
 {NEW}  {yylval.node=newNode("NEW",0,yylineno); return NEW;}
 {DPLUS} {yylval.node=newNode("DPLUS",0,yylineno); return DPLUS;}
 {DMINUS} {yylval.node=newNode("DMINUS",0,yylineno); return DMINUS;}
 {PLUS} {yylval.node=newNode("PLUS",0,yylineno); return PLUS;}
 {MINUS} {yylval.node=newNode("MINUS",0,yylineno); return MINUS;}
-{LINECOMMENT} { }
-{WEAKCOMMENT} { }
+{LINECOMMENT} {}
+{WEAKCOMMENT} {}
 {TYPE} {yylval.node=newNode("TYPE",0,yylineno);return TYPE;}
 {STRUCT} {yylval.node=newNode("STRUCT",0,yylineno);return STRUCT;}
 {CLASS} {yylval.node=newNode("CLASS",0,yylineno);return CLASS;}
@@ -89,8 +91,6 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {BOOL}    {yylval.node=newNode("BOOL",0,yylineno); return BOOL;}
 {ID} {yylval.node=newNode("ID",0,yylineno); return ID;}
 
-
-
 {SPACE} {}
 {EOL} { yycolumn = 1; }
 {SEMI} {yylval.node=newNode("SEMI",0,yylineno); return SEMI;}
@@ -109,6 +109,7 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {RB} {yylval.node=newNode("RB",0,yylineno); return RB;}
 {LC} {yylval.node=newNode("LC",0,yylineno); return LC;}
 {RC} {yylval.node=newNode("RC",0,yylineno); return RC;}
+
 {AERROR} {}
 
 %%

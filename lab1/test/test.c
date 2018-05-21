@@ -1,6 +1,10 @@
 class Main{
-	Person main(){
-		int i=j=0;
+
+	int main(){
+		i++;
+		i=i+10;
 	}
+
 }
+
 

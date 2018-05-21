@@ -18,17 +18,20 @@ class TreeNode {
 public:
     int line;
     string* name;
-    TreeNode* lchild;
-	TreeNode* rchild;
+	vector<TreeNode*> childs;
+	TreeNode* temp;
+    // TreeNode* lchild;
+	// TreeNode* rchild;
     union {
         string *string_value;
         int int_value;
         float float_value;
     };
-    TreeNode(){}
+    TreeNode():temp(NULL){}
 };
 
 
 TreeNode* newNode(const char* name,int argc,...);
 void TravelTree(TreeNode* node,int level);
+void adjustNodes(TreeNode* root,int index);
 #endif //UNTITLED_MAIN_H

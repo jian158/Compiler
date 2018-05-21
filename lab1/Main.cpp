@@ -7,21 +7,20 @@
 #include<cstdarg>
 #include "Main.h"
 TreeNode* newNode(const char* name,int argc,...){
-	cout<<"DEBUG(name):"<<name<<endl;
-	cout<<"DEBUG(yytext):"<<yytext<<endl;
+	// cout<<"DEBUG(name):"<<name<<endl;
+	// cout<<"DEBUG(yytext):"<<yytext<<endl;
     TreeNode *newNode=new TreeNode;
     newNode->name=new string(name);
     va_list list;
     va_start(list,argc);
     if(argc>0){ //非终结符
-		newNode->lchild=va_arg(list,TreeNode*);
-		TreeNode* t=newNode->lchild;
-		newNode->line=newNode->lchild->line;
-        for (int i = 1; i < argc; ++i) {
-            t->rchild=va_arg(list,TreeNode*);
-            t=t->rchild;
+		// newNode->lchild=va_arg(list,TreeNode*);
+		// TreeNode* t=newNode->lchild;
+		// newNode->line=newNode->lchild->line;
+        for (int i = 0; i < argc; ++i) {
+            newNode->childs.push_back(va_arg(list,TreeNode*));
         }
-        
+		newNode->line=newNode->childs.at(0)->line;
     } else if (argc==0){
         newNode->line=va_arg(list, int);
         string pname=*(newNode->name);
@@ -61,11 +60,22 @@ void TravelTree(TreeNode* node,int level){
     else if(pname=="FLOAT")
         cout<<":"<<node->float_value;
 	cout<<endl;
-	TravelTree(node->lchild,level+1);
-	TravelTree(node->rchild,level);
+	for(int i=0;i<node->childs.size();i++){
+		TravelTree(node->childs.at(i),level+1);
+	}
+	// TravelTree(node->lchild,level+1);
+	// TravelTree(node->rchild,level);
 	
 }
-
+void adjustNodes(TreeNode* root,int index){
+	if(root->childs.size()<=index)
+		return;
+	TreeNode* p=root->childs.at(index);
+	while(p->temp!=NULL){
+		root->childs.push_back(p->temp);
+		p=p->temp;
+	}
+}
 
 int main(int argc,char **argv){
 	if (argc > 1){
