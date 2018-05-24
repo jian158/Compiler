@@ -9,8 +9,7 @@ Terminals unused in grammar
 
 
 State 9 conflicts: 4 shift/reduce
-State 16 conflicts: 4 shift/reduce
-State 20 conflicts: 1 reduce/reduce
+State 16 conflicts: 4 shift/reduce, 1 reduce/reduce
 State 21 conflicts: 4 shift/reduce
 State 31 conflicts: 1 shift/reduce
 State 46 conflicts: 1 shift/reduce
@@ -45,7 +44,7 @@ Grammar
     5      | CLASS ID EXTENDS ID LC ClassStms RC
 
     6 ClassStms: ClassStm ClassStms
-    7          | EMPTY
+    7          | ClassStm
 
     8 ClassStm: Fun
     9         | DeclareStm
@@ -217,7 +216,7 @@ Class (50)
 ClassStms (51)
     on left: 6 7, on right: 4 5 6
 ClassStm (52)
-    on left: 8 9, on right: 6
+    on left: 8 9, on right: 6 7
 Fun (53)
     on left: 10 11 12, on right: 8
 VarType (54)
@@ -267,7 +266,7 @@ CallArgs (74)
 CallArg (75)
     on left: 86 87, on right: 85 87
 EMPTY (76)
-    on left: 88, on right: 7 12 15 21 33 35 46 84
+    on left: 88, on right: 12 15 21 33 35 46 84
 
 
 State 0
@@ -433,6 +432,7 @@ State 15
 State 16
 
     6 ClassStms: ClassStm . ClassStms
+    7          | ClassStm .
 
     STATIC  shift, and go to state 11
     FINAL   shift, and go to state 12
@@ -443,7 +443,9 @@ State 16
     FINAL     [reduce using rule 88 (EMPTY)]
     TYPE      [reduce using rule 88 (EMPTY)]
     ID        [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
+    RC        reduce using rule 7 (ClassStms)
+    RC        [reduce using rule 88 (EMPTY)]
+    $default  reduce using rule 7 (ClassStms)
 
     ClassStms   go to state 30
     ClassStm    go to state 16
@@ -493,11 +495,8 @@ State 19
 
 State 20
 
-    7 ClassStms: EMPTY .
    12 Fun: EMPTY .
 
-    RC        reduce using rule 7 (ClassStms)
-    RC        [reduce using rule 12 (Fun)]
     $default  reduce using rule 12 (Fun)
 
 

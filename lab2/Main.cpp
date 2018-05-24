@@ -53,7 +53,7 @@ void TravelTree(TreeNode* node,int level){
 	cout<<pname;
     if(pname=="INT"||pname=="INT8"||pname=="INT16")
         cout<<":"<<node->int_value;
-    else if(pname=="BOOL"||pname=="STR"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP")
+    else if(pname=="BOOL"||pname=="STR"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP"||pname=="VarType")
         cout<<":"<<*(node->string_value);
     else if(pname=="FLOAT")
         cout<<":"<<node->float_value;

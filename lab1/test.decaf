@@ -1,0 +1,9 @@
+class Computer
+{
+	static int count=0;
+    void Crash(int numTimes)
+    {
+        int[] p=new int[10];
+    }
+}
+

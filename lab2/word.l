@@ -22,7 +22,7 @@ MINUS "-"
 INT		[1-9]+[0-9]*|0
 INT8	[+-]?[0][0-9]+
 INT16   [+-]?0x[0-9a-fA-F]+[hH]?
-FLOAT   [+-]?[0-9]+\.[0-9]*
+FLOAT   [+-]?[0-9]+\.[0-9]*([eE][+-]?[0-9]*)?
 STR		\"[^\"\n]*\"
 NULLPTR null
 BOOL    true|false

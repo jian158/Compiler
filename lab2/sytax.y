@@ -45,25 +45,25 @@ ClassDefs: Class{$$=newNode("ClassDefs",1,$1);}
 	;
 	
 	
-Class:CLASS ID LC ClassStms RC{$$=newNode("Class",3,$1,$2,$4);adjustNodes($$,3);}
-	| CLASS ID EXTENDS ID  LC ClassStms RC{$$=newNode("Class",5,$1,$2,$3,$4,$6);adjustNodes($$,5);}
+Class:CLASS ID LC ClassStms RC{$$=newNode("Class",2,$2,$4);adjustNodes($$,1);}
+	| CLASS ID EXTENDS ID  LC ClassStms RC{$$=newNode("ExtClass",4,$2,$3,$4,$6);adjustNodes($$,3);}
 	;
 
 ClassStms:ClassStm ClassStms{$$=$1;$$->temp=$2;}
-	|EMPTY{};
+	|ClassStm{$$=$1;};
 	;
 
 ClassStm:Fun{$$=newNode("ClassStm",1,$1);}
 	| DeclareStm{$$=newNode("ClassStm",1,$1);};
 	
 Fun:VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",4,$1,$2,$4,$7);}
-	|STATIC VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",5,$1,$2,$3,$5,$8);}
+	|STATIC VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun:STATIC",4,$2,$3,$5,$8);}
     |EMPTY{$$=newNode("Fun",0,-1);};
 	
-VarType:TYPE Arrays{ $$=newNode("VarType",2,$1,$2);adjustNodes($$,2);}
-	| ID Arrays{$$=newNode("VarType",2,$1,$2);adjustNodes($$,2);};
+VarType:TYPE Arrays{ $$=newNode("VarType",1,$2);adjustNodes($$,0);$$->string_value=new string(*$1->string_value);}
+	| ID Arrays{$$=newNode("VarType",1,$2);adjustNodes($$,0);$$->string_value=new string(*$1->string_value);};
 	
-Arrays:EMPTY{}
+Arrays:EMPTY{$$=newNode("Arrays",0,-1);}
 	|LB RB{$$=newNode("Arrays",2,$1,$2);}
 	|LB RB Arrays{$$=newNode("Arrays",2,$1,$2);$$->temp=$3;};
 	
@@ -103,10 +103,10 @@ WhileStm:WHILE LP Exp RP LC BaseStm RC{$$=newNode("WhileStm",3,$1,$3,$6);};
 
 ForStm:FOR LP Exp SEMI Exp SEMI Exp RP LC BaseStm RC{$$=newNode("ForStm",3,$1,$3,$6);};
 
-DeclareStm:VarType VarStm SEMI{$$=newNode("DeclareStm",2,$1,$2);adjustNodes($$,2);}
-	|STATIC VarType VarStm SEMI{$$=newNode("DeclareStm",3,$1,$2,$3);adjustNodes($$,3);}
-	|FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",3,$1,$2,$3);adjustNodes($$,3);}
-	|STATIC FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",4,$1,$2,$3,$4);adjustNodes($$,4);}
+DeclareStm:VarType VarStm SEMI{$$=newNode("DeclareStm",2,$1,$2);adjustNodes($$,1);}
+	|STATIC VarType VarStm SEMI{$$=newNode("DeclareStm:STATIC",2,$2,$3);adjustNodes($$,1);}
+	|FINAL VarType VarStm SEMI{$$=newNode("DeclareStm:FINAL",2,$2,$3);adjustNodes($$,1);}
+	|STATIC FINAL VarType VarStm SEMI{$$=newNode("DeclareStm:STATIC:FINAL",2,$3,$4);adjustNodes($$,1);}
 	;
 
 VarStm: Exp {$$=newNode("VarStm",1,$1);}

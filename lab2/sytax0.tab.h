@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_SYTAX_TAB_H_INCLUDED
-# define YY_YY_SYTAX_TAB_H_INCLUDED
+#ifndef YY_YY_SYTAX0_TAB_H_INCLUDED
+# define YY_YY_SYTAX0_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -45,18 +45,18 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    STATIC = 258,
-    FINAL = 259,
-    BREAK = 260,
-    TYPE = 261,
-    STRUCT = 262,
-    EXTENDS = 263,
-    CLASS = 264,
-    RETURN = 265,
-    IF = 266,
-    ELSE = 267,
-    ELIF = 268,
-    FOR = 269,
+    INT = 258,
+    INT8 = 259,
+    INT16 = 260,
+    FLOAT = 261,
+    NULLPTR = 262,
+    STR = 263,
+    BOOL = 264,
+    TYPE = 265,
+    STRUCT = 266,
+    RETURN = 267,
+    IF = 268,
+    ELSE = 269,
     WHILE = 270,
     ID = 271,
     SPACE = 272,
@@ -79,16 +79,7 @@ extern int yydebug;
     LC = 289,
     RC = 290,
     AERROR = 291,
-    DPLUS = 292,
-    DMINUS = 293,
-    INT = 294,
-    FLOAT = 295,
-    NULLPTR = 296,
-    STR = 297,
-    BOOL = 298,
-    EOL = 299,
-    NEW = 300,
-    THIS = 301
+    EOL = 292
   };
 #endif
 
@@ -97,11 +88,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 12 "sytax.y" /* yacc.c:1909  */
+#line 8 "sytax0.y" /* yacc.c:1909  */
 
 TreeNode *node;
 
-#line 105 "sytax.tab.h" /* yacc.c:1909  */
+#line 96 "sytax0.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -109,23 +100,9 @@ typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
-/* Location type.  */
-#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
-typedef struct YYLTYPE YYLTYPE;
-struct YYLTYPE
-{
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
-};
-# define YYLTYPE_IS_DECLARED 1
-# define YYLTYPE_IS_TRIVIAL 1
-#endif
-
 
 extern YYSTYPE yylval;
-extern YYLTYPE yylloc;
+
 int yyparse (void);
 
-#endif /* !YY_YY_SYTAX_TAB_H_INCLUDED  */
+#endif /* !YY_YY_SYTAX0_TAB_H_INCLUDED  */
