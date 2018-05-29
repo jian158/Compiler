@@ -1,4 +1,4 @@
-parser:sytax.y word.l Main.h
+parser:sytax.y word.l Main.h Symbol.h
 	bison -d -v sytax.y
 	flex word.l
 	g++ Main.cpp sytax.tab.c -lfl -ly -o parser 

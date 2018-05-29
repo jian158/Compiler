@@ -1,14 +1,11 @@
 class Computer
 {
-	static final int count=0,sum=100;
-    void Crash()
+	static final int count,p;
+    void Crash(int a,bool b)
     {
-		float f=3.8e-10;
-		Person p;
+		int i,j;
+		i=a*10+get(get(i),1.7)*p.get(j);
     }
 }
 
-class Main extends Computer{
-	
-}
 

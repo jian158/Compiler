@@ -62,6 +62,7 @@ LB \[
 RB \]
 LC \{
 RC \}
+ARRAY "\[\]"
 AERROR .
 LINECOMMENT  "//"[^\n]*$
 WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
@@ -88,15 +89,15 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {FOR} {yylval.node=newNode("FOR",0,yylineno); return FOR;}
 {EXTENDS} {yylval.node=newNode("EXTENDS",0,yylineno); return EXTENDS;}
 
-{INT} {yylval.node=newNode("INT",0,yylineno); return INT;}
-{INT8} {yylval.node=newNode("INT8",0,yylineno); return INT;}
-{INT16} {yylval.node=newNode("INT16",0,yylineno); return INT;}
-{FLOAT}  {yylval.node=newNode("FLOAT",0,yylineno); return FLOAT;}
-{STR}		{yylval.node=newNode("STR",0,yylineno); return STR;}
+{INT} {yylval.node=newNode("INT",0,yylineno);*yylval.node->name="int" ;return INT;}
+{INT8} {yylval.node=newNode("INT8",0,yylineno);*yylval.node->name="int"; return INT;}
+{INT16} {yylval.node=newNode("INT16",0,yylineno); *yylval.node->name="int";return INT;}
+{FLOAT}  {yylval.node=newNode("FLOAT",0,yylineno);*yylval.node->name="float"; return FLOAT;}
+{STR}		{yylval.node=newNode("STR",0,yylineno);*yylval.node->name="String"; return STR;}
 {NULLPTR} {yylval.node=newNode("NULLPTR",0,yylineno); return NULLPTR;}
 {BOOL}    {yylval.node=newNode("BOOL",0,yylineno); return BOOL;}
 {ID} {yylval.node=newNode("ID",0,yylineno); return ID;}
-
+{ARRAY} {yylval.node=newNode("ARRAY",0,yylineno); return ARRAY;}
 {SPACE} {}
 {EOL} { yycolumn = 1; }
 {SEMI} {yylval.node=newNode("SEMI",0,yylineno); return SEMI;}

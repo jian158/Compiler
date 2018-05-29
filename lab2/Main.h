@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include "Symbol.h"
 using namespace std;
 
 extern char* yytext;
@@ -18,15 +19,26 @@ class TreeNode {
 public:
     int line;
     string* name;
-	vector<TreeNode*> childs;
 	TreeNode* temp;
+    vector<TreeNode*> childs;
     union {
         string *string_value;
         int int_value;
         float float_value;
     };
     TreeNode():temp(NULL){}
+    TreeNode* getChild(unsigned int index){
+        return index<childs.size()?childs.at(index):NULL;
+    }
+
+    unsigned int size()const {
+        return childs.size();
+    }
 };
+void createSymbolTable(TreeNode *node,SymbolTable *table,unsigned int index);
+void getDeclareVar(TreeNode* node,vector<string> &result);
+VarTree *parseVarStm(TreeNode *node);
+void TravelVarStm(VarTree *tree,int level);
 
 
 TreeNode* newNode(const char* name,int argc,...);
