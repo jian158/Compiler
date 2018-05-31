@@ -1039,7 +1039,7 @@ YY_RULE_SETUP
 case 28:
 YY_RULE_SETUP
 #line 98 "word.l"
-{yylval.node=newNode("BOOL",0,yylineno); return BOOL;}
+{yylval.node=newNode("BOOL",0,yylineno);*yylval.node->name="bool"; return BOOL;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP

@@ -95,7 +95,7 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {FLOAT}  {yylval.node=newNode("FLOAT",0,yylineno);*yylval.node->name="float"; return FLOAT;}
 {STR}		{yylval.node=newNode("STR",0,yylineno);*yylval.node->name="String"; return STR;}
 {NULLPTR} {yylval.node=newNode("NULLPTR",0,yylineno); return NULLPTR;}
-{BOOL}    {yylval.node=newNode("BOOL",0,yylineno); return BOOL;}
+{BOOL}    {yylval.node=newNode("BOOL",0,yylineno);*yylval.node->name="bool"; return BOOL;}
 {ID} {yylval.node=newNode("ID",0,yylineno); return ID;}
 {ARRAY} {yylval.node=newNode("ARRAY",0,yylineno); return ARRAY;}
 {SPACE} {}

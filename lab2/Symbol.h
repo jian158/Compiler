@@ -9,9 +9,12 @@
 #include <vector>
 #include <map>
 #include <stdlib.h>
-#define ErrorMSg "Error Line at Line:"
+
+
 using namespace std;
-enum Type{_CLASS,VAR,FUN,CONST,REF};
+extern void error(bool e,int line, const string& msg);
+enum Type{_CLASS,VAR,FUN,CONST,REF,EXP};
+
 
 typedef union Value{
     string *string_value;
@@ -54,37 +57,33 @@ public:
     void setId(string Id){
         this->Id=Id;
     }
+	
+	string toString(){
+		string result;
+		switch(type){
+			case _CLASS:result="CLASS";break;
+			case VAR:result="VAR";break;
+			case FUN:result="FUN";break;
+			case CONST:result="CONST";break;
+			case EXP:result="EXP";break;
+			case REF:result="REF";break;
+			default:result="EXP";
+		}
+		return result;
+	}
 };
 
 class Variable:public Symbol{
     bool IsFinal,IsStatic;
     string varType;
 public:
-    Variable(){
+    Variable(const string& Id){
         setType(VAR);
+        setId(Id);
     }
 
-    Variable(const string& instruction):IsFinal(false),IsStatic(false){
-        setType(VAR);
-        vector<string> list;
-        int index=0,prev=0;
-        while ((index=instruction.find('#',prev))>-1){
-            list.push_back(instruction.substr(prev,index-prev));
-            prev=index+1;
-        }
-        list.push_back(instruction.substr(prev,instruction.length()-prev));
-        varType=list.at(0);
-        if(list.size()>1){
-            if(list.at(1)=="STATIC")
-                IsStatic= true;
-            else IsFinal=true;
-        }
-
-        if(list.size()>2){
-            if(list.at(2)=="STATIC")
-                IsStatic= true;
-            else IsFinal=true;
-        }
+    void setVarType(const string& type){
+        varType=type;
     }
 
     string getVarType()const {
@@ -99,17 +98,27 @@ public:
         return IsStatic;
     }
 
+    void setFinal(bool b){
+        IsFinal=b;
+    }
+
+    void setStatic(bool b){
+        IsStatic=b;
+    }
+
 };
 
 
 class Class:public Symbol{
     string extClass;
 public:
-    Class(const string& name,const string& extName){
-        this->Id=name;
+    Class(const string& Id){
+        setId(Id);
         setType(_CLASS);
     }
-
+    string getExtClass()const {
+        return extClass;
+    }
     void setExtClass(const string& extName){
         extClass=extName;
     }
@@ -120,11 +129,16 @@ class Fun:public Symbol{
     vector<string> ArgList;
     string returnType;
 public:
-    Fun(){
+    Fun(const string& Id){
         setType(FUN);
+        setId(Id);
     }
 
-    void setReturnType(const string& type){
+    void setStatic(bool b){
+        IsStatic=b;
+    }
+
+    void setVarType(const string& type){
         returnType=type;
     }
 
@@ -132,7 +146,7 @@ public:
         ArgList.push_back(argType);
     }
 
-    string getReturnType()const {
+    string getVarType()const {
         return returnType;
     }
 
@@ -154,7 +168,6 @@ public:
 
 class SymbolTable{
 public:
-    static SymbolTable root;
     Symbol *symbol;
     SymbolTable *parent;
     map<string,SymbolTable*> nodes;
@@ -162,24 +175,39 @@ public:
     SymbolTable(Symbol* s,SymbolTable *p):parent(p),symbol(s){
         p->add(s->getId(),this);
     }
+	
+	string getId(){
+		return symbol->getId();
+	}
+	
+	SymbolTable* getFirst(){
+		return begin()->second;
+	}
+	
+	map<string,SymbolTable*>::iterator end(){
+		return nodes.end();
+	}
+	
+	map<string,SymbolTable*>::iterator begin(){
+		return nodes.begin();
+	}
+	
+	int size()const{
+		return nodes.size();
+	}
 
     void add(const string& Id,SymbolTable* table){
-        if(nodes.count(Id)>0){
-            string s;
-            cout<<ErrorMSg<<":"<<symbol->getLine()<<"  symbol "<<Id<<" duplicate!"<<endl;
-            exit(-1);
+        if(nodes[Id]!=NULL){
+            string msg;
+			msg.append(Id).append(" ").append("already have been declare!");
+            error(false,table->symbol->getLine(),msg);
         }
-        nodes.insert(pair<string,SymbolTable*>(Id,table));
+        nodes[Id]=table;
     }
+	
+	
 };
 
-
-class VarTree{
-public:
-    Symbol* symbol;
-    vector<VarTree*> childs;
-	VarTree():symbol(NULL){}
-};
 
 
 #endif //UNTITLED_SYBOL_H

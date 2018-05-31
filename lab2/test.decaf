@@ -1,11 +1,18 @@
 class Computer
 {
-	static final int count,p;
-    void Crash(int a,bool b)
-    {
-		int i,j;
-		i=a*10+get(get(i),1.7)*p.get(j);
+	static final int count=5,p;
+    void Crash(int a,bool b){
+		get();
     }
+}
+
+class Person extends Computer{
+	int size;
+	String s;
+	bool b=get();
+	int size0(){
+		return 0;
+	}
 }
 
 

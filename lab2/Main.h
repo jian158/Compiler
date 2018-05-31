@@ -14,14 +14,16 @@ extern char* yytext;
 extern FILE* yyin;
 extern int yylineno;
 extern int yyparse();
+extern SymbolTable *symbolRoot;
 
 class TreeNode {
 public:
     int line;
     string* name;
-	TreeNode* temp;
+    TreeNode* temp;
     vector<TreeNode*> childs;
     union {
+        map<string,string> *attr;
         string *string_value;
         int int_value;
         float float_value;
@@ -30,18 +32,28 @@ public:
     TreeNode* getChild(unsigned int index){
         return index<childs.size()?childs.at(index):NULL;
     }
+	
+	void add(TreeNode* node){
+		childs.push_back(node);
+	}
 
     unsigned int size()const {
         return childs.size();
     }
 };
 void createSymbolTable(TreeNode *node,SymbolTable *table,unsigned int index);
-void getDeclareVar(TreeNode* node,vector<string> &result);
-VarTree *parseVarStm(TreeNode *node);
-void TravelVarStm(VarTree *tree,int level);
-
-
+SymbolTable *parseVarStm(TreeNode *node);
+void getDeclareList(TreeNode* node,vector<string> &list);
+void TravelVarStm(SymbolTable *tree,int level);
 TreeNode* newNode(const char* name,int argc,...);
 void TravelTree(TreeNode* node,int level);
 void adjustNodes(TreeNode* root,int index);
+void TravelSymbols(SymbolTable* table,int level);
+void startSymbolCreate(TreeNode *node);
+
+void ScannerClass(TreeNode *node);
+void ScannerClassAttr(SymbolTable *root,TreeNode *node);
+
+void error(bool e,int line, const string& msg);
+
 #endif //UNTITLED_MAIN_H

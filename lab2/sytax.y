@@ -18,7 +18,7 @@ TreeNode *node;
 %token  <node> STATIC ARRAY FINAL BREAK TYPE STRUCT EXTENDS CLASS RETURN IF ELSE ELIF FOR WHILE ID SPACE SEMI COMMA ASSIGNOP RELOP PLUS MINUS STAR DIV AND OR DOT NOT LP RP LB RB LC RC AERROR DPLUS DMINUS
 %token  <node> INT FLOAT NULLPTR STR BOOL 
 %token  <node> EOL NEW THIS
-%type   <node> Program EMPTY ClassDefs Class Exp Arg Args ClassStm Fun BaseStm Lines Line IfStm ELIfStm ElseStm ForStm WhileStm BreakStm VarStm DeclareStm  Call CallArgs CallArg Constant ReturnStm VarType ClassStms Arrays Lvalue
+%type   <node> Program EMPTY ClassDefs Class Exp Arg Args ClassStm Fun BaseStm Lines Line IfStm ELIfStm ElseStm ForStm WhileStm BreakStm VarStm DeclareStm  Call CallArgs CallArg Constant ReturnStm VarType ClassStms Arrays ArrayIndex Lvalue
 
 
 %right ASSIGNOP
@@ -38,20 +38,24 @@ Program:ClassDefs{
 	printf("打印syntax tree:\n");  
 	TravelTree($$,0) ;
 	printf("syntax tree打印完毕!\n\n");
+	startSymbolCreate($$);
 	};
 	
-ClassDefs: Class{$$=newNode("ClassDefs",1,$1);}
-	|  Class ClassDefs{$$=newNode("ClassDefs",1,$1);$$->temp=$2;}
+ClassDefs: Class{$$=$1;}
+	|  Class ClassDefs{$$=$1;$$->temp=$2;}
 	;
 	
 	
-Class:CLASS ID LC ClassStms RC{$$=newNode("Class",1,$4);adjustNodes($$,0);$$->string_value=new string(*$2->string_value);}
+Class:CLASS ID LC ClassStms RC{$$=newNode("Class",1,$4);adjustNodes($$,0);
+		//$$->string_value=new string(*$2->string_value);
+		(*$$->attr)["id"]=*$2->string_value;
+	}
 	| CLASS ID EXTENDS ID  LC ClassStms RC{
 		$$=newNode("Class",1,$6);
 		adjustNodes($$,0);
-		$$->string_value=new string(*$2->string_value);
-		*($$->string_value)+="#";
-		*($$->string_value)+=*$4->string_value;
+		
+		(*$$->attr)["id"]=*$2->string_value;
+		(*$$->attr)["ext"]=*$4->string_value;
 		}
 	;
 
@@ -59,16 +63,26 @@ ClassStms:ClassStm ClassStms{$$=$1;$$->temp=$2;}
 	|ClassStm{$$=$1;};
 	;
 
-ClassStm:Fun{$$=newNode("ClassStm",1,$1);}
-	| DeclareStm{$$=newNode("ClassStm",1,$1);};
+ClassStm:Fun{$$=$1;}
+	| DeclareStm{$$=$1;};
 	
-Fun:VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",4,$1,$2,$4,$7);}
-	|STATIC VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",4,$2,$3,$5,$8);$$->string_value=new string("STATIC");}
-	|ID LP Args RP LC BaseStm RC {$$=newNode("ConstructFun",3,$1,$3,$6);}
-    |EMPTY{$$=newNode("Fun",0,-1);};
+Fun:VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$4,$7);$$->line=$1->line;  (*$$->attr)["id"]=*$2->string_value; (*$$->attr)["type"]=*$1->string_value;}
+	|STATIC VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$5,$8);$$->line=$1->line;  (*$$->attr)["id"]=*$3->string_value; (*$$->attr)["type"]=*$2->string_value; (*$$->attr)["static"]=*$1->name;}
+	|ID LP Args RP LC BaseStm RC {$$=newNode("ConstructFun",2,$3,$6);$$->line=$1->line; (*$$->attr)["id"]=*$1->string_value;}
+    ; 
 	
-VarType:TYPE Arrays{ $$=newNode("VarType",2,$1,$2);adjustNodes($$,1);$$->string_value=new string(*$1->string_value);}
-	| ID Arrays{$$=newNode("VarType",2,$1,$2);adjustNodes($$,1);$$->string_value=new string(*$1->string_value);};
+VarType:TYPE Arrays{ $$=newNode("VarType",2,$1,$2);adjustNodes($$,1);
+		$$->string_value=new string(*$1->string_value);
+		for(int i=1;i<$$->size();i++){
+			*$$->string_value+="[";
+		}
+	}
+	| ID Arrays{$$=newNode("VarType",2,$1,$2);adjustNodes($$,1);
+		$$->string_value=new string(*$1->string_value);
+		for(int i=1;i<$$->size();i++){
+			*$$->string_value+="[";
+		}
+	}
 	| TYPE{ $$=newNode("VarType",1,$1);$$->string_value=new string(*$1->string_value);}
 	| ID{ $$=newNode("VarType",1,$1);$$->string_value=new string(*$1->string_value);}
 	
@@ -87,7 +101,7 @@ Line:EMPTY{$$=newNode("Line",0,-1);}
 	| IfStm {$$=newNode("Line",1,$1);}
 	| WhileStm{$$=newNode("Line",1,$1);}
 	| VarStm SEMI{$$=newNode("Line",1,$1);
-		VarTree *tree=parseVarStm($$);
+		SymbolTable *tree=parseVarStm($$);
 		cout<<"*************************"<<endl;
         TravelVarStm(tree,0);
 		cout<<"*************************"<<endl;
@@ -116,10 +130,16 @@ WhileStm:WHILE LP Exp RP LC BaseStm RC{$$=newNode("WhileStm",3,$1,$3,$6);};
 
 ForStm:FOR LP Exp SEMI Exp SEMI Exp RP LC BaseStm RC{$$=newNode("ForStm",3,$1,$3,$6);};
 
-DeclareStm:VarType VarStm SEMI{$$=newNode("DeclareStm",1,$2);adjustNodes($$,0);$$->string_value=new string(*$1->string_value);}
-	|STATIC VarType VarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);$$->string_value=new string(*$2->string_value+"#STATIC");}
-	|FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);$$->string_value=new string(*$2->string_value+"#FINAL");}
-	|STATIC FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",1,$4);adjustNodes($$,0);$$->string_value=new string(*$3->string_value+"#STATIC#FINAL");}
+DeclareStm:VarType VarStm SEMI{$$=newNode("DeclareStm",1,$2);adjustNodes($$,0);
+	(*$$->attr)["type"]=*$1->string_value;
+	SymbolTable *tree=parseVarStm($$);
+		cout<<"*************************"<<endl;
+        TravelVarStm(tree,0);
+		cout<<"*************************"<<endl;
+	}
+	|STATIC VarType VarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);(*$$->attr)["type"]=*$2->string_value;(*$$->attr)["static"]=*$1->name;}
+	|FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);(*$$->attr)["type"]=*$2->string_value;(*$$->attr)["final"]=*$1->name;}
+	|STATIC FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",1,$4);adjustNodes($$,0);(*$$->attr)["type"]=*$3->string_value;(*$$->attr)["static"]=*$1->name;(*$$->attr)["final"]=*$2->name;}
 	;
 
 VarStm: Exp {$$=newNode("VarStm",1,$1);}
@@ -127,7 +147,7 @@ VarStm: Exp {$$=newNode("VarStm",1,$1);}
 	;
 	
 ReturnStm:RETURN SEMI{$$=newNode("ReturnStm",1,$1);}
-	| RETURN Exp SEMI{$$=newNode("ReturnStm",1,$1,$2);}
+	| RETURN Exp SEMI{$$=newNode("ReturnStm",2,$1,$2);}
 	
 Args:EMPTY{$$=newNode("Args",0,-1);}
 	|Arg{
@@ -153,8 +173,7 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
 		|THIS DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
         |Exp PLUS Exp{$$=newNode("Exp",3,$1,$2,$3);}
         |Exp MINUS Exp{$$=newNode("Exp",3,$1,$2,$3);}
-		|Lvalue ASSIGNOP Exp{$$=newNode("Exp",3,$1,$2,$3);}
-
+		|Lvalue ASSIGNOP Exp{$$=$1;$$->add($2);$$->add($3);  }
         |Exp AND Exp{$$=newNode("Exp",3,$1,$2,$3);}
         |Exp OR Exp{$$=newNode("Exp",3,$1,$2,$3);}
         |Exp RELOP Exp{$$=newNode("Exp",3,$1,$2,$3);}
@@ -163,28 +182,30 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
         |LP Exp RP{$$=newNode("Exp",1,$2);}
         |MINUS Exp {$$=newNode("Exp",2,$1,$2);}
         |NOT Exp {$$=newNode("Exp",2,$1,$2);}
-        |Exp LB Exp RB {$$=newNode("Exp",4,$1,$2,$3,$4);}
+        |ID ArrayIndex {$$=newNode("Exp",2,$1,$2);adjustNodes($$,1);}
 		|DPLUS ID{$$=newNode("Exp",2,$1,$2);}
 		|ID DPLUS{$$=newNode("Exp",2,$1,$2);}
 		|DMINUS ID{$$=newNode("Exp",2,$1,$2);}
 		|ID DMINUS{$$=newNode("Exp",2,$1,$2);}
 		|NEW Call{$$=newNode("Exp",2,$1,$2);}
-		|NEW TYPE LB Exp RB{$$=newNode("Exp",5,$1,$2,$3,$4,$5);}
+		|NEW TYPE ArrayIndex{$$=newNode("Exp",3,$1,$2,$3);adjustNodes($$,2);}
         ;
+		
+ArrayIndex:LB Exp RB{$$=newNode("ArrayIndex",1,$2);}
+		|LB Exp RB ArrayIndex {$$=newNode("ArrayIndex",1,$2);$$->temp=$4;}
+	;
 	
-Lvalue:ID{$$=newNode("Lvalue",1,$1);}
-		| Exp LB Exp RB{$$=newNode("Lvalue",4,$1,$2,$3,$4);}
-		| Exp DOT ID{$$=newNode("Lvalue",3,$1,$2,$3);};
+Lvalue:ID{$$=$1;*$$->name="Lvalue";};
 		
 Constant:ID {$$=$1;}
         |INT {$$=newNode("Constant",1,$1);}
         |FLOAT{$$=newNode("Constant",1,$1);}
-		|BOOL{$$=newNode("Constant",1,$1);};
+		|BOOL{$$=newNode("Constant",1,$1);}
+		|STR{$$=newNode("Constant",1,$1);}
+		;
 		
 
 Call:ID LP CallArgs RP{$$=newNode("Call",1,$3);$$->string_value=new string(*$1->string_value);}
-	|Call DOT ID {$$=newNode("Call",3,$1,$2,$3);}
-	|Call DOT ID LP CallArgs RP {$$=newNode("Call",4,$1,$2,$3,$5);}
 	;
 
 CallArgs:EMPTY{$$=newNode("CallArgs",0,-1);}
@@ -193,7 +214,7 @@ CallArgs:EMPTY{$$=newNode("CallArgs",0,-1);}
 CallArg:Exp {$$=newNode("CallArg",1,$1);}
 	| Exp COMMA CallArg{$$=newNode("CallArg",1,$1);$$->temp=$3;};
 	
-EMPTY:{$$=NULL;};
+EMPTY:{};
 	
 %%
 
