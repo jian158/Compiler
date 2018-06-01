@@ -20,9 +20,9 @@ PLUS  "+"
 MINUS "-"
 
 INT		[1-9]+[0-9]*|0
-INT8	[+-]?[0][0-9]+
-INT16   [+-]?0x[0-9a-fA-F]+[hH]?
-FLOAT   [+-]?[0-9]+\.[0-9]*([eE][+-]?[0-9]*)?
+INT8	[0][0-9]+
+INT16   0x[0-9a-fA-F]+[hH]?
+FLOAT   [0-9]+\.[0-9]*
 STR		\"[^\"\n]*\"
 NULLPTR null
 BOOL    true|false
@@ -62,7 +62,6 @@ LB \[
 RB \]
 LC \{
 RC \}
-ARRAY "\[\]"
 AERROR .
 LINECOMMENT  "//"[^\n]*$
 WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
@@ -73,8 +72,8 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {NEW}  {yylval.node=newNode("NEW",0,yylineno); return NEW;}
 {DPLUS} {yylval.node=newNode("DPLUS",0,yylineno); return DPLUS;}
 {DMINUS} {yylval.node=newNode("DMINUS",0,yylineno); return DMINUS;}
-{PLUS} {yylval.node=newNode("PLUS",0,yylineno); return PLUS;}
-{MINUS} {yylval.node=newNode("MINUS",0,yylineno); return MINUS;}
+{PLUS} {yylval.node=newNode("OP",0,yylineno); return PLUS;}
+{MINUS} {yylval.node=newNode("OP",0,yylineno); return MINUS;}
 {LINECOMMENT} {}
 {WEAKCOMMENT} {}
 {FINAL} {yylval.node=newNode("FINAL",0,yylineno);return FINAL;}
@@ -89,25 +88,25 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {FOR} {yylval.node=newNode("FOR",0,yylineno); return FOR;}
 {EXTENDS} {yylval.node=newNode("EXTENDS",0,yylineno); return EXTENDS;}
 
-{INT} {yylval.node=newNode("INT",0,yylineno);*yylval.node->name="int" ;return INT;}
+{INT} {yylval.node=newNode("INT",0,yylineno);*yylval.node->name="int"; return INT;}
 {INT8} {yylval.node=newNode("INT8",0,yylineno);*yylval.node->name="int"; return INT;}
-{INT16} {yylval.node=newNode("INT16",0,yylineno); *yylval.node->name="int";return INT;}
-{FLOAT}  {yylval.node=newNode("FLOAT",0,yylineno);*yylval.node->name="float"; return FLOAT;}
-{STR}		{yylval.node=newNode("STR",0,yylineno);*yylval.node->name="String"; return STR;}
+{INT16} {yylval.node=newNode("INT16",0,yylineno);*yylval.node->name="int"; return INT;}
+{FLOAT}  {yylval.node=newNode("float",0,yylineno); return FLOAT;}
+{STR}		{yylval.node=newNode("String",0,yylineno); return STR;}
 {NULLPTR} {yylval.node=newNode("NULLPTR",0,yylineno); return NULLPTR;}
-{BOOL}    {yylval.node=newNode("BOOL",0,yylineno);*yylval.node->name="bool"; return BOOL;}
+{BOOL}    {yylval.node=newNode("bool",0,yylineno); return BOOL;}
 {ID} {yylval.node=newNode("ID",0,yylineno); return ID;}
-{ARRAY} {yylval.node=newNode("ARRAY",0,yylineno); return ARRAY;}
+
 {SPACE} {}
 {EOL} { yycolumn = 1; }
 {SEMI} {yylval.node=newNode("SEMI",0,yylineno); return SEMI;}
 {COMMA} {yylval.node=newNode("COMMA",0,yylineno); return COMMA;}
 {ASSIGNOP} {yylval.node=newNode("ASSIGNOP",0,yylineno); return ASSIGNOP;}
 {RELOP} {yylval.node=newNode("RELOP",0,yylineno); return RELOP;}
-{STAR} {yylval.node=newNode("STAR",0,yylineno); return STAR;}
-{DIV} {yylval.node=newNode("DIV",0,yylineno); return DIV;}
-{AND} {yylval.node=newNode("AND",0,yylineno); return AND;}
-{OR} {yylval.node=newNode("OR",0,yylineno); return OR;}
+{STAR} {yylval.node=newNode("OP",0,yylineno); return STAR;}
+{DIV} {yylval.node=newNode("OP",0,yylineno); return DIV;}
+{AND} {yylval.node=newNode("OP",0,yylineno); return AND;}
+{OR} {yylval.node=newNode("OP",0,yylineno); return OR;}
 {DOT} {yylval.node=newNode("DOT",0,yylineno); return DOT;}
 {NOT} {yylval.node=newNode("NOT",0,yylineno); return NOT;}
 {LP} {yylval.node=newNode("LP",0,yylineno); return LP;}

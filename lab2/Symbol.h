@@ -6,14 +6,13 @@
 #define UNTITLED_SYBOL_H
 #include <iostream>
 #include <string>
-#include <vector>
-#include <map>
+#include "LinkedHashMap.h"
 #include <stdlib.h>
 
 
 using namespace std;
 extern void error(bool e,int line, const string& msg);
-enum Type{_CLASS,VAR,FUN,CONST,REF,EXP};
+enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY};
 
 
 typedef union Value{
@@ -30,6 +29,9 @@ protected:
     Value value;
     bool isNull;
 public:
+	Symbol(){
+		setType(EXP);
+	}
     virtual Type getType(){
         return type;
     }
@@ -58,6 +60,14 @@ public:
         this->Id=Id;
     }
 	
+	virtual void setRealType(Type type){
+		this->type=type;
+	}
+	
+	virtual string getRealType(){
+		return toString();
+	}
+	
 	string toString(){
 		string result;
 		switch(type){
@@ -67,6 +77,8 @@ public:
 			case CONST:result="CONST";break;
 			case EXP:result="EXP";break;
 			case REF:result="REF";break;
+			case OP:result="OP";break;
+			case ANY:result="ANY";break;
 			default:result="EXP";
 		}
 		return result;
@@ -85,6 +97,10 @@ public:
     void setVarType(const string& type){
         varType=type;
     }
+	
+	string getRealType(){
+		return varType;
+	}
 
     string getVarType()const {
         return varType;
@@ -134,6 +150,10 @@ public:
         setId(Id);
     }
 
+	string getRealType(){
+		return returnType;
+	}
+	
     void setStatic(bool b){
         IsStatic=b;
     }
@@ -162,6 +182,12 @@ public:
     Const(){
         setType(CONST);
     }
+	void setVarType(const string& type){
+		varType=type;
+	}
+	string getRealType(){
+		return varType;
+	}
 };
 
 
@@ -170,7 +196,7 @@ class SymbolTable{
 public:
     Symbol *symbol;
     SymbolTable *parent;
-    map<string,SymbolTable*> nodes;
+    LinkedMap<string,SymbolTable*> nodes;
     SymbolTable():parent(NULL),symbol(NULL){}
     SymbolTable(Symbol* s,SymbolTable *p):parent(p),symbol(s){
         p->add(s->getId(),this);
@@ -181,15 +207,30 @@ public:
 	}
 	
 	SymbolTable* getFirst(){
-		return begin()->second;
+		return nodes.get(0);
 	}
 	
-	map<string,SymbolTable*>::iterator end(){
-		return nodes.end();
+	SymbolTable* get(const string& Id){
+		return nodes.get(Id);
 	}
 	
-	map<string,SymbolTable*>::iterator begin(){
-		return nodes.begin();
+	string getKey(int index){
+		return nodes.getKey(index);
+	}
+	
+	SymbolTable* get(int index){
+		return nodes.get(index);
+	}
+	
+	Symbol* getSymbol(int index){
+		SymbolTable* t=nodes.get(index);
+		return t!=NULL?t->symbol:NULL;
+	}
+	
+	
+	Symbol* getSymbol(const string& Id){
+		SymbolTable* t=nodes.get(Id);
+		return t!=NULL?t->symbol:NULL;
 	}
 	
 	int size()const{
@@ -197,14 +238,14 @@ public:
 	}
 
     void add(const string& Id,SymbolTable* table){
-        if(nodes[Id]!=NULL){
+        if(nodes.get(Id)!=NULL){
             string msg;
 			msg.append(Id).append(" ").append("already have been declare!");
             error(false,table->symbol->getLine(),msg);
+			exit(-1);
         }
-        nodes[Id]=table;
+        nodes.put(Id,table);
     }
-	
 	
 };
 

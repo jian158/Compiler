@@ -138,10 +138,10 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
 		|ID DOT Constant{$$=newNode("Exp",3,$1,$2,$3);}
 		|THIS DOT Constant{$$=newNode("Exp",3,$1,$2,$3);}
 		|THIS DOT Call{$$=newNode("Exp",3,$1,$2,$3);}
+		|Lvalue ASSIGNOP Exp{$$=newNode("Exp",3,$1,$2,$3);}
         |Exp PLUS Exp{$$=newNode("Exp",3,$1,$2,$3);}
         |Exp MINUS Exp{$$=newNode("Exp",3,$1,$2,$3);}
-		|Lvalue ASSIGNOP Exp{$$=newNode("Exp",3,$1,$2,$3);}
-
+		
         |Exp AND Exp{$$=newNode("Exp",3,$1,$2,$3);}
         |Exp OR Exp{$$=newNode("Exp",3,$1,$2,$3);}
         |Exp RELOP Exp{$$=newNode("Exp",3,$1,$2,$3);}
