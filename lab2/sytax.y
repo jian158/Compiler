@@ -118,10 +118,10 @@ IfStm:IF LP Exp RP LC BaseStm RC{$$=newNode("IfStm",2,$3,$6);}
 	| IfStm ELIfStm ElseStm {$$=newNode("IfStm",3,$1,$2,$3);};
 
 ELIfStm:ELIF LP Exp RP LC BaseStm RC{$$=newNode("ELIfStm",2,$3,$6);}
-	|EMPTY{$$=newNode("ELIfStm",0,-1);};
+	|EMPTY{$$=newNode("ELIfStm",0,yylineno);};
 	
 ElseStm:ELSE LC BaseStm RC{$$=newNode("ElseStm",1,$3);}
-|EMPTY{$$=newNode("ElseStm",0,-1);};
+|EMPTY{$$=newNode("ElseStm",0,yylineno);};
 
 WhileStm:WHILE LP Exp RP LC BaseStm RC{$$=newNode("WhileStm",3,$1,$3,$6);};
 
@@ -142,7 +142,7 @@ VarStm: Exp {$$=newNode("VarStm",1,$1);}
 ReturnStm:RETURN SEMI{$$=newNode("ReturnStm",1,$1);}
 	| RETURN Exp SEMI{$$=newNode("ReturnStm",2,$1,$2);}
 	
-Args:EMPTY{$$=newNode("Args",0,-1);}
+Args:EMPTY{$$=newNode("Args",0,yylineno);}
 	|Arg{
 		$$=newNode("Args",1,$1);
 		adjustNodes($$,0);
@@ -160,10 +160,11 @@ Arg:VarType ID{$$=newNode("Arg",2,$1,$2);}
 
 
 Exp:	Constant{$$=newNode("Exp",1,$1);}
-		|Call{$$=newNode("Exp",1,$1);}
+		|Call{$$=newNode("Ref",1,$1);$$->string_value=new string("THIS");}
 		|ID DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
 		|ID DOT Constant{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
-		|THIS DOT Constant{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
+		|ID{$$=$1;}
+		|THIS DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
 		|THIS DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
         
 		|Lvalue ASSIGNOP Exp{$$=$1;$$->add($2);$$->add($3);  }
@@ -193,8 +194,7 @@ ArrayIndex:LB Exp RB{$$=newNode("ArrayIndex",1,$2);}
 	
 Lvalue:ID{$$=$1;*$$->name="Lvalue";};
 		
-Constant:ID {$$=$1;}
-        |INT {$$=newNode("Constant",1,$1);}
+Constant:INT {$$=newNode("Constant",1,$1);}
         |FLOAT{$$=newNode("Constant",1,$1);}
 		|BOOL{$$=newNode("Constant",1,$1);}
 		|STR{$$=newNode("Constant",1,$1);}
@@ -204,7 +204,7 @@ Constant:ID {$$=$1;}
 Call:ID LP CallArgs RP{$$=newNode("Call",1,$3);$$->string_value=new string(*$1->string_value);}
 	;
 
-CallArgs:EMPTY{$$=newNode("CallArgs",0,-1);}
+CallArgs:EMPTY{$$=newNode("CallArgs",0,yylineno);}
 	| CallArg{$$=newNode("CallArgs",1,$1);adjustNodes($$,0);};
 	
 CallArg:Exp {$$=newNode("CallArg",1,$1);}

@@ -1,20 +1,22 @@
-class Computer
-{
-	static final int count=5*1.7,p;
-    void Crash(int a,bool b){
-		get();
-		int i=a*5+c;
-		i+=p.get(6);
-		if(i>0){
-			i=0;
-		}
-    }
+class Base{
+	String get(){
+		
+	}
 }
 
-class Person extends Computer{
+class Computer extends Base
+{
+	String getName(){
+		
+	}
+}
+
+class Person{
 	int size;
-	String s=p.getName(a*5+10,1.7,true)*5+1.7 ;
-	bool b=get();
+	static void main(){
+		Computer c;
+		String s=c.get(5);
+	}
 }
 
 

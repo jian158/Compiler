@@ -101,20 +101,24 @@ void ScannerClass(TreeNode *node){
         Class *symbol=new Class((*p->attr)["id"]);
         symbol->setLine(p->line);
         symbol->setExtClass((*p->attr)["ext"]);
-        SymbolTable *table=new SymbolTable(symbol,symbolRoot);
+		SymbolTable *table=new SymbolTable(symbol,symbolRoot);
+		if(!symbol->getExtClass().empty()&&symbolRoot->get(symbol->getExtClass())!=NULL){
+			table->parentClass=symbolRoot->get(symbol->getExtClass());
+		}
+        
         ScannerClassAttr(table,p);
     }
 
-    for (int i=0;i<symbolRoot->size();i++) {
-        Class *symbol= dynamic_cast<Class *>(symbolRoot->get(i)->symbol);
-        if(symbol==NULL){
-            cout<<"Cast Error!"<<endl;
-            exit(-1);
-        }
-        string msg;
-        msg=msg.append(symbol->getExtClass()).append(" ").append("not Exit");
-        error(symbol->getExtClass().empty()||symbolRoot->get(symbol->getExtClass())!=NULL,symbol->getLine(),msg);
-    }
+    // for (int i=0;i<symbolRoot->size();i++) {
+        // Class *symbol= dynamic_cast<Class *>(symbolRoot->get(i)->symbol);
+        // if(symbol==NULL){
+            // cout<<"Cast Error!"<<endl;
+            // exit(-1);
+        // }
+        // string msg;
+        // msg=msg.append(symbol->getExtClass()).append(" ").append("not Exit");
+        // error(symbol->getExtClass().empty()||symbolRoot->get(symbol->getExtClass())!=NULL,symbol->getLine(),msg);
+    // }
 
 }
 
@@ -132,23 +136,24 @@ void ScannerClassAttr(SymbolTable *root,TreeNode *node){
                 symbol->addArgs(*args->getChild(j)->getChild(0)->string_value);
             }
             new SymbolTable(symbol,root);
-        } else{
-            vector<string> declareList;
-            Rule rules;
-            getDeclareList(p,declareList,rules);
-            for (int j = 0; j < declareList.size(); ++j) {
-                Variable *symbol=new Variable(declareList.at(j));
-                symbol->setLine(p->line);
-                symbol->setStatic(!(*p->attr)["static"].empty());
-                symbol->setFinal(!(*p->attr)["final"].empty());
-                symbol->setVarType((*p->attr)["type"]);
-                new SymbolTable(symbol,root);
-            }
         }
+		// else{
+            // vector<string> declareList;
+            // Rule rules;
+            // getDeclareList(p,declareList,rules);
+            // for (int j = 0; j < declareList.size(); ++j) {
+                // Variable *symbol=new Variable(declareList.at(j));
+                // symbol->setLine(p->line);
+                // symbol->setStatic(!(*p->attr)["static"].empty());
+                // symbol->setFinal(!(*p->attr)["final"].empty());
+                // symbol->setVarType((*p->attr)["type"]);
+                // new SymbolTable(symbol,root);
+            // }
+        // }
     }
 }
 
-Symbol* checkSymbol(SymbolTable* table,const string& target){
+Symbol* findSymbol(SymbolTable* table,const string& target){
 	if(table==NULL){
 		return NULL;
 	}
@@ -156,8 +161,10 @@ Symbol* checkSymbol(SymbolTable* table,const string& target){
 	if(result!=NULL){
 		return result;
 	}
-	return checkSymbol(table->parent,target);
+	return table->isClass()?findSymbol(table->parentClass,target):findSymbol(table->parent,target);
 }
+
+
 
 SymbolTable* Reduce(SymbolTable* table,SymbolTable* tree){
 	for(int i=0;i<tree->size();i++){
@@ -166,7 +173,7 @@ SymbolTable* Reduce(SymbolTable* table,SymbolTable* tree){
 	Symbol* symbol=tree->symbol;
 	Type type=symbol->getType();
 	if(type==VAR){
-		Symbol* targetSymbol=checkSymbol(table,symbol->getId());
+		Symbol* targetSymbol=findSymbol(table,symbol->getId());
 		if(targetSymbol==NULL||targetSymbol->getType()!=VAR){
 			symbol->setRealType(ANY);
 			((Variable*)symbol)->setVarType("ANY");
@@ -194,14 +201,60 @@ SymbolTable* Reduce(SymbolTable* table,SymbolTable* tree){
 			tree->symbol->setId(t1);
 		}
 	}
+	else if(type==REF){
+		if(symbol->getId()=="THIS"){
+			
+		}else{
+			Symbol* targetSymbol=findSymbol(table,symbol->getId());
+			if(targetSymbol==NULL||targetSymbol->getType()!=VAR){
+				symbol->setRealType(ANY);
+				error(false,symbol->getLine(),string("var ").append(symbol->getId())+" not exit");
+			}else{
+				Variable* varSymbol=(Variable*)targetSymbol;
+				string classType=varSymbol->getVarType();
+				Symbol* refSymbol=tree->getSymbol(0);
+				Symbol* globalSymbol=findSymbol(symbolRoot->get(classType),refSymbol->getId());
+				if(globalSymbol==NULL){
+					error(false,symbol->getLine(),string("var ").append(symbol->getId()).append(" don't have member ").append(refSymbol->getId()));
+				}
+				else if(globalSymbol->getType()!=refSymbol->getType()){
+					error(false,symbol->getLine(),string(refSymbol->getId()).append(" is ").append(refSymbol->getRealType()).
+						append(" not ").append(globalSymbol->getRealType()));
+				}
+				else if(refSymbol->getType()==FUN){ 
+					Fun *fSymbol=(Fun*)globalSymbol;
+					SymbolTable* targetTree=tree->get(0);
+					if(targetTree->size()==fSymbol->size()){
+						bool isSame=true;
+						for(int i=0;i<fSymbol->size();i++){
+							if(fSymbol->get(i)!=targetTree->getSymbol(i)->getId()){
+								isSame=false;
+								break;
+							}
+						}
+						if(isSame){
+							tree->symbol->setType(CONST);
+							tree->symbol->setId(fSymbol->getRealType());
+						}else{
+							error(false,symbol->getLine(),"args type isn't same");
+						}
+					}
+					else{
+						error(targetTree->size()>fSymbol->size(),symbol->getLine(),"too few arg");
+						error(targetTree->size()<fSymbol->size(),symbol->getLine(),"too many arg");
+					}
+				}
+			}
+		}
+	}
 }
 
 SymbolTable *symbolReduce(SymbolTable* table,SymbolTable* tree){
 	for(int i=0;i<tree->size();i++){
-		cout<<"%%%%%%%%%%%%%%%%%"<<endl;
-		TravelSymbols(tree->get(i),0);
+		// cout<<"%%%%%%%%%%%%%%%%%"<<endl;
+		// TravelSymbols(tree->get(i),0);
 		Reduce(table,tree->get(i));
-		cout<<"%%%%%%%%%%%%%%%%%"<<endl;
+		// cout<<"%%%%%%%%%%%%%%%%%"<<endl;
 	}	
 
 }
@@ -216,15 +269,13 @@ void createSymbolTable(TreeNode *node,SymbolTable *table,int level,int index){
         vector<string> declareList;
         Rule rules;
         SymbolTable* varTree=getDeclareList(p,declareList,rules);
-        if(level>2){
-            for (int j = 0; j < declareList.size(); ++j) {
+		for (int j = 0; j < declareList.size(); ++j) {
                 Variable *symbol=new Variable(declareList.at(j));
                 symbol->setLine(p->line);
                 symbol->setStatic(!(*p->attr)["static"].empty());
                 symbol->setFinal(!(*p->attr)["final"].empty());
                 symbol->setVarType((*p->attr)["type"]);
                 new SymbolTable(symbol,table);
-            }
         }
 		symbolReduce(table,varTree);
     }

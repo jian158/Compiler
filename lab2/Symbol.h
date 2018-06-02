@@ -170,9 +170,13 @@ public:
         return returnType;
     }
 
-    bool check(vector<string>& args){
-
-    }
+    string get(int index){
+		return ArgList[index];
+	}
+	
+	int size()const{
+		return ArgList.size();
+	}
 
 };
 
@@ -195,12 +199,17 @@ public:
 class SymbolTable{
 public:
     Symbol *symbol;
+	SymbolTable* parentClass;
     SymbolTable *parent;
     LinkedMap<string,SymbolTable*> nodes;
-    SymbolTable():parent(NULL),symbol(NULL){}
-    SymbolTable(Symbol* s,SymbolTable *p):parent(p),symbol(s){
+    SymbolTable():parent(NULL),symbol(NULL),parentClass(NULL){}
+    SymbolTable(Symbol* s,SymbolTable *p):parent(p),symbol(s),parentClass(NULL){
         p->add(s->getId(),this);
     }
+	
+	bool isClass(){
+		return symbol==NULL?false:symbol->getType()==_CLASS;
+	}
 	
 	string getId(){
 		return symbol->getId();
