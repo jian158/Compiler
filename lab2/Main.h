@@ -15,6 +15,7 @@ extern FILE* yyin;
 extern int yylineno;
 extern int yyparse();
 extern SymbolTable *symbolRoot;
+
 typedef map<string,bool> Rule;
 class TreeNode {
 public:
@@ -41,8 +42,8 @@ public:
         return childs.size();
     }
 };
-void createSymbolTable(TreeNode *node,SymbolTable *table,int level,int index);
-SymbolTable *parseVarStm(TreeNode *node,Rule& rules);
+void createSymbolTable(TreeNode *node,SymbolTable *table,int index);
+SymbolTable *parseVarStm(TreeNode *node,vector<string>& list);
 SymbolTable* getDeclareList(TreeNode* node,vector<string> &list,Rule& rules);
 TreeNode* newNode(const char* name,int argc,...);
 void TravelTree(TreeNode* node,int level);

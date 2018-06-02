@@ -10,6 +10,7 @@
 #include<cstdarg>
 #include "Main.h"
 SymbolTable *symbolRoot;
+SymbolTable *thisClass,*thisFun; 
 TreeNode* newNode(const char* name,int argc,...){
     // cout<<"DEBUG(name):"<<name<<endl;
     // cout<<"DEBUG(yytext):"<<yytext<<endl;
@@ -37,7 +38,7 @@ TreeNode* newNode(const char* name,int argc,...){
             newNode->int_value=strtol(yytext,NULL,16);
             *(newNode->name)="INT";
         }
-        else if(pname=="bool"||pname=="String"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP"||pname=="OP")
+        else if(pname=="bool"||pname=="String"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP"||pname=="OP"||pname=="RELOP")
             newNode->string_value=new string(yytext);
         else if(pname=="float")
             newNode->float_value=strtof(yytext,NULL);
@@ -58,7 +59,7 @@ void TravelTree(TreeNode* node,int level){
     if(pname=="int")
         cout<<":"<<node->int_value;
     else if(pname=="bool"||pname=="String"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP"
-            ||pname=="VarType"||pname=="Call"||pname=="Ref"||pname=="Lvalue"||pname=="OP")
+            ||pname=="VarType"||pname=="Call"||pname=="Ref"||pname=="Lvalue"||pname=="OP"||pname=="RELOP")
         cout<<":"<<*(node->string_value);
     else if(pname=="float")
         cout<<":"<<node->float_value;
@@ -89,7 +90,7 @@ void adjustNodes(TreeNode* root,int index){
 void startSymbolCreate(TreeNode *node){
 	cout<<"******************startSymbolCreate********************"<<endl;
     ScannerClass(node);
-	createSymbolTable(node,symbolRoot,0,0);
+	createSymbolTable(node,symbolRoot,0);
     TravelSymbols(symbolRoot,0);
 	cout<<"******************endSymbolCreate********************"<<endl;
 }
@@ -103,7 +104,7 @@ void ScannerClass(TreeNode *node){
         symbol->setExtClass((*p->attr)["ext"]);
 		SymbolTable *table=new SymbolTable(symbol,symbolRoot);
 		if(!symbol->getExtClass().empty()&&symbolRoot->get(symbol->getExtClass())!=NULL){
-			table->parentClass=symbolRoot->get(symbol->getExtClass());
+			table->parent=symbolRoot->get(symbol->getExtClass());
 		}
         
         ScannerClassAttr(table,p);
@@ -161,17 +162,44 @@ Symbol* findSymbol(SymbolTable* table,const string& target){
 	if(result!=NULL){
 		return result;
 	}
-	return table->isClass()?findSymbol(table->parentClass,target):findSymbol(table->parent,target);
+	return findSymbol(table->parent,target);
+}
+
+void ReduceFunction(Symbol* globalSymbol,Symbol* symbol,SymbolTable* tree){
+	Fun *fSymbol=(Fun*)globalSymbol;
+	SymbolTable* targetTree=tree->get(0);
+	if(targetTree->size()==fSymbol->size()){
+		bool isSame=true;
+		for(int i=0;i<fSymbol->size();i++){
+			if(fSymbol->get(i)!=targetTree->getSymbol(i)->getRealType()){
+				// cout<<"CONST TYPE:"<<fSymbol->get(i)<<"  $$$"<<targetTree->getSymbol(i)->getId()<<endl;
+				isSame=false;
+				break;
+			}
+		}
+		if(!isSame){
+			error(false,symbol->getLine(),"args type isn't same");
+		}
+	}
+	else{
+		error(targetTree->size()>fSymbol->size(),symbol->getLine(),"too few arg");
+		error(targetTree->size()<fSymbol->size(),symbol->getLine(),"too many arg");
+	}
+	tree->symbol->setType(CONST);
+	tree->symbol->setId(fSymbol->getRealType());
 }
 
 
-
-SymbolTable* Reduce(SymbolTable* table,SymbolTable* tree){
+void Reduce(SymbolTable* table,SymbolTable* tree){
+	Symbol* symbol=tree->symbol;
+	Type type=symbol->getType();
+	if(type==REF&&tree->getSymbol(0)->getType()==VAR){
+		return;
+	}
 	for(int i=0;i<tree->size();i++){
 		Reduce(table,tree->get(i));
 	}
-	Symbol* symbol=tree->symbol;
-	Type type=symbol->getType();
+
 	if(type==VAR){
 		Symbol* targetSymbol=findSymbol(table,symbol->getId());
 		if(targetSymbol==NULL||targetSymbol->getType()!=VAR){
@@ -182,84 +210,102 @@ SymbolTable* Reduce(SymbolTable* table,SymbolTable* tree){
 			((Variable*)symbol)->setVarType(((Variable*)targetSymbol)->getVarType());
 		}
 	}
+	
 	else if(type==OP){
+		// cout<<"OP:"<<tree->symbol->getId()<<endl;
 		string t1=tree->getSymbol(0)->getRealType();
 		string t2=tree->getSymbol(1)->getRealType();
+		// cout<<"Real Type:"<<t1<<"\t"<<t2<<endl;
 		if(t1=="ANY"||t2=="ANY"){
 			tree->symbol->setRealType(ANY);
-			// error(false,tree->symbol->getLine(),string("OP only supprot same type and type is int,flaot"));
-		} else if((t1!=t2)||(t1!="int"&&t1!="float")||(t2!="int"&&t2!="float")){
+		} 
+		else if(symbol->getId()=="="){
+			if(t1==t2){
+				tree->symbol->setRealType(CONST);
+				tree->symbol->setId(t1);
+			}else{
+				error(false,symbol->getLine(),string("Lvalue' type is ").append(t1).append(",but Rvalue's type is ").append(t2));
+				tree->symbol->setRealType(ANY);
+			}
+		}
+		else if(((t1!=t2)||(t1!="int"&&t1!="float")||(t2!="int"&&t2!="float"))){
 			tree->symbol->setRealType(ANY);
 			error(false,tree->symbol->getLine(),string("OP only supprot same" 
 				" type and type is int,flaot;the symbol ").append(tree->getSymbol(0)->getId()).
 				append(" and ").append(tree->getSymbol(1)->getId()).append(" is not same")
-			
 			);
 		}
 		else{
-			tree->symbol->setType(CONST);
+			tree->symbol->setRealType(CONST);
 			tree->symbol->setId(t1);
 		}
 	}
 	else if(type==REF){
-		if(symbol->getId()=="THIS"){
-			
+		bool isThis=symbol->getId()=="THIS";
+		Symbol* targetSymbol=isThis?thisClass->symbol:findSymbol(table,symbol->getId());
+		if(targetSymbol==NULL){
+			symbol->setRealType(ANY);
+			error(false,symbol->getLine(),string("var ").append(symbol->getId())+" not exit");
 		}else{
-			Symbol* targetSymbol=findSymbol(table,symbol->getId());
-			if(targetSymbol==NULL||targetSymbol->getType()!=VAR){
-				symbol->setRealType(ANY);
-				error(false,symbol->getLine(),string("var ").append(symbol->getId())+" not exit");
-			}else{
+			Symbol* refSymbol=tree->getSymbol(0);
+			Symbol* globalSymbol;
+			if(!isThis){
 				Variable* varSymbol=(Variable*)targetSymbol;
-				string classType=varSymbol->getVarType();
-				Symbol* refSymbol=tree->getSymbol(0);
-				Symbol* globalSymbol=findSymbol(symbolRoot->get(classType),refSymbol->getId());
-				if(globalSymbol==NULL){
-					error(false,symbol->getLine(),string("var ").append(symbol->getId()).append(" don't have member ").append(refSymbol->getId()));
-				}
-				else if(globalSymbol->getType()!=refSymbol->getType()){
-					error(false,symbol->getLine(),string(refSymbol->getId()).append(" is ").append(refSymbol->getRealType()).
-						append(" not ").append(globalSymbol->getRealType()));
-				}
-				else if(refSymbol->getType()==FUN){ 
-					Fun *fSymbol=(Fun*)globalSymbol;
-					SymbolTable* targetTree=tree->get(0);
-					if(targetTree->size()==fSymbol->size()){
-						bool isSame=true;
-						for(int i=0;i<fSymbol->size();i++){
-							if(fSymbol->get(i)!=targetTree->getSymbol(i)->getId()){
-								isSame=false;
-								break;
-							}
-						}
-						if(isSame){
-							tree->symbol->setType(CONST);
-							tree->symbol->setId(fSymbol->getRealType());
-						}else{
-							error(false,symbol->getLine(),"args type isn't same");
-						}
-					}
-					else{
-						error(targetTree->size()>fSymbol->size(),symbol->getLine(),"too few arg");
-						error(targetTree->size()<fSymbol->size(),symbol->getLine(),"too many arg");
-					}
-				}
+				string classId=varSymbol->getVarType();
+				globalSymbol=findSymbol(symbolRoot->get(classId),refSymbol->getId());
+			}else{
+				globalSymbol=findSymbol(thisClass,refSymbol->getId());
+			}
+			
+			if(globalSymbol==NULL){
+				error(false,symbol->getLine(),string("var ").append(symbol->getId())
+					.append(" don't have member ").append(refSymbol->getId()));
+			}else if(globalSymbol->getType()!=refSymbol->getType()){
+				error(false,symbol->getLine(),string(refSymbol->getId()).append(" is ").append(refSymbol->getRealType()).
+					append(" not ").append(globalSymbol->getRealType()));
+			}else if(refSymbol->getType()==FUN){ 
+				ReduceFunction(globalSymbol,symbol,tree);
+			}else{
+				Variable* varSymbol=(Variable*)globalSymbol;
+				tree->symbol->setType(CONST);
+				tree->symbol->setId(varSymbol->getRealType());
 			}
 		}
+		
+	}
+	else if(type==CONST){
+		
 	}
 }
 
 SymbolTable *symbolReduce(SymbolTable* table,SymbolTable* tree){
+	// cout<<"$$$$$$$$$$$$$$$$$$$$$"<<endl;
+	// TravelSymbols(tree,0);
+	// cout<<"$$$$$$$$$$$$$$$$$$$$$"<<endl;
 	for(int i=0;i<tree->size();i++){
-		// cout<<"%%%%%%%%%%%%%%%%%"<<endl;
-		// TravelSymbols(tree->get(i),0);
+		
 		Reduce(table,tree->get(i));
 		// cout<<"%%%%%%%%%%%%%%%%%"<<endl;
+		// TravelSymbols(tree->get(i),0);
+		// cout<<"%%%%%%%%%%%%%%%%%"<<endl;
+		// if(tree->symbol->getType()!=EXP){
+			// Symbol* lSymbol=findSymbol(table,tree->symbol->getId());
+			// if(lSymbol==NULL){
+				// error(false,tree->symbol->getLine(),string(tree->symbol->getId()).append(" is not declare"));
+			// }
+			// else if(tree->get(i)->symbol->getRealType()!="ANY"&&tree->get(i)->symbol->getRealType()!=lSymbol->getRealType()){
+				// cout<<"type:"<<tree->get(i)->symbol->getRealType()<<"  %%  "<<lSymbol->getRealType()<<endl;
+				// error(false,tree->symbol->getLine(),string(tree->symbol->getId()).append(" type is ")
+					// .append(tree->get(i)->symbol->getRealType()).append(",").append("exp type is ").append(lSymbol->getRealType()));
+			// }
+		// }
+
+		
 	}	
 
 }
 
-void createSymbolTable(TreeNode *node,SymbolTable *table,int level,int index){
+void createSymbolTable(TreeNode *node,SymbolTable *table,int index){
     if(index>=node->size()){
         return;
     }
@@ -288,38 +334,43 @@ void createSymbolTable(TreeNode *node,SymbolTable *table,int level,int index){
             symbol->setVarType(*args->getChild(i)->getChild(0)->string_value);
             new SymbolTable(symbol,t);
 		}
-		createSymbolTable(p->getChild(1),t,level+1,0);
+		createSymbolTable(p->getChild(1),t,0);
 	}else if(name=="Class"){
 		SymbolTable *t=table->get((*p->attr)["id"]);
-		createSymbolTable(p,t,level+1,0);
-	}else{
-		createSymbolTable(p,table,level+1,0);
+		thisClass=t;
+		createSymbolTable(p,t,0);
+	}else if(name=="VarStm"||name=="BoolExp"){
+		vector<string> declareList;
+        Rule rules;
+        SymbolTable* varTree=getDeclareList(p,declareList,rules);
+		symbolReduce(table,varTree);
+	}else if(name=="IfStm"||name=="ELIfStm"||name=="ElseStm"||name=="WhileStm"){
+		Symbol* symbol=new Segment(to_string(table->size()).append("SEG"));
+		SymbolTable* T=new SymbolTable(symbol,table);
+		createSymbolTable(p,T,0);
 	}
-	createSymbolTable(node,table,level,index+1);
+	else{
+		createSymbolTable(p,table,0);
+	}
+	createSymbolTable(node,table,index+1);
 }
 
 SymbolTable* getDeclareList(TreeNode* node,vector<string> &list,map<string,bool>& rules){
-    SymbolTable* tree=parseVarStm(node,rules);
-	// cout<<"$$$$$$$$$$$$$$$$$$$$$"<<endl;
-	// TravelSymbols(tree,0);
-	// cout<<"$$$$$$$$$$$$$$$$$$$$$"<<endl;
-    if(tree->getId()!="Exp"){
-        list.push_back(tree->getId());
-    }else{
-        for(int i=0;i<tree->size();i++){
-            list.push_back(tree->get(i)->getId());
-        }
-    }
+    SymbolTable* tree=parseVarStm(node,list);
+	for(int i=0;i<tree->size();i++){
+		if(tree->getSymbol(i)->getType()==VAR){
+			list.push_back(tree->getSymbol(i)->getId());
+		}
+	}
     return tree;
 }
 
-SymbolTable *parseVarStm(TreeNode *node,map<string,bool>& rules){
+SymbolTable *parseVarStm(TreeNode *node,vector<string>& list){
     if(node==NULL)
         return NULL;
     // cout<<"Id:"<<*node->name<<"  line:"<<node->line<<endl;
     SymbolTable *treeNode=new SymbolTable;
     string name=*node->name;
-    error(!rules[name],node->line,string("this exp is not support ").append(name));
     if(name=="ID"){
         treeNode->symbol=new Variable(*node->string_value);
         treeNode->symbol->setLine(node->line);
@@ -330,7 +381,9 @@ SymbolTable *parseVarStm(TreeNode *node,map<string,bool>& rules){
 		
         symbol->setLine(node->line);
 		TreeNode* q=node->getChild(0);
+		// cout<<"Constant*****************"<<*q->name<<endl;
 		symbol->setVarType(*q->name);
+
 		if(*q->name=="float")
 			symbol->setId(to_string(q->float_value));
 		else if(*q->name=="int")
@@ -339,7 +392,7 @@ SymbolTable *parseVarStm(TreeNode *node,map<string,bool>& rules){
         return treeNode;
     }
     for (int i = 0; i < node->size(); ++i) {
-        SymbolTable *p=parseVarStm(node->getChild(i),rules);
+        SymbolTable *p=parseVarStm(node->getChild(i),list);
         if(p!=NULL){
             if(p->getId()=="Exp"){
                 for (int j=0;j<p->size();j++) {
@@ -367,10 +420,11 @@ SymbolTable *parseVarStm(TreeNode *node,map<string,bool>& rules){
         return treeNode;
     }else if(name=="Lvalue"){
         treeNode->symbol=new Variable(*node->string_value);
+		list.push_back(*node->string_value);
         treeNode->symbol->setLine(node->line);
         return treeNode;
     }
-	else if(name=="OP"||name=="RELOP"){
+	else if(name=="OP"||name=="RELOP"||name=="ASSIGNOP"){
 		treeNode->symbol=new Symbol;
 		treeNode->symbol->setType(OP);
         treeNode->symbol->setLine(node->line);
@@ -382,7 +436,7 @@ SymbolTable *parseVarStm(TreeNode *node,map<string,bool>& rules){
         treeNode->symbol->setLine(node->line);
         treeNode->symbol->setId("Exp");
     }
-    return treeNode->nodes.size()==0?NULL:(treeNode->nodes.size()==1?treeNode->getFirst():treeNode);
+    return treeNode;
 }
 
 
@@ -394,7 +448,7 @@ void TravelSymbols(SymbolTable* table,int level){
         cout<<"-";
     }
     if(table->symbol!=NULL)
-        cout<<table->symbol->getId()<<":"<<table->symbol->toString()<<endl;
+        cout<<table->symbol->getId()<<":"<<table->symbol->getRealType()<<endl;
     for ( int i=0;i<table->size();i++) {
         TravelSymbols(table->get(i),level+2);
     }

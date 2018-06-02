@@ -16,9 +16,9 @@ TreeNode *node;
 /*declare tokens*/
 
 %token  <node> STATIC ARRAY FINAL BREAK TYPE STRUCT  EXTENDS CLASS RETURN IF ELSE ELIF FOR WHILE ID SPACE SEMI COMMA ASSIGNOP RELOP  DOT NOT LP RP LB RB LC RC AERROR DPLUS DMINUS
-%token  <node> INT FLOAT NULLPTR STR BOOL PLUS MINUS STAR DIV OR AND
+%token  <node> INT FLOAT NULLPTR STR BOOL PLUS MINUS STAR DIV OR AND 
 %token  <node> EOL NEW THIS
-%type   <node> Program EMPTY ClassDefs Class Exp Arg Args ClassStm Fun BaseStm Lines Line IfStm ELIfStm ElseStm ForStm WhileStm BreakStm VarStm DeclareStm  Call CallArgs CallArg Constant ReturnStm VarType ClassStms Arrays ArrayIndex Lvalue
+%type   <node> Program EMPTY ClassDefs Class Exp Arg Args ClassStm Fun BaseStm Lines Line IfStm ELIfStm ElseStm ForStm WhileStm BreakStm VarStm DeclareStm  Call CallArgs CallArg Constant ReturnStm VarType ClassStms Arrays ArrayIndex Lvalue BoolExp
 
 
 %right ASSIGNOP
@@ -98,15 +98,14 @@ Lines: Line{ $$=newNode("Lines",1,$1);}
 	;
 
 
-Line:EMPTY{$$=newNode("Line",0,-1);}
-	| IfStm {$$=newNode("Line",1,$1);}
-	| WhileStm{$$=newNode("Line",1,$1);}
-	| VarStm SEMI{$$=newNode("Line",1,$1);
-		}
-	| DeclareStm{$$=newNode("Line",1,$1);}
-	| ReturnStm{$$=newNode("Line",1,$1);}
-	| BreakStm{$$=newNode("Line",1,$1);}
-	| ForStm{$$=newNode("Line",1,$1);}
+Line:EMPTY{$$=newNode("Line",0,yylineno);}
+	| IfStm {$$=$1;}
+	| WhileStm{$$=$1;}
+	| VarStm SEMI{$$=$1;}
+	| DeclareStm{$$=$1;}
+	| ReturnStm{$$=$1;}
+	| BreakStm{$$=$1;}
+	| ForStm{$$=$1;}
 ;
 
 
@@ -114,7 +113,7 @@ BreakStm:BREAK SEMI{
 	$$=newNode("BreakStm",1,$1);
 };
 
-IfStm:IF LP Exp RP LC BaseStm RC{$$=newNode("IfStm",2,$3,$6);}
+IfStm:IF LP BoolExp RP LC BaseStm RC{$$=newNode("IfStm",2,$3,$6);}
 	| IfStm ELIfStm ElseStm {$$=newNode("IfStm",3,$1,$2,$3);};
 
 ELIfStm:ELIF LP Exp RP LC BaseStm RC{$$=newNode("ELIfStm",2,$3,$6);}
@@ -123,9 +122,9 @@ ELIfStm:ELIF LP Exp RP LC BaseStm RC{$$=newNode("ELIfStm",2,$3,$6);}
 ElseStm:ELSE LC BaseStm RC{$$=newNode("ElseStm",1,$3);}
 |EMPTY{$$=newNode("ElseStm",0,yylineno);};
 
-WhileStm:WHILE LP Exp RP LC BaseStm RC{$$=newNode("WhileStm",3,$1,$3,$6);};
+WhileStm:WHILE LP BoolExp RP LC BaseStm RC{$$=newNode("WhileStm",3,$1,$3,$6);};
 
-ForStm:FOR LP Exp SEMI Exp SEMI Exp RP LC BaseStm RC{$$=newNode("ForStm",3,$1,$3,$6);};
+ForStm:FOR LP Exp SEMI BoolExp SEMI Exp RP LC BaseStm RC{$$=newNode("ForStm",3,$1,$3,$6);};
 
 DeclareStm:VarType VarStm SEMI{$$=newNode("DeclareStm",1,$2);adjustNodes($$,0);
 	(*$$->attr)["type"]=*$1->string_value;
@@ -157,25 +156,27 @@ Arg:VarType ID{$$=newNode("Arg",2,$1,$2);}
 	}
 ;
 
-
+BoolExp:Exp RELOP Exp{$$=newNode("BoolExp",1,$2);$2->add($1);$2->add($3);}
+	|Exp AND Exp{$$=$2;$$->add($1);$$->add($3);}
+    |Exp OR Exp{$$=$2;$$->add($1);$$->add($3);};
 
 Exp:	Constant{$$=newNode("Exp",1,$1);}
 		|Call{$$=newNode("Ref",1,$1);$$->string_value=new string("THIS");}
 		|ID DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
-		|ID DOT Constant{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
+		|ID DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
 		|ID{$$=$1;}
 		|THIS DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
 		|THIS DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
         
-		|Lvalue ASSIGNOP Exp{$$=$1;$$->add($2);$$->add($3);  }
+		|Lvalue ASSIGNOP Exp{$$=$2;$$->add($1);$$->add($3);  }
 		|Exp PLUS Exp{$$=$2;$$->add($1);$$->add($3);}
         |Exp MINUS Exp{$$=$2;$$->add($1);$$->add($3);}
 		
-        |Exp AND Exp{$$=$2;$$->add($1);$$->add($3);}
-        |Exp OR Exp{$$=$2;$$->add($1);$$->add($3);}
+		|BoolExp{$$=$1;}
+
 		|Exp STAR Exp{$$=$2;$$->add($1);$$->add($3);}
         |Exp DIV Exp{$$=$2;$$->add($1);$$->add($3);}
-        |Exp RELOP Exp{$$=$2;$$->add($1);$$->add($3);}
+        
         |LP Exp RP{$$=newNode("Exp",1,$2);}
         |MINUS Exp {$$=newNode("Exp",2,$1,$2);}
         |NOT Exp {$$=newNode("Exp",2,$1,$2);}

@@ -8,19 +8,19 @@ Terminals unused in grammar
 
 
 State 14 conflicts: 1 shift/reduce
-State 94 conflicts: 3 shift/reduce, 1 reduce/reduce
-State 99 conflicts: 1 reduce/reduce
-State 118 conflicts: 20 shift/reduce
-State 134 conflicts: 20 shift/reduce, 1 reduce/reduce
-State 136 conflicts: 1 shift/reduce, 21 reduce/reduce
-State 143 conflicts: 20 shift/reduce
-State 146 conflicts: 20 shift/reduce
-State 157 conflicts: 1 shift/reduce
-State 176 conflicts: 20 shift/reduce
-State 177 conflicts: 20 shift/reduce
+State 95 conflicts: 3 shift/reduce, 1 reduce/reduce
+State 100 conflicts: 1 reduce/reduce
+State 119 conflicts: 20 shift/reduce
+State 135 conflicts: 20 shift/reduce, 1 reduce/reduce
+State 137 conflicts: 1 shift/reduce, 21 reduce/reduce
+State 144 conflicts: 20 shift/reduce
+State 147 conflicts: 20 shift/reduce
+State 158 conflicts: 1 shift/reduce
+State 178 conflicts: 20 shift/reduce
 State 179 conflicts: 20 shift/reduce
-State 185 conflicts: 20 shift/reduce
-State 193 conflicts: 20 shift/reduce
+State 181 conflicts: 20 shift/reduce
+State 187 conflicts: 20 shift/reduce
+State 195 conflicts: 20 shift/reduce
 
 
 Grammar
@@ -69,7 +69,7 @@ Grammar
 
    30 BreakStm: BREAK SEMI
 
-   31 IfStm: IF LP Exp RP LC BaseStm RC
+   31 IfStm: IF LP BoolExp RP LC BaseStm RC
    32      | IfStm ELIfStm ElseStm
 
    33 ELIfStm: ELIF LP Exp RP LC BaseStm RC
@@ -78,9 +78,9 @@ Grammar
    35 ElseStm: ELSE LC BaseStm RC
    36        | EMPTY
 
-   37 WhileStm: WHILE LP Exp RP LC BaseStm RC
+   37 WhileStm: WHILE LP BoolExp RP LC BaseStm RC
 
-   38 ForStm: FOR LP Exp SEMI Exp SEMI Exp RP LC BaseStm RC
+   38 ForStm: FOR LP Exp SEMI BoolExp SEMI Exp RP LC BaseStm RC
 
    39 DeclareStm: VarType VarStm SEMI
    40           | STATIC VarType VarStm SEMI
@@ -99,51 +99,53 @@ Grammar
    49 Arg: VarType ID
    50    | VarType ID COMMA Arg
 
-   51 Exp: Constant
-   52    | Call
-   53    | ID DOT Call
-   54    | ID DOT Constant
-   55    | ID
-   56    | THIS DOT ID
-   57    | THIS DOT Call
-   58    | Lvalue ASSIGNOP Exp
-   59    | Exp PLUS Exp
-   60    | Exp MINUS Exp
-   61    | Exp AND Exp
-   62    | Exp OR Exp
-   63    | Exp STAR Exp
-   64    | Exp DIV Exp
-   65    | Exp RELOP Exp
-   66    | LP Exp RP
-   67    | MINUS Exp
-   68    | NOT Exp
-   69    | ID ArrayIndex
-   70    | DPLUS ID
-   71    | ID DPLUS
-   72    | DMINUS ID
-   73    | ID DMINUS
-   74    | NEW Call
-   75    | NEW TYPE ArrayIndex
+   51 BoolExp: Exp RELOP Exp
+   52        | Exp AND Exp
+   53        | Exp OR Exp
 
-   76 ArrayIndex: LB Exp RB
-   77           | LB Exp RB ArrayIndex
+   54 Exp: Constant
+   55    | Call
+   56    | ID DOT Call
+   57    | ID DOT ID
+   58    | ID
+   59    | THIS DOT ID
+   60    | THIS DOT Call
+   61    | Lvalue ASSIGNOP Exp
+   62    | Exp PLUS Exp
+   63    | Exp MINUS Exp
+   64    | BoolExp
+   65    | Exp STAR Exp
+   66    | Exp DIV Exp
+   67    | LP Exp RP
+   68    | MINUS Exp
+   69    | NOT Exp
+   70    | ID ArrayIndex
+   71    | DPLUS ID
+   72    | ID DPLUS
+   73    | DMINUS ID
+   74    | ID DMINUS
+   75    | NEW Call
+   76    | NEW TYPE ArrayIndex
 
-   78 Lvalue: ID
+   77 ArrayIndex: LB Exp RB
+   78           | LB Exp RB ArrayIndex
 
-   79 Constant: INT
-   80         | FLOAT
-   81         | BOOL
-   82         | STR
+   79 Lvalue: ID
 
-   83 Call: ID LP CallArgs RP
+   80 Constant: INT
+   81         | FLOAT
+   82         | BOOL
+   83         | STR
 
-   84 CallArgs: EMPTY
-   85         | CallArg
+   84 Call: ID LP CallArgs RP
 
-   86 CallArg: Exp
-   87        | Exp COMMA CallArg
+   85 CallArgs: EMPTY
+   86         | CallArg
 
-   88 EMPTY: %empty
+   87 CallArg: Exp
+   88        | Exp COMMA CallArg
+
+   89 EMPTY: %empty
 
 
 Terminals, with rules where they appear
@@ -154,7 +156,7 @@ STATIC (258) 11 40 42
 ARRAY (259) 17 18
 FINAL (260) 41 42
 BREAK (261) 30
-TYPE (262) 13 15 75
+TYPE (262) 13 15 76
 STRUCT (263)
 EXTENDS (264) 5
 CLASS (265) 4 5
@@ -164,37 +166,37 @@ ELSE (268) 35
 ELIF (269) 33
 FOR (270) 38
 WHILE (271) 37
-ID (272) 4 5 10 11 12 14 16 49 50 53 54 55 56 69 70 71 72 73 78 83
+ID (272) 4 5 10 11 12 14 16 49 50 56 57 58 59 70 71 72 73 74 79 84
 SPACE (273)
 SEMI (274) 25 30 38 39 40 41 42 45 46
-COMMA (275) 44 50 87
-ASSIGNOP (276) 58
-RELOP (277) 65
-DOT (278) 53 54 56 57
-NOT (279) 68
-LP (280) 10 11 12 31 33 37 38 66 83
-RP (281) 10 11 12 31 33 37 38 66 83
-LB (282) 76 77
-RB (283) 76 77
+COMMA (275) 44 50 88
+ASSIGNOP (276) 61
+RELOP (277) 51
+DOT (278) 56 57 59 60
+NOT (279) 69
+LP (280) 10 11 12 31 33 37 38 67 84
+RP (281) 10 11 12 31 33 37 38 67 84
+LB (282) 77 78
+RB (283) 77 78
 LC (284) 4 5 10 11 12 31 33 35 37 38
 RC (285) 4 5 10 11 12 31 33 35 37 38
 AERROR (286)
-DPLUS (287) 70 71
-DMINUS (288) 72 73
-INT (289) 79
-FLOAT (290) 80
+DPLUS (287) 71 72
+DMINUS (288) 73 74
+INT (289) 80
+FLOAT (290) 81
 NULLPTR (291)
-STR (292) 82
-BOOL (293) 81
-PLUS (294) 59
-MINUS (295) 60 67
-STAR (296) 63
-DIV (297) 64
-OR (298) 62
-AND (299) 61
+STR (292) 83
+BOOL (293) 82
+PLUS (294) 62
+MINUS (295) 63 68
+STAR (296) 65
+DIV (297) 66
+OR (298) 53
+AND (299) 52
 EOL (300)
-NEW (301) 74 75
-THIS (302) 56 57
+NEW (301) 75 76
+THIS (302) 59 60
 
 
 Nonterminals, with rules where they appear
@@ -245,24 +247,26 @@ Args (69)
     on left: 47 48, on right: 10 11 12
 Arg (70)
     on left: 49 50, on right: 48 50
-Exp (71)
-    on left: 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68
-    69 70 71 72 73 74 75, on right: 31 33 37 38 43 44 46 58 59 60 61
-    62 63 64 65 66 67 68 76 77 86 87
-ArrayIndex (72)
-    on left: 76 77, on right: 69 75 77
-Lvalue (73)
-    on left: 78, on right: 58
-Constant (74)
-    on left: 79 80 81 82, on right: 51 54
-Call (75)
-    on left: 83, on right: 52 53 57 74
-CallArgs (76)
-    on left: 84 85, on right: 83
-CallArg (77)
-    on left: 86 87, on right: 85 87
-EMPTY (78)
-    on left: 88, on right: 22 34 36 47 84
+BoolExp (71)
+    on left: 51 52 53, on right: 31 37 38 64
+Exp (72)
+    on left: 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+    72 73 74 75 76, on right: 33 38 43 44 46 51 52 53 61 62 63 65 66
+    67 68 69 77 78 87 88
+ArrayIndex (73)
+    on left: 77 78, on right: 70 76 78
+Lvalue (74)
+    on left: 79, on right: 61
+Constant (75)
+    on left: 80 81 82 83, on right: 54
+Call (76)
+    on left: 84, on right: 55 56 60 75
+CallArgs (77)
+    on left: 85 86, on right: 84
+CallArg (78)
+    on left: 87 88, on right: 86 88
+EMPTY (79)
+    on left: 89, on right: 22 34 36 47 85
 
 
 State 0
@@ -466,10 +470,11 @@ State 18
     THIS    shift, and go to state 42
 
     VarStm    go to state 43
-    Exp       go to state 44
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    BoolExp   go to state 44
+    Exp       go to state 45
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 19
@@ -488,7 +493,7 @@ State 20
     TYPE    shift, and go to state 13
     ID      shift, and go to state 14
 
-    ClassStms   go to state 48
+    ClassStms   go to state 49
     ClassStm    go to state 16
     Fun         go to state 17
     VarType     go to state 18
@@ -502,7 +507,7 @@ State 21
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    VarType  go to state 49
+    VarType  go to state 50
 
 
 State 22
@@ -522,7 +527,7 @@ State 23
    11 Fun: STATIC VarType . ID LP Args RP LC BaseStm RC
    40 DeclareStm: STATIC VarType . VarStm SEMI
 
-    ID      shift, and go to state 50
+    ID      shift, and go to state 51
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -535,18 +540,19 @@ State 23
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 51
-    Exp       go to state 44
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    VarStm    go to state 52
+    BoolExp   go to state 44
+    Exp       go to state 45
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 24
 
    41 DeclareStm: FINAL VarType . VarStm SEMI
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -559,11 +565,12 @@ State 24
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 53
-    Exp       go to state 44
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    VarStm    go to state 54
+    BoolExp   go to state 44
+    Exp       go to state 45
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 25
@@ -575,7 +582,7 @@ State 25
 
     $default  reduce using rule 17 (Arrays)
 
-    Arrays  go to state 54
+    Arrays  go to state 55
 
 
 State 26
@@ -592,12 +599,12 @@ State 27
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    $default  reduce using rule 88 (EMPTY)
+    $default  reduce using rule 89 (EMPTY)
 
-    VarType  go to state 55
-    Args     go to state 56
-    Arg      go to state 57
-    EMPTY    go to state 58
+    VarType  go to state 56
+    Args     go to state 57
+    Arg      go to state 58
+    EMPTY    go to state 59
 
 
 State 28
@@ -624,32 +631,32 @@ State 30
 State 31
 
    10 Fun: VarType ID . LP Args RP LC BaseStm RC
-   53 Exp: ID . DOT Call
-   54    | ID . DOT Constant
-   55    | ID .
-   69    | ID . ArrayIndex
-   71    | ID . DPLUS
-   73    | ID . DMINUS
-   78 Lvalue: ID .
-   83 Call: ID . LP CallArgs RP
+   56 Exp: ID . DOT Call
+   57    | ID . DOT ID
+   58    | ID .
+   70    | ID . ArrayIndex
+   72    | ID . DPLUS
+   74    | ID . DMINUS
+   79 Lvalue: ID .
+   84 Call: ID . LP CallArgs RP
 
-    DOT     shift, and go to state 59
-    LP      shift, and go to state 60
-    LB      shift, and go to state 61
-    DPLUS   shift, and go to state 62
-    DMINUS  shift, and go to state 63
+    DOT     shift, and go to state 60
+    LP      shift, and go to state 61
+    LB      shift, and go to state 62
+    DPLUS   shift, and go to state 63
+    DMINUS  shift, and go to state 64
 
-    ASSIGNOP  reduce using rule 78 (Lvalue)
-    $default  reduce using rule 55 (Exp)
+    ASSIGNOP  reduce using rule 79 (Lvalue)
+    $default  reduce using rule 58 (Exp)
 
-    ArrayIndex  go to state 64
+    ArrayIndex  go to state 65
 
 
 State 32
 
-   68 Exp: NOT . Exp
+   69 Exp: NOT . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -662,17 +669,18 @@ State 32
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 65
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    BoolExp   go to state 44
+    Exp       go to state 66
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 33
 
-   66 Exp: LP . Exp RP
+   67 Exp: LP . Exp RP
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -685,59 +693,60 @@ State 33
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 66
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    BoolExp   go to state 44
+    Exp       go to state 67
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 34
 
-   70 Exp: DPLUS . ID
-
-    ID  shift, and go to state 67
-
-
-State 35
-
-   72 Exp: DMINUS . ID
+   71 Exp: DPLUS . ID
 
     ID  shift, and go to state 68
 
 
+State 35
+
+   73 Exp: DMINUS . ID
+
+    ID  shift, and go to state 69
+
+
 State 36
 
-   79 Constant: INT .
-
-    $default  reduce using rule 79 (Constant)
-
-
-State 37
-
-   80 Constant: FLOAT .
+   80 Constant: INT .
 
     $default  reduce using rule 80 (Constant)
 
 
-State 38
+State 37
 
-   82 Constant: STR .
-
-    $default  reduce using rule 82 (Constant)
-
-
-State 39
-
-   81 Constant: BOOL .
+   81 Constant: FLOAT .
 
     $default  reduce using rule 81 (Constant)
 
 
+State 38
+
+   83 Constant: STR .
+
+    $default  reduce using rule 83 (Constant)
+
+
+State 39
+
+   82 Constant: BOOL .
+
+    $default  reduce using rule 82 (Constant)
+
+
 State 40
 
-   67 Exp: MINUS . Exp
+   68 Exp: MINUS . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -750,95 +759,103 @@ State 40
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 69
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    BoolExp   go to state 44
+    Exp       go to state 70
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 41
 
-   74 Exp: NEW . Call
-   75    | NEW . TYPE ArrayIndex
+   75 Exp: NEW . Call
+   76    | NEW . TYPE ArrayIndex
 
-    TYPE  shift, and go to state 70
-    ID    shift, and go to state 71
+    TYPE  shift, and go to state 71
+    ID    shift, and go to state 72
 
-    Call  go to state 72
+    Call  go to state 73
 
 
 State 42
 
-   56 Exp: THIS . DOT ID
-   57    | THIS . DOT Call
+   59 Exp: THIS . DOT ID
+   60    | THIS . DOT Call
 
-    DOT  shift, and go to state 73
+    DOT  shift, and go to state 74
 
 
 State 43
 
    39 DeclareStm: VarType VarStm . SEMI
 
-    SEMI  shift, and go to state 74
+    SEMI  shift, and go to state 75
 
 
 State 44
 
-   43 VarStm: Exp .
-   44       | Exp . COMMA VarStm
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   64 Exp: BoolExp .
 
-    COMMA  shift, and go to state 75
-    RELOP  shift, and go to state 76
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
-
-    $default  reduce using rule 43 (VarStm)
+    $default  reduce using rule 64 (Exp)
 
 
 State 45
 
-   58 Exp: Lvalue . ASSIGNOP Exp
+   43 VarStm: Exp .
+   44       | Exp . COMMA VarStm
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    ASSIGNOP  shift, and go to state 83
+    COMMA  shift, and go to state 76
+    RELOP  shift, and go to state 77
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
+
+    $default  reduce using rule 43 (VarStm)
 
 
 State 46
 
-   51 Exp: Constant .
+   61 Exp: Lvalue . ASSIGNOP Exp
 
-    $default  reduce using rule 51 (Exp)
+    ASSIGNOP  shift, and go to state 84
 
 
 State 47
 
-   52 Exp: Call .
+   54 Exp: Constant .
 
-    $default  reduce using rule 52 (Exp)
+    $default  reduce using rule 54 (Exp)
 
 
 State 48
 
-    5 Class: CLASS ID EXTENDS ID LC ClassStms . RC
+   55 Exp: Call .
 
-    RC  shift, and go to state 84
+    $default  reduce using rule 55 (Exp)
 
 
 State 49
 
+    5 Class: CLASS ID EXTENDS ID LC ClassStms . RC
+
+    RC  shift, and go to state 85
+
+
+State 50
+
    42 DeclareStm: STATIC FINAL VarType . VarStm SEMI
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -851,164 +868,128 @@ State 49
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 85
-    Exp       go to state 44
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-
-
-State 50
-
-   11 Fun: STATIC VarType ID . LP Args RP LC BaseStm RC
-   53 Exp: ID . DOT Call
-   54    | ID . DOT Constant
-   55    | ID .
-   69    | ID . ArrayIndex
-   71    | ID . DPLUS
-   73    | ID . DMINUS
-   78 Lvalue: ID .
-   83 Call: ID . LP CallArgs RP
-
-    DOT     shift, and go to state 59
-    LP      shift, and go to state 86
-    LB      shift, and go to state 61
-    DPLUS   shift, and go to state 62
-    DMINUS  shift, and go to state 63
-
-    ASSIGNOP  reduce using rule 78 (Lvalue)
-    $default  reduce using rule 55 (Exp)
-
-    ArrayIndex  go to state 64
+    VarStm    go to state 86
+    BoolExp   go to state 44
+    Exp       go to state 45
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 51
 
-   40 DeclareStm: STATIC VarType VarStm . SEMI
+   11 Fun: STATIC VarType ID . LP Args RP LC BaseStm RC
+   56 Exp: ID . DOT Call
+   57    | ID . DOT ID
+   58    | ID .
+   70    | ID . ArrayIndex
+   72    | ID . DPLUS
+   74    | ID . DMINUS
+   79 Lvalue: ID .
+   84 Call: ID . LP CallArgs RP
 
-    SEMI  shift, and go to state 87
+    DOT     shift, and go to state 60
+    LP      shift, and go to state 87
+    LB      shift, and go to state 62
+    DPLUS   shift, and go to state 63
+    DMINUS  shift, and go to state 64
+
+    ASSIGNOP  reduce using rule 79 (Lvalue)
+    $default  reduce using rule 58 (Exp)
+
+    ArrayIndex  go to state 65
 
 
 State 52
 
-   53 Exp: ID . DOT Call
-   54    | ID . DOT Constant
-   55    | ID .
-   69    | ID . ArrayIndex
-   71    | ID . DPLUS
-   73    | ID . DMINUS
-   78 Lvalue: ID .
-   83 Call: ID . LP CallArgs RP
+   40 DeclareStm: STATIC VarType VarStm . SEMI
 
-    DOT     shift, and go to state 59
-    LP      shift, and go to state 88
-    LB      shift, and go to state 61
-    DPLUS   shift, and go to state 62
-    DMINUS  shift, and go to state 63
-
-    ASSIGNOP  reduce using rule 78 (Lvalue)
-    $default  reduce using rule 55 (Exp)
-
-    ArrayIndex  go to state 64
+    SEMI  shift, and go to state 88
 
 
 State 53
 
-   41 DeclareStm: FINAL VarType VarStm . SEMI
+   56 Exp: ID . DOT Call
+   57    | ID . DOT ID
+   58    | ID .
+   70    | ID . ArrayIndex
+   72    | ID . DPLUS
+   74    | ID . DMINUS
+   79 Lvalue: ID .
+   84 Call: ID . LP CallArgs RP
 
-    SEMI  shift, and go to state 89
+    DOT     shift, and go to state 60
+    LP      shift, and go to state 89
+    LB      shift, and go to state 62
+    DPLUS   shift, and go to state 63
+    DMINUS  shift, and go to state 64
+
+    ASSIGNOP  reduce using rule 79 (Lvalue)
+    $default  reduce using rule 58 (Exp)
+
+    ArrayIndex  go to state 65
 
 
 State 54
+
+   41 DeclareStm: FINAL VarType VarStm . SEMI
+
+    SEMI  shift, and go to state 90
+
+
+State 55
 
    18 Arrays: ARRAY Arrays .
 
     $default  reduce using rule 18 (Arrays)
 
 
-State 55
+State 56
 
    49 Arg: VarType . ID
    50    | VarType . ID COMMA Arg
 
-    ID  shift, and go to state 90
-
-
-State 56
-
-   12 Fun: ID LP Args . RP LC BaseStm RC
-
-    RP  shift, and go to state 91
+    ID  shift, and go to state 91
 
 
 State 57
+
+   12 Fun: ID LP Args . RP LC BaseStm RC
+
+    RP  shift, and go to state 92
+
+
+State 58
 
    48 Args: Arg .
 
     $default  reduce using rule 48 (Args)
 
 
-State 58
+State 59
 
    47 Args: EMPTY .
 
     $default  reduce using rule 47 (Args)
 
 
-State 59
-
-   53 Exp: ID DOT . Call
-   54    | ID DOT . Constant
-
-    ID     shift, and go to state 71
-    INT    shift, and go to state 36
-    FLOAT  shift, and go to state 37
-    STR    shift, and go to state 38
-    BOOL   shift, and go to state 39
-
-    Constant  go to state 92
-    Call      go to state 93
-
-
 State 60
 
-   10 Fun: VarType ID LP . Args RP LC BaseStm RC
-   83 Call: ID LP . CallArgs RP
+   56 Exp: ID DOT . Call
+   57    | ID DOT . ID
 
-    TYPE    shift, and go to state 13
-    ID      shift, and go to state 94
-    NOT     shift, and go to state 32
-    LP      shift, and go to state 33
-    DPLUS   shift, and go to state 34
-    DMINUS  shift, and go to state 35
-    INT     shift, and go to state 36
-    FLOAT   shift, and go to state 37
-    STR     shift, and go to state 38
-    BOOL    shift, and go to state 39
-    MINUS   shift, and go to state 40
-    NEW     shift, and go to state 41
-    THIS    shift, and go to state 42
+    ID  shift, and go to state 93
 
-    $default  reduce using rule 88 (EMPTY)
-
-    VarType   go to state 55
-    Args      go to state 95
-    Arg       go to state 57
-    Exp       go to state 96
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-    CallArgs  go to state 97
-    CallArg   go to state 98
-    EMPTY     go to state 99
+    Call  go to state 94
 
 
 State 61
 
-   76 ArrayIndex: LB . Exp RB
-   77           | LB . Exp RB ArrayIndex
+   10 Fun: VarType ID LP . Args RP LC BaseStm RC
+   84 Call: ID LP . CallArgs RP
 
-    ID      shift, and go to state 52
+    TYPE    shift, and go to state 13
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1021,144 +1002,178 @@ State 61
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 100
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    $default  reduce using rule 89 (EMPTY)
+
+    VarType   go to state 56
+    Args      go to state 96
+    Arg       go to state 58
+    BoolExp   go to state 44
+    Exp       go to state 97
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
+    CallArgs  go to state 98
+    CallArg   go to state 99
+    EMPTY     go to state 100
 
 
 State 62
 
-   71 Exp: ID DPLUS .
+   77 ArrayIndex: LB . Exp RB
+   78           | LB . Exp RB ArrayIndex
 
-    $default  reduce using rule 71 (Exp)
+    ID      shift, and go to state 53
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    BoolExp   go to state 44
+    Exp       go to state 101
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 63
 
-   73 Exp: ID DMINUS .
-
-    $default  reduce using rule 73 (Exp)
-
-
-State 64
-
-   69 Exp: ID ArrayIndex .
-
-    $default  reduce using rule 69 (Exp)
-
-
-State 65
-
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-   68    | NOT Exp .
-
-    $default  reduce using rule 68 (Exp)
-
-
-State 66
-
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-   66    | LP Exp . RP
-
-    RELOP  shift, and go to state 76
-    RP     shift, and go to state 101
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
-
-
-State 67
-
-   70 Exp: DPLUS ID .
-
-    $default  reduce using rule 70 (Exp)
-
-
-State 68
-
-   72 Exp: DMINUS ID .
+   72 Exp: ID DPLUS .
 
     $default  reduce using rule 72 (Exp)
 
 
-State 69
+State 64
 
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-   67    | MINUS Exp .
-
-    STAR  shift, and go to state 79
-    DIV   shift, and go to state 80
-
-    $default  reduce using rule 67 (Exp)
-
-
-State 70
-
-   75 Exp: NEW TYPE . ArrayIndex
-
-    LB  shift, and go to state 61
-
-    ArrayIndex  go to state 102
-
-
-State 71
-
-   83 Call: ID . LP CallArgs RP
-
-    LP  shift, and go to state 88
-
-
-State 72
-
-   74 Exp: NEW Call .
+   74 Exp: ID DMINUS .
 
     $default  reduce using rule 74 (Exp)
 
 
+State 65
+
+   70 Exp: ID ArrayIndex .
+
+    $default  reduce using rule 70 (Exp)
+
+
+State 66
+
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+   69    | NOT Exp .
+
+    $default  reduce using rule 69 (Exp)
+
+
+State 67
+
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+   67    | LP Exp . RP
+
+    RELOP  shift, and go to state 77
+    RP     shift, and go to state 102
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
+
+
+State 68
+
+   71 Exp: DPLUS ID .
+
+    $default  reduce using rule 71 (Exp)
+
+
+State 69
+
+   73 Exp: DMINUS ID .
+
+    $default  reduce using rule 73 (Exp)
+
+
+State 70
+
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+   68    | MINUS Exp .
+
+    STAR  shift, and go to state 80
+    DIV   shift, and go to state 81
+
+    $default  reduce using rule 68 (Exp)
+
+
+State 71
+
+   76 Exp: NEW TYPE . ArrayIndex
+
+    LB  shift, and go to state 62
+
+    ArrayIndex  go to state 103
+
+
+State 72
+
+   84 Call: ID . LP CallArgs RP
+
+    LP  shift, and go to state 89
+
+
 State 73
 
-   56 Exp: THIS DOT . ID
-   57    | THIS DOT . Call
+   75 Exp: NEW Call .
 
-    ID  shift, and go to state 103
-
-    Call  go to state 104
+    $default  reduce using rule 75 (Exp)
 
 
 State 74
+
+   59 Exp: THIS DOT . ID
+   60    | THIS DOT . Call
+
+    ID  shift, and go to state 104
+
+    Call  go to state 105
+
+
+State 75
 
    39 DeclareStm: VarType VarStm SEMI .
 
     $default  reduce using rule 39 (DeclareStm)
 
 
-State 75
+State 76
 
    44 VarStm: Exp COMMA . VarStm
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1171,41 +1186,19 @@ State 75
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 105
-    Exp       go to state 44
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-
-
-State 76
-
-   65 Exp: Exp RELOP . Exp
-
-    ID      shift, and go to state 52
-    NOT     shift, and go to state 32
-    LP      shift, and go to state 33
-    DPLUS   shift, and go to state 34
-    DMINUS  shift, and go to state 35
-    INT     shift, and go to state 36
-    FLOAT   shift, and go to state 37
-    STR     shift, and go to state 38
-    BOOL    shift, and go to state 39
-    MINUS   shift, and go to state 40
-    NEW     shift, and go to state 41
-    THIS    shift, and go to state 42
-
-    Exp       go to state 106
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    VarStm    go to state 106
+    BoolExp   go to state 44
+    Exp       go to state 45
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 77
 
-   59 Exp: Exp PLUS . Exp
+   51 BoolExp: Exp RELOP . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1218,17 +1211,18 @@ State 77
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
+    BoolExp   go to state 44
     Exp       go to state 107
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 78
 
-   60 Exp: Exp MINUS . Exp
+   62 Exp: Exp PLUS . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1241,17 +1235,18 @@ State 78
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
+    BoolExp   go to state 44
     Exp       go to state 108
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 79
 
-   63 Exp: Exp STAR . Exp
+   63 Exp: Exp MINUS . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1264,17 +1259,18 @@ State 79
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
+    BoolExp   go to state 44
     Exp       go to state 109
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 80
 
-   64 Exp: Exp DIV . Exp
+   65 Exp: Exp STAR . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1287,17 +1283,18 @@ State 80
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
+    BoolExp   go to state 44
     Exp       go to state 110
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 81
 
-   62 Exp: Exp OR . Exp
+   66 Exp: Exp DIV . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1310,17 +1307,18 @@ State 81
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
+    BoolExp   go to state 44
     Exp       go to state 111
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 82
 
-   61 Exp: Exp AND . Exp
+   53 BoolExp: Exp OR . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1333,17 +1331,18 @@ State 82
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
+    BoolExp   go to state 44
     Exp       go to state 112
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 83
 
-   58 Exp: Lvalue ASSIGNOP . Exp
+   52 BoolExp: Exp AND . Exp
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1356,33 +1355,58 @@ State 83
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
+    BoolExp   go to state 44
     Exp       go to state 113
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 84
+
+   61 Exp: Lvalue ASSIGNOP . Exp
+
+    ID      shift, and go to state 53
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    BoolExp   go to state 44
+    Exp       go to state 114
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
+
+
+State 85
 
     5 Class: CLASS ID EXTENDS ID LC ClassStms RC .
 
     $default  reduce using rule 5 (Class)
 
 
-State 85
+State 86
 
    42 DeclareStm: STATIC FINAL VarType VarStm . SEMI
 
-    SEMI  shift, and go to state 114
+    SEMI  shift, and go to state 115
 
 
-State 86
+State 87
 
    11 Fun: STATIC VarType ID LP . Args RP LC BaseStm RC
-   83 Call: ID LP . CallArgs RP
+   84 Call: ID LP . CallArgs RP
 
     TYPE    shift, and go to state 13
-    ID      shift, and go to state 94
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1395,32 +1419,33 @@ State 86
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    $default  reduce using rule 88 (EMPTY)
+    $default  reduce using rule 89 (EMPTY)
 
-    VarType   go to state 55
-    Args      go to state 115
-    Arg       go to state 57
-    Exp       go to state 96
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-    CallArgs  go to state 97
-    CallArg   go to state 98
-    EMPTY     go to state 99
+    VarType   go to state 56
+    Args      go to state 116
+    Arg       go to state 58
+    BoolExp   go to state 44
+    Exp       go to state 97
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
+    CallArgs  go to state 98
+    CallArg   go to state 99
+    EMPTY     go to state 100
 
 
-State 87
+State 88
 
    40 DeclareStm: STATIC VarType VarStm SEMI .
 
     $default  reduce using rule 40 (DeclareStm)
 
 
-State 88
+State 89
 
-   83 Call: ID LP . CallArgs RP
+   84 Call: ID LP . CallArgs RP
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1433,464 +1458,404 @@ State 88
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    $default  reduce using rule 88 (EMPTY)
+    $default  reduce using rule 89 (EMPTY)
 
-    Exp       go to state 96
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-    CallArgs  go to state 97
-    CallArg   go to state 98
-    EMPTY     go to state 116
+    BoolExp   go to state 44
+    Exp       go to state 97
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
+    CallArgs  go to state 98
+    CallArg   go to state 99
+    EMPTY     go to state 117
 
 
-State 89
+State 90
 
    41 DeclareStm: FINAL VarType VarStm SEMI .
 
     $default  reduce using rule 41 (DeclareStm)
 
 
-State 90
+State 91
 
    49 Arg: VarType ID .
    50    | VarType ID . COMMA Arg
 
-    COMMA  shift, and go to state 117
+    COMMA  shift, and go to state 118
 
     $default  reduce using rule 49 (Arg)
 
 
-State 91
+State 92
 
    12 Fun: ID LP Args RP . LC BaseStm RC
 
-    LC  shift, and go to state 118
-
-
-State 92
-
-   54 Exp: ID DOT Constant .
-
-    $default  reduce using rule 54 (Exp)
+    LC  shift, and go to state 119
 
 
 State 93
 
-   53 Exp: ID DOT Call .
+   57 Exp: ID DOT ID .
+   84 Call: ID . LP CallArgs RP
 
-    $default  reduce using rule 53 (Exp)
-
-
-State 94
-
-   14 VarType: ID . Arrays
-   16        | ID .
-   53 Exp: ID . DOT Call
-   54    | ID . DOT Constant
-   55    | ID .
-   69    | ID . ArrayIndex
-   71    | ID . DPLUS
-   73    | ID . DMINUS
-   78 Lvalue: ID .
-   83 Call: ID . LP CallArgs RP
-
-    ARRAY   shift, and go to state 25
-    DOT     shift, and go to state 59
-    LP      shift, and go to state 88
-    LB      shift, and go to state 61
-    DPLUS   shift, and go to state 62
-    DMINUS  shift, and go to state 63
-
-    SEMI      reduce using rule 55 (Exp)
-    COMMA     reduce using rule 55 (Exp)
-    ASSIGNOP  reduce using rule 78 (Lvalue)
-    RELOP     reduce using rule 55 (Exp)
-    LP        [reduce using rule 16 (VarType)]
-    RP        reduce using rule 55 (Exp)
-    DPLUS     [reduce using rule 16 (VarType)]
-    DMINUS    [reduce using rule 16 (VarType)]
-    PLUS      reduce using rule 55 (Exp)
-    MINUS     reduce using rule 16 (VarType)
-    MINUS     [reduce using rule 55 (Exp)]
-    STAR      reduce using rule 55 (Exp)
-    DIV       reduce using rule 55 (Exp)
-    OR        reduce using rule 55 (Exp)
-    AND       reduce using rule 55 (Exp)
-    $default  reduce using rule 16 (VarType)
-
-    Arrays      go to state 28
-    ArrayIndex  go to state 64
-
-
-State 95
-
-   10 Fun: VarType ID LP Args . RP LC BaseStm RC
-
-    RP  shift, and go to state 119
-
-
-State 96
-
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-   86 CallArg: Exp .
-   87        | Exp . COMMA CallArg
-
-    COMMA  shift, and go to state 120
-    RELOP  shift, and go to state 76
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
-
-    $default  reduce using rule 86 (CallArg)
-
-
-State 97
-
-   83 Call: ID LP CallArgs . RP
-
-    RP  shift, and go to state 121
-
-
-State 98
-
-   85 CallArgs: CallArg .
-
-    $default  reduce using rule 85 (CallArgs)
-
-
-State 99
-
-   47 Args: EMPTY .
-   84 CallArgs: EMPTY .
-
-    RP        reduce using rule 47 (Args)
-    RP        [reduce using rule 84 (CallArgs)]
-    $default  reduce using rule 47 (Args)
-
-
-State 100
-
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-   76 ArrayIndex: LB Exp . RB
-   77           | LB Exp . RB ArrayIndex
-
-    RELOP  shift, and go to state 76
-    RB     shift, and go to state 122
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
-
-
-State 101
-
-   66 Exp: LP Exp RP .
-
-    $default  reduce using rule 66 (Exp)
-
-
-State 102
-
-   75 Exp: NEW TYPE ArrayIndex .
-
-    $default  reduce using rule 75 (Exp)
-
-
-State 103
-
-   56 Exp: THIS DOT ID .
-   83 Call: ID . LP CallArgs RP
-
-    LP  shift, and go to state 88
-
-    $default  reduce using rule 56 (Exp)
-
-
-State 104
-
-   57 Exp: THIS DOT Call .
+    LP  shift, and go to state 89
 
     $default  reduce using rule 57 (Exp)
 
 
+State 94
+
+   56 Exp: ID DOT Call .
+
+    $default  reduce using rule 56 (Exp)
+
+
+State 95
+
+   14 VarType: ID . Arrays
+   16        | ID .
+   56 Exp: ID . DOT Call
+   57    | ID . DOT ID
+   58    | ID .
+   70    | ID . ArrayIndex
+   72    | ID . DPLUS
+   74    | ID . DMINUS
+   79 Lvalue: ID .
+   84 Call: ID . LP CallArgs RP
+
+    ARRAY   shift, and go to state 25
+    DOT     shift, and go to state 60
+    LP      shift, and go to state 89
+    LB      shift, and go to state 62
+    DPLUS   shift, and go to state 63
+    DMINUS  shift, and go to state 64
+
+    SEMI      reduce using rule 58 (Exp)
+    COMMA     reduce using rule 58 (Exp)
+    ASSIGNOP  reduce using rule 79 (Lvalue)
+    RELOP     reduce using rule 58 (Exp)
+    LP        [reduce using rule 16 (VarType)]
+    RP        reduce using rule 58 (Exp)
+    DPLUS     [reduce using rule 16 (VarType)]
+    DMINUS    [reduce using rule 16 (VarType)]
+    PLUS      reduce using rule 58 (Exp)
+    MINUS     reduce using rule 16 (VarType)
+    MINUS     [reduce using rule 58 (Exp)]
+    STAR      reduce using rule 58 (Exp)
+    DIV       reduce using rule 58 (Exp)
+    OR        reduce using rule 58 (Exp)
+    AND       reduce using rule 58 (Exp)
+    $default  reduce using rule 16 (VarType)
+
+    Arrays      go to state 28
+    ArrayIndex  go to state 65
+
+
+State 96
+
+   10 Fun: VarType ID LP Args . RP LC BaseStm RC
+
+    RP  shift, and go to state 120
+
+
+State 97
+
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+   87 CallArg: Exp .
+   88        | Exp . COMMA CallArg
+
+    COMMA  shift, and go to state 121
+    RELOP  shift, and go to state 77
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
+
+    $default  reduce using rule 87 (CallArg)
+
+
+State 98
+
+   84 Call: ID LP CallArgs . RP
+
+    RP  shift, and go to state 122
+
+
+State 99
+
+   86 CallArgs: CallArg .
+
+    $default  reduce using rule 86 (CallArgs)
+
+
+State 100
+
+   47 Args: EMPTY .
+   85 CallArgs: EMPTY .
+
+    RP        reduce using rule 47 (Args)
+    RP        [reduce using rule 85 (CallArgs)]
+    $default  reduce using rule 47 (Args)
+
+
+State 101
+
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+   77 ArrayIndex: LB Exp . RB
+   78           | LB Exp . RB ArrayIndex
+
+    RELOP  shift, and go to state 77
+    RB     shift, and go to state 123
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
+
+
+State 102
+
+   67 Exp: LP Exp RP .
+
+    $default  reduce using rule 67 (Exp)
+
+
+State 103
+
+   76 Exp: NEW TYPE ArrayIndex .
+
+    $default  reduce using rule 76 (Exp)
+
+
+State 104
+
+   59 Exp: THIS DOT ID .
+   84 Call: ID . LP CallArgs RP
+
+    LP  shift, and go to state 89
+
+    $default  reduce using rule 59 (Exp)
+
+
 State 105
+
+   60 Exp: THIS DOT Call .
+
+    $default  reduce using rule 60 (Exp)
+
+
+State 106
 
    44 VarStm: Exp COMMA VarStm .
 
     $default  reduce using rule 44 (VarStm)
 
 
-State 106
-
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-   65    | Exp RELOP Exp .
-
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-
-    $default  reduce using rule 65 (Exp)
-
-
 State 107
 
-   59 Exp: Exp . PLUS Exp
-   59    | Exp PLUS Exp .
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   51 BoolExp: Exp . RELOP Exp
+   51        | Exp RELOP Exp .
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    STAR  shift, and go to state 79
-    DIV   shift, and go to state 80
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
 
-    $default  reduce using rule 59 (Exp)
+    $default  reduce using rule 51 (BoolExp)
 
 
 State 108
 
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   60    | Exp MINUS Exp .
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   62    | Exp PLUS Exp .
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    STAR  shift, and go to state 79
-    DIV   shift, and go to state 80
+    STAR  shift, and go to state 80
+    DIV   shift, and go to state 81
 
-    $default  reduce using rule 60 (Exp)
+    $default  reduce using rule 62 (Exp)
 
 
 State 109
 
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   63    | Exp STAR Exp .
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   63    | Exp MINUS Exp .
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+
+    STAR  shift, and go to state 80
+    DIV   shift, and go to state 81
 
     $default  reduce using rule 63 (Exp)
 
 
 State 110
 
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   64    | Exp DIV Exp .
-   65    | Exp . RELOP Exp
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   65    | Exp STAR Exp .
+   66    | Exp . DIV Exp
 
-    $default  reduce using rule 64 (Exp)
+    $default  reduce using rule 65 (Exp)
 
 
 State 111
 
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   62    | Exp OR Exp .
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+   66    | Exp DIV Exp .
 
-    RELOP  shift, and go to state 76
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    AND    shift, and go to state 82
-
-    $default  reduce using rule 62 (Exp)
+    $default  reduce using rule 66 (Exp)
 
 
 State 112
 
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   61    | Exp AND Exp .
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   53        | Exp OR Exp .
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    RELOP  shift, and go to state 76
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
+    RELOP  shift, and go to state 77
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    AND    shift, and go to state 83
 
-    $default  reduce using rule 61 (Exp)
+    $default  reduce using rule 53 (BoolExp)
 
 
 State 113
 
-   58 Exp: Lvalue ASSIGNOP Exp .
-   59    | Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   52        | Exp AND Exp .
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    RELOP  shift, and go to state 76
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
+    RELOP  shift, and go to state 77
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
 
-    $default  reduce using rule 58 (Exp)
+    $default  reduce using rule 52 (BoolExp)
 
 
 State 114
+
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   61 Exp: Lvalue ASSIGNOP Exp .
+   62    | Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+
+    RELOP  shift, and go to state 77
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
+
+    $default  reduce using rule 61 (Exp)
+
+
+State 115
 
    42 DeclareStm: STATIC FINAL VarType VarStm SEMI .
 
     $default  reduce using rule 42 (DeclareStm)
 
 
-State 115
+State 116
 
    11 Fun: STATIC VarType ID LP Args . RP LC BaseStm RC
 
-    RP  shift, and go to state 123
-
-
-State 116
-
-   84 CallArgs: EMPTY .
-
-    $default  reduce using rule 84 (CallArgs)
+    RP  shift, and go to state 124
 
 
 State 117
+
+   85 CallArgs: EMPTY .
+
+    $default  reduce using rule 85 (CallArgs)
+
+
+State 118
 
    50 Arg: VarType ID COMMA . Arg
 
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    VarType  go to state 55
-    Arg      go to state 124
-
-
-State 118
-
-   12 Fun: ID LP Args RP LC . BaseStm RC
-
-    STATIC  shift, and go to state 125
-    FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
-    TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
-    NOT     shift, and go to state 32
-    LP      shift, and go to state 33
-    DPLUS   shift, and go to state 34
-    DMINUS  shift, and go to state 35
-    INT     shift, and go to state 36
-    FLOAT   shift, and go to state 37
-    STR     shift, and go to state 38
-    BOOL    shift, and go to state 39
-    MINUS   shift, and go to state 40
-    NEW     shift, and go to state 41
-    THIS    shift, and go to state 42
-
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
-
-    VarType     go to state 131
-    BaseStm     go to state 132
-    Lines       go to state 133
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
+    VarType  go to state 56
+    Arg      go to state 125
 
 
 State 119
 
-   10 Fun: VarType ID LP Args RP . LC BaseStm RC
+   12 Fun: ID LP Args RP LC . BaseStm RC
 
-    LC  shift, and go to state 143
-
-
-State 120
-
-   87 CallArg: Exp COMMA . CallArg
-
-    ID      shift, and go to state 52
+    STATIC  shift, and go to state 126
+    FINAL   shift, and go to state 12
+    BREAK   shift, and go to state 127
+    TYPE    shift, and go to state 13
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1903,47 +1868,113 @@ State 120
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 96
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-    CallArg   go to state 144
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
+
+    VarType     go to state 132
+    BaseStm     go to state 133
+    Lines       go to state 134
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
+
+
+State 120
+
+   10 Fun: VarType ID LP Args RP . LC BaseStm RC
+
+    LC  shift, and go to state 144
 
 
 State 121
 
-   83 Call: ID LP CallArgs RP .
+   88 CallArg: Exp COMMA . CallArg
 
-    $default  reduce using rule 83 (Call)
+    ID      shift, and go to state 53
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    BoolExp   go to state 44
+    Exp       go to state 97
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
+    CallArg   go to state 145
 
 
 State 122
 
-   76 ArrayIndex: LB Exp RB .
-   77           | LB Exp RB . ArrayIndex
+   84 Call: ID LP CallArgs RP .
 
-    LB  shift, and go to state 61
-
-    $default  reduce using rule 76 (ArrayIndex)
-
-    ArrayIndex  go to state 145
+    $default  reduce using rule 84 (Call)
 
 
 State 123
 
-   11 Fun: STATIC VarType ID LP Args RP . LC BaseStm RC
+   77 ArrayIndex: LB Exp RB .
+   78           | LB Exp RB . ArrayIndex
 
-    LC  shift, and go to state 146
+    LB  shift, and go to state 62
+
+    $default  reduce using rule 77 (ArrayIndex)
+
+    ArrayIndex  go to state 146
 
 
 State 124
+
+   11 Fun: STATIC VarType ID LP Args RP . LC BaseStm RC
+
+    LC  shift, and go to state 147
+
+
+State 125
 
    50 Arg: VarType ID COMMA Arg .
 
     $default  reduce using rule 50 (Arg)
 
 
-State 125
+State 126
 
    40 DeclareStm: STATIC . VarType VarStm SEMI
    42           | STATIC . FINAL VarType VarStm SEMI
@@ -1952,23 +1983,23 @@ State 125
     TYPE   shift, and go to state 13
     ID     shift, and go to state 22
 
-    VarType  go to state 147
-
-
-State 126
-
-   30 BreakStm: BREAK . SEMI
-
-    SEMI  shift, and go to state 148
+    VarType  go to state 148
 
 
 State 127
 
+   30 BreakStm: BREAK . SEMI
+
+    SEMI  shift, and go to state 149
+
+
+State 128
+
    45 ReturnStm: RETURN . SEMI
    46          | RETURN . Exp SEMI
 
-    ID      shift, and go to state 52
-    SEMI    shift, and go to state 149
+    ID      shift, and go to state 53
+    SEMI    shift, and go to state 150
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -1981,38 +2012,39 @@ State 127
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 150
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-
-
-State 128
-
-   31 IfStm: IF . LP Exp RP LC BaseStm RC
-
-    LP  shift, and go to state 151
+    BoolExp   go to state 44
+    Exp       go to state 151
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 129
 
-   38 ForStm: FOR . LP Exp SEMI Exp SEMI Exp RP LC BaseStm RC
+   31 IfStm: IF . LP BoolExp RP LC BaseStm RC
 
     LP  shift, and go to state 152
 
 
 State 130
 
-   37 WhileStm: WHILE . LP Exp RP LC BaseStm RC
+   38 ForStm: FOR . LP Exp SEMI BoolExp SEMI Exp RP LC BaseStm RC
 
     LP  shift, and go to state 153
 
 
 State 131
 
+   37 WhileStm: WHILE . LP BoolExp RP LC BaseStm RC
+
+    LP  shift, and go to state 154
+
+
+State 132
+
    39 DeclareStm: VarType . VarStm SEMI
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2026,40 +2058,41 @@ State 131
     THIS    shift, and go to state 42
 
     VarStm    go to state 43
-    Exp       go to state 44
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-
-
-State 132
-
-   12 Fun: ID LP Args RP LC BaseStm . RC
-
-    RC  shift, and go to state 154
+    BoolExp   go to state 44
+    Exp       go to state 45
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 133
+
+   12 Fun: ID LP Args RP LC BaseStm . RC
+
+    RC  shift, and go to state 155
+
+
+State 134
 
    19 BaseStm: Lines .
 
     $default  reduce using rule 19 (BaseStm)
 
 
-State 134
+State 135
 
    20 Lines: Line .
    21      | Line . Lines
 
-    STATIC  shift, and go to state 125
+    STATIC  shift, and go to state 126
     FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
+    BREAK   shift, and go to state 127
     TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2072,166 +2105,167 @@ State 134
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
     RC        reduce using rule 20 (Lines)
-    RC        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
+    RC        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 20 (Lines)
 
-    VarType     go to state 131
-    Lines       go to state 155
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
+    VarType     go to state 132
+    Lines       go to state 156
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
 
 
-State 135
+State 136
 
    28 Line: BreakStm .
 
     $default  reduce using rule 28 (Line)
 
 
-State 136
+State 137
 
    23 Line: IfStm .
    32 IfStm: IfStm . ELIfStm ElseStm
 
-    ELIF  shift, and go to state 156
+    ELIF  shift, and go to state 157
 
     STATIC    reduce using rule 23 (Line)
-    STATIC    [reduce using rule 88 (EMPTY)]
+    STATIC    [reduce using rule 89 (EMPTY)]
     FINAL     reduce using rule 23 (Line)
-    FINAL     [reduce using rule 88 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
     BREAK     reduce using rule 23 (Line)
-    BREAK     [reduce using rule 88 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
     TYPE      reduce using rule 23 (Line)
-    TYPE      [reduce using rule 88 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
     RETURN    reduce using rule 23 (Line)
-    RETURN    [reduce using rule 88 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
     IF        reduce using rule 23 (Line)
-    IF        [reduce using rule 88 (EMPTY)]
-    ELSE      reduce using rule 88 (EMPTY)
-    ELIF      [reduce using rule 88 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    ELSE      reduce using rule 89 (EMPTY)
+    ELIF      [reduce using rule 89 (EMPTY)]
     FOR       reduce using rule 23 (Line)
-    FOR       [reduce using rule 88 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
     WHILE     reduce using rule 23 (Line)
-    WHILE     [reduce using rule 88 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
     ID        reduce using rule 23 (Line)
-    ID        [reduce using rule 88 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
     NOT       reduce using rule 23 (Line)
-    NOT       [reduce using rule 88 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
     LP        reduce using rule 23 (Line)
-    LP        [reduce using rule 88 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
     RC        reduce using rule 23 (Line)
-    RC        [reduce using rule 88 (EMPTY)]
+    RC        [reduce using rule 89 (EMPTY)]
     DPLUS     reduce using rule 23 (Line)
-    DPLUS     [reduce using rule 88 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
     DMINUS    reduce using rule 23 (Line)
-    DMINUS    [reduce using rule 88 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
     INT       reduce using rule 23 (Line)
-    INT       [reduce using rule 88 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
     FLOAT     reduce using rule 23 (Line)
-    FLOAT     [reduce using rule 88 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
     STR       reduce using rule 23 (Line)
-    STR       [reduce using rule 88 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
     BOOL      reduce using rule 23 (Line)
-    BOOL      [reduce using rule 88 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
     MINUS     reduce using rule 23 (Line)
-    MINUS     [reduce using rule 88 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
     NEW       reduce using rule 23 (Line)
-    NEW       [reduce using rule 88 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
     THIS      reduce using rule 23 (Line)
-    THIS      [reduce using rule 88 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 23 (Line)
 
-    ELIfStm  go to state 157
-    EMPTY    go to state 158
+    ELIfStm  go to state 158
+    EMPTY    go to state 159
 
 
-State 137
+State 138
 
    24 Line: WhileStm .
 
     $default  reduce using rule 24 (Line)
 
 
-State 138
+State 139
 
    29 Line: ForStm .
 
     $default  reduce using rule 29 (Line)
 
 
-State 139
+State 140
 
    26 Line: DeclareStm .
 
     $default  reduce using rule 26 (Line)
 
 
-State 140
+State 141
 
    25 Line: VarStm . SEMI
 
-    SEMI  shift, and go to state 159
+    SEMI  shift, and go to state 160
 
 
-State 141
+State 142
 
    27 Line: ReturnStm .
 
     $default  reduce using rule 27 (Line)
 
 
-State 142
+State 143
 
    22 Line: EMPTY .
 
     $default  reduce using rule 22 (Line)
 
 
-State 143
+State 144
 
    10 Fun: VarType ID LP Args RP LC . BaseStm RC
 
-    STATIC  shift, and go to state 125
+    STATIC  shift, and go to state 126
     FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
+    BREAK   shift, and go to state 127
     TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2244,130 +2278,74 @@ State 143
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 131
-    BaseStm     go to state 160
-    Lines       go to state 133
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
-
-
-State 144
-
-   87 CallArg: Exp COMMA CallArg .
-
-    $default  reduce using rule 87 (CallArg)
+    VarType     go to state 132
+    BaseStm     go to state 161
+    Lines       go to state 134
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
 
 
 State 145
 
-   77 ArrayIndex: LB Exp RB ArrayIndex .
+   88 CallArg: Exp COMMA CallArg .
 
-    $default  reduce using rule 77 (ArrayIndex)
+    $default  reduce using rule 88 (CallArg)
 
 
 State 146
 
-   11 Fun: STATIC VarType ID LP Args RP LC . BaseStm RC
+   78 ArrayIndex: LB Exp RB ArrayIndex .
 
-    STATIC  shift, and go to state 125
-    FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
-    TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
-    NOT     shift, and go to state 32
-    LP      shift, and go to state 33
-    DPLUS   shift, and go to state 34
-    DMINUS  shift, and go to state 35
-    INT     shift, and go to state 36
-    FLOAT   shift, and go to state 37
-    STR     shift, and go to state 38
-    BOOL    shift, and go to state 39
-    MINUS   shift, and go to state 40
-    NEW     shift, and go to state 41
-    THIS    shift, and go to state 42
-
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
-
-    VarType     go to state 131
-    BaseStm     go to state 161
-    Lines       go to state 133
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
+    $default  reduce using rule 78 (ArrayIndex)
 
 
 State 147
 
-   40 DeclareStm: STATIC VarType . VarStm SEMI
+   11 Fun: STATIC VarType ID LP Args RP LC . BaseStm RC
 
-    ID      shift, and go to state 52
+    STATIC  shift, and go to state 126
+    FINAL   shift, and go to state 12
+    BREAK   shift, and go to state 127
+    TYPE    shift, and go to state 13
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2380,76 +2358,112 @@ State 147
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 51
-    Exp       go to state 44
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
+
+    VarType     go to state 132
+    BaseStm     go to state 162
+    Lines       go to state 134
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
 
 
 State 148
+
+   40 DeclareStm: STATIC VarType . VarStm SEMI
+
+    ID      shift, and go to state 53
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    VarStm    go to state 52
+    BoolExp   go to state 44
+    Exp       go to state 45
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
+
+
+State 149
 
    30 BreakStm: BREAK SEMI .
 
     $default  reduce using rule 30 (BreakStm)
 
 
-State 149
+State 150
 
    45 ReturnStm: RETURN SEMI .
 
     $default  reduce using rule 45 (ReturnStm)
 
 
-State 150
-
-   46 ReturnStm: RETURN Exp . SEMI
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-
-    SEMI   shift, and go to state 162
-    RELOP  shift, and go to state 76
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
-
-
 State 151
 
-   31 IfStm: IF LP . Exp RP LC BaseStm RC
+   46 ReturnStm: RETURN Exp . SEMI
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    ID      shift, and go to state 52
-    NOT     shift, and go to state 32
-    LP      shift, and go to state 33
-    DPLUS   shift, and go to state 34
-    DMINUS  shift, and go to state 35
-    INT     shift, and go to state 36
-    FLOAT   shift, and go to state 37
-    STR     shift, and go to state 38
-    BOOL    shift, and go to state 39
-    MINUS   shift, and go to state 40
-    NEW     shift, and go to state 41
-    THIS    shift, and go to state 42
-
-    Exp       go to state 163
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    SEMI   shift, and go to state 163
+    RELOP  shift, and go to state 77
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
 
 
 State 152
 
-   38 ForStm: FOR LP . Exp SEMI Exp SEMI Exp RP LC BaseStm RC
+   31 IfStm: IF LP . BoolExp RP LC BaseStm RC
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2462,17 +2476,18 @@ State 152
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 164
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    BoolExp   go to state 164
+    Exp       go to state 165
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 153
 
-   37 WhileStm: WHILE LP . Exp RP LC BaseStm RC
+   38 ForStm: FOR LP . Exp SEMI BoolExp SEMI Exp RP LC BaseStm RC
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2485,149 +2500,171 @@ State 153
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 165
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    BoolExp   go to state 44
+    Exp       go to state 166
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 154
+
+   37 WhileStm: WHILE LP . BoolExp RP LC BaseStm RC
+
+    ID      shift, and go to state 53
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    BoolExp   go to state 167
+    Exp       go to state 165
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
+
+
+State 155
 
    12 Fun: ID LP Args RP LC BaseStm RC .
 
     $default  reduce using rule 12 (Fun)
 
 
-State 155
+State 156
 
    21 Lines: Line Lines .
 
     $default  reduce using rule 21 (Lines)
 
 
-State 156
+State 157
 
    33 ELIfStm: ELIF . LP Exp RP LC BaseStm RC
 
-    LP  shift, and go to state 166
-
-
-State 157
-
-   32 IfStm: IfStm ELIfStm . ElseStm
-
-    ELSE  shift, and go to state 167
-
-    ELSE      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
-
-    ElseStm  go to state 168
-    EMPTY    go to state 169
+    LP  shift, and go to state 168
 
 
 State 158
+
+   32 IfStm: IfStm ELIfStm . ElseStm
+
+    ELSE  shift, and go to state 169
+
+    ELSE      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
+
+    ElseStm  go to state 170
+    EMPTY    go to state 171
+
+
+State 159
 
    34 ELIfStm: EMPTY .
 
     $default  reduce using rule 34 (ELIfStm)
 
 
-State 159
+State 160
 
    25 Line: VarStm SEMI .
 
     $default  reduce using rule 25 (Line)
 
 
-State 160
+State 161
 
    10 Fun: VarType ID LP Args RP LC BaseStm . RC
 
-    RC  shift, and go to state 170
-
-
-State 161
-
-   11 Fun: STATIC VarType ID LP Args RP LC BaseStm . RC
-
-    RC  shift, and go to state 171
+    RC  shift, and go to state 172
 
 
 State 162
+
+   11 Fun: STATIC VarType ID LP Args RP LC BaseStm . RC
+
+    RC  shift, and go to state 173
+
+
+State 163
 
    46 ReturnStm: RETURN Exp SEMI .
 
     $default  reduce using rule 46 (ReturnStm)
 
 
-State 163
-
-   31 IfStm: IF LP Exp . RP LC BaseStm RC
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-
-    RELOP  shift, and go to state 76
-    RP     shift, and go to state 172
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
-
-
 State 164
 
-   38 ForStm: FOR LP Exp . SEMI Exp SEMI Exp RP LC BaseStm RC
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   31 IfStm: IF LP BoolExp . RP LC BaseStm RC
+   64 Exp: BoolExp .
 
-    SEMI   shift, and go to state 173
-    RELOP  shift, and go to state 76
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
+    RP  shift, and go to state 174
+
+    $default  reduce using rule 64 (Exp)
 
 
 State 165
 
-   37 WhileStm: WHILE LP Exp . RP LC BaseStm RC
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    RELOP  shift, and go to state 76
-    RP     shift, and go to state 174
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
+    RELOP  shift, and go to state 77
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
 
 
 State 166
 
+   38 ForStm: FOR LP Exp . SEMI BoolExp SEMI Exp RP LC BaseStm RC
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+
+    SEMI   shift, and go to state 175
+    RELOP  shift, and go to state 77
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
+
+
+State 167
+
+   37 WhileStm: WHILE LP BoolExp . RP LC BaseStm RC
+   64 Exp: BoolExp .
+
+    RP  shift, and go to state 176
+
+    $default  reduce using rule 64 (Exp)
+
+
+State 168
+
    33 ELIfStm: ELIF LP . Exp RP LC BaseStm RC
 
-    ID      shift, and go to state 52
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2640,269 +2677,186 @@ State 166
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 175
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    BoolExp   go to state 44
+    Exp       go to state 177
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
-State 167
+State 169
 
    35 ElseStm: ELSE . LC BaseStm RC
 
-    LC  shift, and go to state 176
+    LC  shift, and go to state 178
 
 
-State 168
+State 170
 
    32 IfStm: IfStm ELIfStm ElseStm .
 
     $default  reduce using rule 32 (IfStm)
 
 
-State 169
+State 171
 
    36 ElseStm: EMPTY .
 
     $default  reduce using rule 36 (ElseStm)
 
 
-State 170
+State 172
 
    10 Fun: VarType ID LP Args RP LC BaseStm RC .
 
     $default  reduce using rule 10 (Fun)
 
 
-State 171
+State 173
 
    11 Fun: STATIC VarType ID LP Args RP LC BaseStm RC .
 
     $default  reduce using rule 11 (Fun)
 
 
-State 172
-
-   31 IfStm: IF LP Exp RP . LC BaseStm RC
-
-    LC  shift, and go to state 177
-
-
-State 173
-
-   38 ForStm: FOR LP Exp SEMI . Exp SEMI Exp RP LC BaseStm RC
-
-    ID      shift, and go to state 52
-    NOT     shift, and go to state 32
-    LP      shift, and go to state 33
-    DPLUS   shift, and go to state 34
-    DMINUS  shift, and go to state 35
-    INT     shift, and go to state 36
-    FLOAT   shift, and go to state 37
-    STR     shift, and go to state 38
-    BOOL    shift, and go to state 39
-    MINUS   shift, and go to state 40
-    NEW     shift, and go to state 41
-    THIS    shift, and go to state 42
-
-    Exp       go to state 178
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
-
-
 State 174
 
-   37 WhileStm: WHILE LP Exp RP . LC BaseStm RC
+   31 IfStm: IF LP BoolExp RP . LC BaseStm RC
 
     LC  shift, and go to state 179
 
 
 State 175
 
-   33 ELIfStm: ELIF LP Exp . RP LC BaseStm RC
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   38 ForStm: FOR LP Exp SEMI . BoolExp SEMI Exp RP LC BaseStm RC
 
-    RELOP  shift, and go to state 76
-    RP     shift, and go to state 180
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
+    ID      shift, and go to state 53
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    BoolExp   go to state 180
+    Exp       go to state 165
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 176
 
-   35 ElseStm: ELSE LC . BaseStm RC
+   37 WhileStm: WHILE LP BoolExp RP . LC BaseStm RC
 
-    STATIC  shift, and go to state 125
-    FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
-    TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
-    NOT     shift, and go to state 32
-    LP      shift, and go to state 33
-    DPLUS   shift, and go to state 34
-    DMINUS  shift, and go to state 35
-    INT     shift, and go to state 36
-    FLOAT   shift, and go to state 37
-    STR     shift, and go to state 38
-    BOOL    shift, and go to state 39
-    MINUS   shift, and go to state 40
-    NEW     shift, and go to state 41
-    THIS    shift, and go to state 42
-
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
-
-    VarType     go to state 131
-    BaseStm     go to state 181
-    Lines       go to state 133
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
+    LC  shift, and go to state 181
 
 
 State 177
 
-   31 IfStm: IF LP Exp RP LC . BaseStm RC
+   33 ELIfStm: ELIF LP Exp . RP LC BaseStm RC
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    STATIC  shift, and go to state 125
-    FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
-    TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
-    NOT     shift, and go to state 32
-    LP      shift, and go to state 33
-    DPLUS   shift, and go to state 34
-    DMINUS  shift, and go to state 35
-    INT     shift, and go to state 36
-    FLOAT   shift, and go to state 37
-    STR     shift, and go to state 38
-    BOOL    shift, and go to state 39
-    MINUS   shift, and go to state 40
-    NEW     shift, and go to state 41
-    THIS    shift, and go to state 42
-
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
-
-    VarType     go to state 131
-    BaseStm     go to state 182
-    Lines       go to state 133
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
+    RELOP  shift, and go to state 77
+    RP     shift, and go to state 182
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
 
 
 State 178
 
-   38 ForStm: FOR LP Exp SEMI Exp . SEMI Exp RP LC BaseStm RC
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
+   35 ElseStm: ELSE LC . BaseStm RC
 
-    SEMI   shift, and go to state 183
-    RELOP  shift, and go to state 76
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
+    STATIC  shift, and go to state 126
+    FINAL   shift, and go to state 12
+    BREAK   shift, and go to state 127
+    TYPE    shift, and go to state 13
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
+
+    VarType     go to state 132
+    BaseStm     go to state 183
+    Lines       go to state 134
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
 
 
 State 179
 
-   37 WhileStm: WHILE LP Exp RP LC . BaseStm RC
+   31 IfStm: IF LP BoolExp RP LC . BaseStm RC
 
-    STATIC  shift, and go to state 125
+    STATIC  shift, and go to state 126
     FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
+    BREAK   shift, and go to state 127
     TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2915,72 +2869,70 @@ State 179
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 131
+    VarType     go to state 132
     BaseStm     go to state 184
-    Lines       go to state 133
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
+    Lines       go to state 134
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
 
 
 State 180
 
-   33 ELIfStm: ELIF LP Exp RP . LC BaseStm RC
+   38 ForStm: FOR LP Exp SEMI BoolExp . SEMI Exp RP LC BaseStm RC
+   64 Exp: BoolExp .
 
-    LC  shift, and go to state 185
+    SEMI  shift, and go to state 185
+
+    $default  reduce using rule 64 (Exp)
 
 
 State 181
 
-   35 ElseStm: ELSE LC BaseStm . RC
+   37 WhileStm: WHILE LP BoolExp RP LC . BaseStm RC
 
-    RC  shift, and go to state 186
-
-
-State 182
-
-   31 IfStm: IF LP Exp RP LC BaseStm . RC
-
-    RC  shift, and go to state 187
-
-
-State 183
-
-   38 ForStm: FOR LP Exp SEMI Exp SEMI . Exp RP LC BaseStm RC
-
-    ID      shift, and go to state 52
+    STATIC  shift, and go to state 126
+    FINAL   shift, and go to state 12
+    BREAK   shift, and go to state 127
+    TYPE    shift, and go to state 13
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -2993,32 +2945,73 @@ State 183
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    Exp       go to state 188
-    Lvalue    go to state 45
-    Constant  go to state 46
-    Call      go to state 47
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
+
+    VarType     go to state 132
+    BaseStm     go to state 186
+    Lines       go to state 134
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
+
+
+State 182
+
+   33 ELIfStm: ELIF LP Exp RP . LC BaseStm RC
+
+    LC  shift, and go to state 187
+
+
+State 183
+
+   35 ElseStm: ELSE LC BaseStm . RC
+
+    RC  shift, and go to state 188
 
 
 State 184
 
-   37 WhileStm: WHILE LP Exp RP LC BaseStm . RC
+   31 IfStm: IF LP BoolExp RP LC BaseStm . RC
 
     RC  shift, and go to state 189
 
 
 State 185
 
-   33 ELIfStm: ELIF LP Exp RP LC . BaseStm RC
+   38 ForStm: FOR LP Exp SEMI BoolExp SEMI . Exp RP LC BaseStm RC
 
-    STATIC  shift, and go to state 125
-    FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
-    TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
+    ID      shift, and go to state 53
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -3031,122 +3024,162 @@ State 185
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
-
-    VarType     go to state 131
-    BaseStm     go to state 190
-    Lines       go to state 133
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
+    BoolExp   go to state 44
+    Exp       go to state 190
+    Lvalue    go to state 46
+    Constant  go to state 47
+    Call      go to state 48
 
 
 State 186
+
+   37 WhileStm: WHILE LP BoolExp RP LC BaseStm . RC
+
+    RC  shift, and go to state 191
+
+
+State 187
+
+   33 ELIfStm: ELIF LP Exp RP LC . BaseStm RC
+
+    STATIC  shift, and go to state 126
+    FINAL   shift, and go to state 12
+    BREAK   shift, and go to state 127
+    TYPE    shift, and go to state 13
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
+
+    VarType     go to state 132
+    BaseStm     go to state 192
+    Lines       go to state 134
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
+
+
+State 188
 
    35 ElseStm: ELSE LC BaseStm RC .
 
     $default  reduce using rule 35 (ElseStm)
 
 
-State 187
+State 189
 
-   31 IfStm: IF LP Exp RP LC BaseStm RC .
+   31 IfStm: IF LP BoolExp RP LC BaseStm RC .
 
     $default  reduce using rule 31 (IfStm)
 
 
-State 188
-
-   38 ForStm: FOR LP Exp SEMI Exp SEMI Exp . RP LC BaseStm RC
-   59 Exp: Exp . PLUS Exp
-   60    | Exp . MINUS Exp
-   61    | Exp . AND Exp
-   62    | Exp . OR Exp
-   63    | Exp . STAR Exp
-   64    | Exp . DIV Exp
-   65    | Exp . RELOP Exp
-
-    RELOP  shift, and go to state 76
-    RP     shift, and go to state 191
-    PLUS   shift, and go to state 77
-    MINUS  shift, and go to state 78
-    STAR   shift, and go to state 79
-    DIV    shift, and go to state 80
-    OR     shift, and go to state 81
-    AND    shift, and go to state 82
-
-
-State 189
-
-   37 WhileStm: WHILE LP Exp RP LC BaseStm RC .
-
-    $default  reduce using rule 37 (WhileStm)
-
-
 State 190
 
-   33 ELIfStm: ELIF LP Exp RP LC BaseStm . RC
+   38 ForStm: FOR LP Exp SEMI BoolExp SEMI Exp . RP LC BaseStm RC
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
 
-    RC  shift, and go to state 192
+    RELOP  shift, and go to state 77
+    RP     shift, and go to state 193
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
 
 
 State 191
 
-   38 ForStm: FOR LP Exp SEMI Exp SEMI Exp RP . LC BaseStm RC
+   37 WhileStm: WHILE LP BoolExp RP LC BaseStm RC .
 
-    LC  shift, and go to state 193
+    $default  reduce using rule 37 (WhileStm)
 
 
 State 192
+
+   33 ELIfStm: ELIF LP Exp RP LC BaseStm . RC
+
+    RC  shift, and go to state 194
+
+
+State 193
+
+   38 ForStm: FOR LP Exp SEMI BoolExp SEMI Exp RP . LC BaseStm RC
+
+    LC  shift, and go to state 195
+
+
+State 194
 
    33 ELIfStm: ELIF LP Exp RP LC BaseStm RC .
 
     $default  reduce using rule 33 (ELIfStm)
 
 
-State 193
+State 195
 
-   38 ForStm: FOR LP Exp SEMI Exp SEMI Exp RP LC . BaseStm RC
+   38 ForStm: FOR LP Exp SEMI BoolExp SEMI Exp RP LC . BaseStm RC
 
-    STATIC  shift, and go to state 125
+    STATIC  shift, and go to state 126
     FINAL   shift, and go to state 12
-    BREAK   shift, and go to state 126
+    BREAK   shift, and go to state 127
     TYPE    shift, and go to state 13
-    RETURN  shift, and go to state 127
-    IF      shift, and go to state 128
-    FOR     shift, and go to state 129
-    WHILE   shift, and go to state 130
-    ID      shift, and go to state 94
+    RETURN  shift, and go to state 128
+    IF      shift, and go to state 129
+    FOR     shift, and go to state 130
+    WHILE   shift, and go to state 131
+    ID      shift, and go to state 95
     NOT     shift, and go to state 32
     LP      shift, and go to state 33
     DPLUS   shift, and go to state 34
@@ -3159,55 +3192,56 @@ State 193
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    STATIC    [reduce using rule 88 (EMPTY)]
-    FINAL     [reduce using rule 88 (EMPTY)]
-    BREAK     [reduce using rule 88 (EMPTY)]
-    TYPE      [reduce using rule 88 (EMPTY)]
-    RETURN    [reduce using rule 88 (EMPTY)]
-    IF        [reduce using rule 88 (EMPTY)]
-    FOR       [reduce using rule 88 (EMPTY)]
-    WHILE     [reduce using rule 88 (EMPTY)]
-    ID        [reduce using rule 88 (EMPTY)]
-    NOT       [reduce using rule 88 (EMPTY)]
-    LP        [reduce using rule 88 (EMPTY)]
-    DPLUS     [reduce using rule 88 (EMPTY)]
-    DMINUS    [reduce using rule 88 (EMPTY)]
-    INT       [reduce using rule 88 (EMPTY)]
-    FLOAT     [reduce using rule 88 (EMPTY)]
-    STR       [reduce using rule 88 (EMPTY)]
-    BOOL      [reduce using rule 88 (EMPTY)]
-    MINUS     [reduce using rule 88 (EMPTY)]
-    NEW       [reduce using rule 88 (EMPTY)]
-    THIS      [reduce using rule 88 (EMPTY)]
-    $default  reduce using rule 88 (EMPTY)
+    STATIC    [reduce using rule 89 (EMPTY)]
+    FINAL     [reduce using rule 89 (EMPTY)]
+    BREAK     [reduce using rule 89 (EMPTY)]
+    TYPE      [reduce using rule 89 (EMPTY)]
+    RETURN    [reduce using rule 89 (EMPTY)]
+    IF        [reduce using rule 89 (EMPTY)]
+    FOR       [reduce using rule 89 (EMPTY)]
+    WHILE     [reduce using rule 89 (EMPTY)]
+    ID        [reduce using rule 89 (EMPTY)]
+    NOT       [reduce using rule 89 (EMPTY)]
+    LP        [reduce using rule 89 (EMPTY)]
+    DPLUS     [reduce using rule 89 (EMPTY)]
+    DMINUS    [reduce using rule 89 (EMPTY)]
+    INT       [reduce using rule 89 (EMPTY)]
+    FLOAT     [reduce using rule 89 (EMPTY)]
+    STR       [reduce using rule 89 (EMPTY)]
+    BOOL      [reduce using rule 89 (EMPTY)]
+    MINUS     [reduce using rule 89 (EMPTY)]
+    NEW       [reduce using rule 89 (EMPTY)]
+    THIS      [reduce using rule 89 (EMPTY)]
+    $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 131
-    BaseStm     go to state 194
-    Lines       go to state 133
-    Line        go to state 134
-    BreakStm    go to state 135
-    IfStm       go to state 136
-    WhileStm    go to state 137
-    ForStm      go to state 138
-    DeclareStm  go to state 139
-    VarStm      go to state 140
-    ReturnStm   go to state 141
-    Exp         go to state 44
-    Lvalue      go to state 45
-    Constant    go to state 46
-    Call        go to state 47
-    EMPTY       go to state 142
-
-
-State 194
-
-   38 ForStm: FOR LP Exp SEMI Exp SEMI Exp RP LC BaseStm . RC
-
-    RC  shift, and go to state 195
+    VarType     go to state 132
+    BaseStm     go to state 196
+    Lines       go to state 134
+    Line        go to state 135
+    BreakStm    go to state 136
+    IfStm       go to state 137
+    WhileStm    go to state 138
+    ForStm      go to state 139
+    DeclareStm  go to state 140
+    VarStm      go to state 141
+    ReturnStm   go to state 142
+    BoolExp     go to state 44
+    Exp         go to state 45
+    Lvalue      go to state 46
+    Constant    go to state 47
+    Call        go to state 48
+    EMPTY       go to state 143
 
 
-State 195
+State 196
 
-   38 ForStm: FOR LP Exp SEMI Exp SEMI Exp RP LC BaseStm RC .
+   38 ForStm: FOR LP Exp SEMI BoolExp SEMI Exp RP LC BaseStm . RC
+
+    RC  shift, and go to state 197
+
+
+State 197
+
+   38 ForStm: FOR LP Exp SEMI BoolExp SEMI Exp RP LC BaseStm RC .
 
     $default  reduce using rule 38 (ForStm)

@@ -1,5 +1,5 @@
 class Base{
-	String get(){
+	int get(String b){
 		
 	}
 }
@@ -12,10 +12,18 @@ class Computer extends Base
 }
 
 class Person{
-	int size;
-	static void main(){
+	String size,name="";
+	void main(){
 		Computer c;
-		String s=c.get(5);
+		String s=c.get("454")*5;
+		size=5*10+s;
+		5;
+		p.get("Hello");
+		int t=c.getName();
+		if(5*10>1){
+			int k=0;
+			
+		}
 	}
 }
 

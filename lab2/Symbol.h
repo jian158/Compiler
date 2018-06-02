@@ -12,7 +12,7 @@
 
 using namespace std;
 extern void error(bool e,int line, const string& msg);
-enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY};
+enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT};
 
 
 typedef union Value{
@@ -74,7 +74,7 @@ public:
 			case _CLASS:result="CLASS";break;
 			case VAR:result="VAR";break;
 			case FUN:result="FUN";break;
-			case CONST:result="CONST";break;
+			case CONST:result=Id;break;
 			case EXP:result="EXP";break;
 			case REF:result="REF";break;
 			case OP:result="OP";break;
@@ -194,22 +194,24 @@ public:
 	}
 };
 
+class Segment:public Symbol{
+	public:
+	Segment(const string& Id){
+		setType(SEGMENT);
+		setId(Id);
+	}
+};
 
 
 class SymbolTable{
 public:
     Symbol *symbol;
-	SymbolTable* parentClass;
     SymbolTable *parent;
     LinkedMap<string,SymbolTable*> nodes;
-    SymbolTable():parent(NULL),symbol(NULL),parentClass(NULL){}
-    SymbolTable(Symbol* s,SymbolTable *p):parent(p),symbol(s),parentClass(NULL){
+    SymbolTable():parent(NULL),symbol(NULL){}
+    SymbolTable(Symbol* s,SymbolTable *p):parent(p),symbol(s){
         p->add(s->getId(),this);
     }
-	
-	bool isClass(){
-		return symbol==NULL?false:symbol->getType()==_CLASS;
-	}
 	
 	string getId(){
 		return symbol->getId();
