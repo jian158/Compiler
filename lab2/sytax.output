@@ -7,23 +7,23 @@ Terminals unused in grammar
    EOL
 
 
-State 14 conflicts: 1 shift/reduce
-State 95 conflicts: 3 shift/reduce, 1 reduce/reduce
-State 100 conflicts: 1 reduce/reduce
-State 119 conflicts: 20 shift/reduce
-State 135 conflicts: 20 shift/reduce, 1 reduce/reduce
-State 137 conflicts: 1 shift/reduce, 21 reduce/reduce
-State 144 conflicts: 20 shift/reduce
-State 147 conflicts: 20 shift/reduce
-State 158 conflicts: 1 shift/reduce
-State 178 conflicts: 20 shift/reduce
-State 179 conflicts: 20 shift/reduce
-State 181 conflicts: 20 shift/reduce
-State 187 conflicts: 20 shift/reduce
-State 195 conflicts: 20 shift/reduce
+状态 14conflicts: 1 shift/reduce
+状态 95conflicts: 1 shift/reduce, 3 reduce/reduce
+状态 100conflicts: 1 reduce/reduce
+状态 119conflicts: 20 shift/reduce
+状态 135conflicts: 20 shift/reduce, 1 reduce/reduce
+状态 137conflicts: 1 shift/reduce, 21 reduce/reduce
+状态 144conflicts: 20 shift/reduce
+状态 147conflicts: 20 shift/reduce
+状态 158conflicts: 1 shift/reduce
+状态 178conflicts: 20 shift/reduce
+状态 179conflicts: 20 shift/reduce
+状态 181conflicts: 20 shift/reduce
+状态 187conflicts: 20 shift/reduce
+状态 195conflicts: 20 shift/reduce
 
 
-Grammar
+语法
 
     0 $accept: Program $end
 
@@ -120,10 +120,10 @@ Grammar
    68    | MINUS Exp
    69    | NOT Exp
    70    | ID ArrayIndex
-   71    | DPLUS ID
-   72    | ID DPLUS
-   73    | DMINUS ID
-   74    | ID DMINUS
+   71    | DPLUS Exp
+   72    | Exp DPLUS
+   73    | DMINUS Exp
+   74    | Exp DMINUS
    75    | NEW Call
    76    | NEW TYPE ArrayIndex
 
@@ -166,7 +166,7 @@ ELSE (268) 35
 ELIF (269) 33
 FOR (270) 38
 WHILE (271) 37
-ID (272) 4 5 10 11 12 14 16 49 50 56 57 58 59 70 71 72 73 74 79 84
+ID (272) 4 5 10 11 12 14 16 49 50 56 57 58 59 70 79 84
 SPACE (273)
 SEMI (274) 25 30 38 39 40 41 42 45 46
 COMMA (275) 44 50 88
@@ -252,7 +252,7 @@ BoolExp (71)
 Exp (72)
     on left: 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
     72 73 74 75 76, on right: 33 38 43 44 46 51 52 53 61 62 63 65 66
-    67 68 69 77 78 87 88
+    67 68 69 71 72 73 74 77 78 87 88
 ArrayIndex (73)
     on left: 77 78, on right: 70 76 78
 Lvalue (74)
@@ -275,9 +275,9 @@ State 0
 
     CLASS  shift, and go to state 1
 
-    Program    go to state 2
-    ClassDefs  go to state 3
-    Class      go to state 4
+    Program    转到状态 2
+    ClassDefs  转到状态 3
+    Class      转到状态 4
 
 
 State 1
@@ -311,8 +311,8 @@ State 4
 
     $default  reduce using rule 2 (ClassDefs)
 
-    ClassDefs  go to state 7
-    Class      go to state 4
+    ClassDefs  转到状态 7
+    Class      转到状态 4
 
 
 State 5
@@ -328,7 +328,7 @@ State 6
 
     0 $accept: Program $end .
 
-    $default  accept
+    $default  接受
 
 
 State 7
@@ -354,11 +354,11 @@ State 9
     TYPE    shift, and go to state 13
     ID      shift, and go to state 14
 
-    ClassStms   go to state 15
-    ClassStm    go to state 16
-    Fun         go to state 17
-    VarType     go to state 18
-    DeclareStm  go to state 19
+    ClassStms   转到状态 15
+    ClassStm    转到状态 16
+    Fun         转到状态 17
+    VarType     转到状态 18
+    DeclareStm  转到状态 19
 
 
 State 10
@@ -378,7 +378,7 @@ State 11
     TYPE   shift, and go to state 13
     ID     shift, and go to state 22
 
-    VarType  go to state 23
+    VarType  转到状态 23
 
 
 State 12
@@ -388,7 +388,7 @@ State 12
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    VarType  go to state 24
+    VarType  转到状态 24
 
 
 State 13
@@ -400,7 +400,7 @@ State 13
 
     $default  reduce using rule 15 (VarType)
 
-    Arrays  go to state 26
+    Arrays  转到状态 26
 
 
 State 14
@@ -415,7 +415,7 @@ State 14
     LP        [reduce using rule 16 (VarType)]
     $default  reduce using rule 16 (VarType)
 
-    Arrays  go to state 28
+    Arrays  转到状态 28
 
 
 State 15
@@ -437,11 +437,11 @@ State 16
 
     $default  reduce using rule 7 (ClassStms)
 
-    ClassStms   go to state 30
-    ClassStm    go to state 16
-    Fun         go to state 17
-    VarType     go to state 18
-    DeclareStm  go to state 19
+    ClassStms   转到状态 30
+    ClassStm    转到状态 16
+    Fun         转到状态 17
+    VarType     转到状态 18
+    DeclareStm  转到状态 19
 
 
 State 17
@@ -469,12 +469,12 @@ State 18
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 43
-    BoolExp   go to state 44
-    Exp       go to state 45
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    VarStm    转到状态 43
+    BoolExp   转到状态 44
+    Exp       转到状态 45
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 19
@@ -493,11 +493,11 @@ State 20
     TYPE    shift, and go to state 13
     ID      shift, and go to state 14
 
-    ClassStms   go to state 49
-    ClassStm    go to state 16
-    Fun         go to state 17
-    VarType     go to state 18
-    DeclareStm  go to state 19
+    ClassStms   转到状态 49
+    ClassStm    转到状态 16
+    Fun         转到状态 17
+    VarType     转到状态 18
+    DeclareStm  转到状态 19
 
 
 State 21
@@ -507,7 +507,7 @@ State 21
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    VarType  go to state 50
+    VarType  转到状态 50
 
 
 State 22
@@ -519,7 +519,7 @@ State 22
 
     $default  reduce using rule 16 (VarType)
 
-    Arrays  go to state 28
+    Arrays  转到状态 28
 
 
 State 23
@@ -540,12 +540,12 @@ State 23
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 52
-    BoolExp   go to state 44
-    Exp       go to state 45
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    VarStm    转到状态 52
+    BoolExp   转到状态 44
+    Exp       转到状态 45
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 24
@@ -565,12 +565,12 @@ State 24
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 54
-    BoolExp   go to state 44
-    Exp       go to state 45
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    VarStm    转到状态 54
+    BoolExp   转到状态 44
+    Exp       转到状态 45
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 25
@@ -582,7 +582,7 @@ State 25
 
     $default  reduce using rule 17 (Arrays)
 
-    Arrays  go to state 55
+    Arrays  转到状态 55
 
 
 State 26
@@ -601,10 +601,10 @@ State 27
 
     $default  reduce using rule 89 (EMPTY)
 
-    VarType  go to state 56
-    Args     go to state 57
-    Arg      go to state 58
-    EMPTY    go to state 59
+    VarType  转到状态 56
+    Args     转到状态 57
+    Arg      转到状态 58
+    EMPTY    转到状态 59
 
 
 State 28
@@ -635,21 +635,17 @@ State 31
    57    | ID . DOT ID
    58    | ID .
    70    | ID . ArrayIndex
-   72    | ID . DPLUS
-   74    | ID . DMINUS
    79 Lvalue: ID .
    84 Call: ID . LP CallArgs RP
 
-    DOT     shift, and go to state 60
-    LP      shift, and go to state 61
-    LB      shift, and go to state 62
-    DPLUS   shift, and go to state 63
-    DMINUS  shift, and go to state 64
+    DOT  shift, and go to state 60
+    LP   shift, and go to state 61
+    LB   shift, and go to state 62
 
     ASSIGNOP  reduce using rule 79 (Lvalue)
     $default  reduce using rule 58 (Exp)
 
-    ArrayIndex  go to state 65
+    ArrayIndex  转到状态 63
 
 
 State 32
@@ -669,11 +665,11 @@ State 32
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 66
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 64
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 33
@@ -693,25 +689,59 @@ State 33
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 67
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 65
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 34
 
-   71 Exp: DPLUS . ID
+   71 Exp: DPLUS . Exp
 
-    ID  shift, and go to state 68
+    ID      shift, and go to state 53
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    BoolExp   转到状态 44
+    Exp       转到状态 66
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 35
 
-   73 Exp: DMINUS . ID
+   73 Exp: DMINUS . Exp
 
-    ID  shift, and go to state 69
+    ID      shift, and go to state 53
+    NOT     shift, and go to state 32
+    LP      shift, and go to state 33
+    DPLUS   shift, and go to state 34
+    DMINUS  shift, and go to state 35
+    INT     shift, and go to state 36
+    FLOAT   shift, and go to state 37
+    STR     shift, and go to state 38
+    BOOL    shift, and go to state 39
+    MINUS   shift, and go to state 40
+    NEW     shift, and go to state 41
+    THIS    shift, and go to state 42
+
+    BoolExp   转到状态 44
+    Exp       转到状态 67
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 36
@@ -759,11 +789,11 @@ State 40
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 70
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 68
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 41
@@ -771,10 +801,10 @@ State 41
    75 Exp: NEW . Call
    76    | NEW . TYPE ArrayIndex
 
-    TYPE  shift, and go to state 71
-    ID    shift, and go to state 72
+    TYPE  shift, and go to state 69
+    ID    shift, and go to state 70
 
-    Call  go to state 73
+    Call  转到状态 71
 
 
 State 42
@@ -782,14 +812,14 @@ State 42
    59 Exp: THIS . DOT ID
    60    | THIS . DOT Call
 
-    DOT  shift, and go to state 74
+    DOT  shift, and go to state 72
 
 
 State 43
 
    39 DeclareStm: VarType VarStm . SEMI
 
-    SEMI  shift, and go to state 75
+    SEMI  shift, and go to state 73
 
 
 State 44
@@ -810,15 +840,19 @@ State 45
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    COMMA  shift, and go to state 76
-    RELOP  shift, and go to state 77
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    COMMA   shift, and go to state 74
+    RELOP   shift, and go to state 75
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
     $default  reduce using rule 43 (VarStm)
 
@@ -868,12 +902,12 @@ State 50
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 86
-    BoolExp   go to state 44
-    Exp       go to state 45
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    VarStm    转到状态 86
+    BoolExp   转到状态 44
+    Exp       转到状态 45
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 51
@@ -883,21 +917,17 @@ State 51
    57    | ID . DOT ID
    58    | ID .
    70    | ID . ArrayIndex
-   72    | ID . DPLUS
-   74    | ID . DMINUS
    79 Lvalue: ID .
    84 Call: ID . LP CallArgs RP
 
-    DOT     shift, and go to state 60
-    LP      shift, and go to state 87
-    LB      shift, and go to state 62
-    DPLUS   shift, and go to state 63
-    DMINUS  shift, and go to state 64
+    DOT  shift, and go to state 60
+    LP   shift, and go to state 87
+    LB   shift, and go to state 62
 
     ASSIGNOP  reduce using rule 79 (Lvalue)
     $default  reduce using rule 58 (Exp)
 
-    ArrayIndex  go to state 65
+    ArrayIndex  转到状态 63
 
 
 State 52
@@ -913,21 +943,17 @@ State 53
    57    | ID . DOT ID
    58    | ID .
    70    | ID . ArrayIndex
-   72    | ID . DPLUS
-   74    | ID . DMINUS
    79 Lvalue: ID .
    84 Call: ID . LP CallArgs RP
 
-    DOT     shift, and go to state 60
-    LP      shift, and go to state 89
-    LB      shift, and go to state 62
-    DPLUS   shift, and go to state 63
-    DMINUS  shift, and go to state 64
+    DOT  shift, and go to state 60
+    LP   shift, and go to state 89
+    LB   shift, and go to state 62
 
     ASSIGNOP  reduce using rule 79 (Lvalue)
     $default  reduce using rule 58 (Exp)
 
-    ArrayIndex  go to state 65
+    ArrayIndex  转到状态 63
 
 
 State 54
@@ -980,7 +1006,7 @@ State 60
 
     ID  shift, and go to state 93
 
-    Call  go to state 94
+    Call  转到状态 94
 
 
 State 61
@@ -1004,17 +1030,17 @@ State 61
 
     $default  reduce using rule 89 (EMPTY)
 
-    VarType   go to state 56
-    Args      go to state 96
-    Arg       go to state 58
-    BoolExp   go to state 44
-    Exp       go to state 97
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
-    CallArgs  go to state 98
-    CallArg   go to state 99
-    EMPTY     go to state 100
+    VarType   转到状态 56
+    Args      转到状态 96
+    Arg       转到状态 58
+    BoolExp   转到状态 44
+    Exp       转到状态 97
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
+    CallArgs  转到状态 98
+    CallArg   转到状态 99
+    EMPTY     转到状态 100
 
 
 State 62
@@ -1035,32 +1061,59 @@ State 62
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 101
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 101
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 63
 
-   72 Exp: ID DPLUS .
+   70 Exp: ID ArrayIndex .
 
-    $default  reduce using rule 72 (Exp)
+    $default  reduce using rule 70 (Exp)
 
 
 State 64
 
-   74 Exp: ID DMINUS .
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+   69    | NOT Exp .
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    $default  reduce using rule 74 (Exp)
+    $default  reduce using rule 69 (Exp)
 
 
 State 65
 
-   70 Exp: ID ArrayIndex .
+   51 BoolExp: Exp . RELOP Exp
+   52        | Exp . AND Exp
+   53        | Exp . OR Exp
+   62 Exp: Exp . PLUS Exp
+   63    | Exp . MINUS Exp
+   65    | Exp . STAR Exp
+   66    | Exp . DIV Exp
+   67    | LP Exp . RP
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    $default  reduce using rule 70 (Exp)
+    RELOP   shift, and go to state 75
+    RP      shift, and go to state 102
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
 
 State 66
@@ -1072,9 +1125,19 @@ State 66
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
-   69    | NOT Exp .
+   71    | DPLUS Exp .
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    $default  reduce using rule 69 (Exp)
+    RELOP  shift, and go to state 75
+    PLUS   shift, and go to state 78
+    MINUS  shift, and go to state 79
+    STAR   shift, and go to state 80
+    DIV    shift, and go to state 81
+    OR     shift, and go to state 82
+    AND    shift, and go to state 83
+
+    $default  reduce using rule 71 (Exp)
 
 
 State 67
@@ -1086,10 +1149,11 @@ State 67
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
-   67    | LP Exp . RP
+   72    | Exp . DPLUS
+   73    | DMINUS Exp .
+   74    | Exp . DMINUS
 
-    RELOP  shift, and go to state 77
-    RP     shift, and go to state 102
+    RELOP  shift, and go to state 75
     PLUS   shift, and go to state 78
     MINUS  shift, and go to state 79
     STAR   shift, and go to state 80
@@ -1097,22 +1161,10 @@ State 67
     OR     shift, and go to state 82
     AND    shift, and go to state 83
 
-
-State 68
-
-   71 Exp: DPLUS ID .
-
-    $default  reduce using rule 71 (Exp)
-
-
-State 69
-
-   73 Exp: DMINUS ID .
-
     $default  reduce using rule 73 (Exp)
 
 
-State 70
+State 68
 
    51 BoolExp: Exp . RELOP Exp
    52        | Exp . AND Exp
@@ -1122,6 +1174,8 @@ State 70
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
    68    | MINUS Exp .
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
     STAR  shift, and go to state 80
     DIV   shift, and go to state 81
@@ -1129,47 +1183,47 @@ State 70
     $default  reduce using rule 68 (Exp)
 
 
-State 71
+State 69
 
    76 Exp: NEW TYPE . ArrayIndex
 
     LB  shift, and go to state 62
 
-    ArrayIndex  go to state 103
+    ArrayIndex  转到状态 103
 
 
-State 72
+State 70
 
    84 Call: ID . LP CallArgs RP
 
     LP  shift, and go to state 89
 
 
-State 73
+State 71
 
    75 Exp: NEW Call .
 
     $default  reduce using rule 75 (Exp)
 
 
-State 74
+State 72
 
    59 Exp: THIS DOT . ID
    60    | THIS DOT . Call
 
     ID  shift, and go to state 104
 
-    Call  go to state 105
+    Call  转到状态 105
 
 
-State 75
+State 73
 
    39 DeclareStm: VarType VarStm SEMI .
 
     $default  reduce using rule 39 (DeclareStm)
 
 
-State 76
+State 74
 
    44 VarStm: Exp COMMA . VarStm
 
@@ -1186,15 +1240,15 @@ State 76
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 106
-    BoolExp   go to state 44
-    Exp       go to state 45
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    VarStm    转到状态 106
+    BoolExp   转到状态 44
+    Exp       转到状态 45
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
-State 77
+State 75
 
    51 BoolExp: Exp RELOP . Exp
 
@@ -1211,11 +1265,25 @@ State 77
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 107
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 107
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
+
+
+State 76
+
+   72 Exp: Exp DPLUS .
+
+    $default  reduce using rule 72 (Exp)
+
+
+State 77
+
+   74 Exp: Exp DMINUS .
+
+    $default  reduce using rule 74 (Exp)
 
 
 State 78
@@ -1235,11 +1303,11 @@ State 78
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 108
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 108
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 79
@@ -1259,11 +1327,11 @@ State 79
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 109
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 109
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 80
@@ -1283,11 +1351,11 @@ State 80
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 110
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 110
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 81
@@ -1307,11 +1375,11 @@ State 81
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 111
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 111
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 82
@@ -1331,11 +1399,11 @@ State 82
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 112
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 112
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 83
@@ -1355,11 +1423,11 @@ State 83
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 113
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 113
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 84
@@ -1379,11 +1447,11 @@ State 84
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 114
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 114
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 85
@@ -1421,17 +1489,17 @@ State 87
 
     $default  reduce using rule 89 (EMPTY)
 
-    VarType   go to state 56
-    Args      go to state 116
-    Arg       go to state 58
-    BoolExp   go to state 44
-    Exp       go to state 97
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
-    CallArgs  go to state 98
-    CallArg   go to state 99
-    EMPTY     go to state 100
+    VarType   转到状态 56
+    Args      转到状态 116
+    Arg       转到状态 58
+    BoolExp   转到状态 44
+    Exp       转到状态 97
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
+    CallArgs  转到状态 98
+    CallArg   转到状态 99
+    EMPTY     转到状态 100
 
 
 State 88
@@ -1460,14 +1528,14 @@ State 89
 
     $default  reduce using rule 89 (EMPTY)
 
-    BoolExp   go to state 44
-    Exp       go to state 97
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
-    CallArgs  go to state 98
-    CallArg   go to state 99
-    EMPTY     go to state 117
+    BoolExp   转到状态 44
+    Exp       转到状态 97
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
+    CallArgs  转到状态 98
+    CallArg   转到状态 99
+    EMPTY     转到状态 117
 
 
 State 90
@@ -1519,17 +1587,13 @@ State 95
    57    | ID . DOT ID
    58    | ID .
    70    | ID . ArrayIndex
-   72    | ID . DPLUS
-   74    | ID . DMINUS
    79 Lvalue: ID .
    84 Call: ID . LP CallArgs RP
 
-    ARRAY   shift, and go to state 25
-    DOT     shift, and go to state 60
-    LP      shift, and go to state 89
-    LB      shift, and go to state 62
-    DPLUS   shift, and go to state 63
-    DMINUS  shift, and go to state 64
+    ARRAY  shift, and go to state 25
+    DOT    shift, and go to state 60
+    LP     shift, and go to state 89
+    LB     shift, and go to state 62
 
     SEMI      reduce using rule 58 (Exp)
     COMMA     reduce using rule 58 (Exp)
@@ -1537,8 +1601,10 @@ State 95
     RELOP     reduce using rule 58 (Exp)
     LP        [reduce using rule 16 (VarType)]
     RP        reduce using rule 58 (Exp)
-    DPLUS     [reduce using rule 16 (VarType)]
-    DMINUS    [reduce using rule 16 (VarType)]
+    DPLUS     reduce using rule 16 (VarType)
+    DPLUS     [reduce using rule 58 (Exp)]
+    DMINUS    reduce using rule 16 (VarType)
+    DMINUS    [reduce using rule 58 (Exp)]
     PLUS      reduce using rule 58 (Exp)
     MINUS     reduce using rule 16 (VarType)
     MINUS     [reduce using rule 58 (Exp)]
@@ -1548,8 +1614,8 @@ State 95
     AND       reduce using rule 58 (Exp)
     $default  reduce using rule 16 (VarType)
 
-    Arrays      go to state 28
-    ArrayIndex  go to state 65
+    Arrays      转到状态 28
+    ArrayIndex  转到状态 63
 
 
 State 96
@@ -1568,17 +1634,21 @@ State 97
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
    87 CallArg: Exp .
    88        | Exp . COMMA CallArg
 
-    COMMA  shift, and go to state 121
-    RELOP  shift, and go to state 77
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    COMMA   shift, and go to state 121
+    RELOP   shift, and go to state 75
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
     $default  reduce using rule 87 (CallArg)
 
@@ -1616,17 +1686,21 @@ State 101
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
    77 ArrayIndex: LB Exp . RB
    78           | LB Exp . RB ArrayIndex
 
-    RELOP  shift, and go to state 77
-    RB     shift, and go to state 123
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    RELOP   shift, and go to state 75
+    RB      shift, and go to state 123
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
 
 State 102
@@ -1677,6 +1751,8 @@ State 107
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
     PLUS   shift, and go to state 78
     MINUS  shift, and go to state 79
@@ -1696,6 +1772,8 @@ State 108
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
     STAR  shift, and go to state 80
     DIV   shift, and go to state 81
@@ -1713,6 +1791,8 @@ State 109
    63    | Exp MINUS Exp .
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
     STAR  shift, and go to state 80
     DIV   shift, and go to state 81
@@ -1730,6 +1810,8 @@ State 110
    65    | Exp . STAR Exp
    65    | Exp STAR Exp .
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
     $default  reduce using rule 65 (Exp)
 
@@ -1744,6 +1826,8 @@ State 111
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
    66    | Exp DIV Exp .
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
     $default  reduce using rule 66 (Exp)
 
@@ -1758,8 +1842,10 @@ State 112
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    RELOP  shift, and go to state 77
+    RELOP  shift, and go to state 75
     PLUS   shift, and go to state 78
     MINUS  shift, and go to state 79
     STAR   shift, and go to state 80
@@ -1779,8 +1865,10 @@ State 113
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    RELOP  shift, and go to state 77
+    RELOP  shift, and go to state 75
     PLUS   shift, and go to state 78
     MINUS  shift, and go to state 79
     STAR   shift, and go to state 80
@@ -1799,14 +1887,18 @@ State 114
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    RELOP  shift, and go to state 77
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    RELOP   shift, and go to state 75
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
     $default  reduce using rule 61 (Exp)
 
@@ -1839,8 +1931,8 @@ State 118
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    VarType  go to state 56
-    Arg      go to state 125
+    VarType  转到状态 56
+    Arg      转到状态 125
 
 
 State 119
@@ -1890,23 +1982,23 @@ State 119
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 132
-    BaseStm     go to state 133
-    Lines       go to state 134
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    BaseStm     转到状态 133
+    Lines       转到状态 134
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 120
@@ -1933,12 +2025,12 @@ State 121
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 97
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
-    CallArg   go to state 145
+    BoolExp   转到状态 44
+    Exp       转到状态 97
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
+    CallArg   转到状态 145
 
 
 State 122
@@ -1957,7 +2049,7 @@ State 123
 
     $default  reduce using rule 77 (ArrayIndex)
 
-    ArrayIndex  go to state 146
+    ArrayIndex  转到状态 146
 
 
 State 124
@@ -1983,7 +2075,7 @@ State 126
     TYPE   shift, and go to state 13
     ID     shift, and go to state 22
 
-    VarType  go to state 148
+    VarType  转到状态 148
 
 
 State 127
@@ -2012,11 +2104,11 @@ State 128
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 151
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 151
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 129
@@ -2057,12 +2149,12 @@ State 132
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 43
-    BoolExp   go to state 44
-    Exp       go to state 45
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    VarStm    转到状态 43
+    BoolExp   转到状态 44
+    Exp       转到状态 45
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 133
@@ -2129,22 +2221,22 @@ State 135
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 20 (Lines)
 
-    VarType     go to state 132
-    Lines       go to state 156
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    Lines       转到状态 156
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 136
@@ -2207,8 +2299,8 @@ State 137
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 23 (Line)
 
-    ELIfStm  go to state 158
-    EMPTY    go to state 159
+    ELIfStm  转到状态 158
+    EMPTY    转到状态 159
 
 
 State 138
@@ -2300,23 +2392,23 @@ State 144
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 132
-    BaseStm     go to state 161
-    Lines       go to state 134
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    BaseStm     转到状态 161
+    Lines       转到状态 134
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 145
@@ -2380,23 +2472,23 @@ State 147
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 132
-    BaseStm     go to state 162
-    Lines       go to state 134
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    BaseStm     转到状态 162
+    Lines       转到状态 134
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 148
@@ -2416,12 +2508,12 @@ State 148
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    VarStm    go to state 52
-    BoolExp   go to state 44
-    Exp       go to state 45
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    VarStm    转到状态 52
+    BoolExp   转到状态 44
+    Exp       转到状态 45
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 149
@@ -2448,15 +2540,19 @@ State 151
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    SEMI   shift, and go to state 163
-    RELOP  shift, and go to state 77
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    SEMI    shift, and go to state 163
+    RELOP   shift, and go to state 75
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
 
 State 152
@@ -2476,11 +2572,11 @@ State 152
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 164
-    Exp       go to state 165
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 164
+    Exp       转到状态 165
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 153
@@ -2500,11 +2596,11 @@ State 153
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 166
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 166
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 154
@@ -2524,11 +2620,11 @@ State 154
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 167
-    Exp       go to state 165
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 167
+    Exp       转到状态 165
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 155
@@ -2561,8 +2657,8 @@ State 158
     ELSE      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    ElseStm  go to state 170
-    EMPTY    go to state 171
+    ElseStm  转到状态 170
+    EMPTY    转到状态 171
 
 
 State 159
@@ -2619,14 +2715,18 @@ State 165
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    RELOP  shift, and go to state 77
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    RELOP   shift, and go to state 75
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
 
 State 166
@@ -2639,15 +2739,19 @@ State 166
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    SEMI   shift, and go to state 175
-    RELOP  shift, and go to state 77
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    SEMI    shift, and go to state 175
+    RELOP   shift, and go to state 75
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
 
 State 167
@@ -2677,11 +2781,11 @@ State 168
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 177
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 177
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 169
@@ -2743,11 +2847,11 @@ State 175
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 180
-    Exp       go to state 165
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 180
+    Exp       转到状态 165
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 176
@@ -2767,15 +2871,19 @@ State 177
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    RELOP  shift, and go to state 77
-    RP     shift, and go to state 182
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    RELOP   shift, and go to state 75
+    RP      shift, and go to state 182
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
 
 State 178
@@ -2825,23 +2933,23 @@ State 178
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 132
-    BaseStm     go to state 183
-    Lines       go to state 134
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    BaseStm     转到状态 183
+    Lines       转到状态 134
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 179
@@ -2891,23 +2999,23 @@ State 179
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 132
-    BaseStm     go to state 184
-    Lines       go to state 134
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    BaseStm     转到状态 184
+    Lines       转到状态 134
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 180
@@ -2967,23 +3075,23 @@ State 181
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 132
-    BaseStm     go to state 186
-    Lines       go to state 134
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    BaseStm     转到状态 186
+    Lines       转到状态 134
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 182
@@ -3024,11 +3132,11 @@ State 185
     NEW     shift, and go to state 41
     THIS    shift, and go to state 42
 
-    BoolExp   go to state 44
-    Exp       go to state 190
-    Lvalue    go to state 46
-    Constant  go to state 47
-    Call      go to state 48
+    BoolExp   转到状态 44
+    Exp       转到状态 190
+    Lvalue    转到状态 46
+    Constant  转到状态 47
+    Call      转到状态 48
 
 
 State 186
@@ -3085,23 +3193,23 @@ State 187
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 132
-    BaseStm     go to state 192
-    Lines       go to state 134
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    BaseStm     转到状态 192
+    Lines       转到状态 134
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 188
@@ -3128,15 +3236,19 @@ State 190
    63    | Exp . MINUS Exp
    65    | Exp . STAR Exp
    66    | Exp . DIV Exp
+   72    | Exp . DPLUS
+   74    | Exp . DMINUS
 
-    RELOP  shift, and go to state 77
-    RP     shift, and go to state 193
-    PLUS   shift, and go to state 78
-    MINUS  shift, and go to state 79
-    STAR   shift, and go to state 80
-    DIV    shift, and go to state 81
-    OR     shift, and go to state 82
-    AND    shift, and go to state 83
+    RELOP   shift, and go to state 75
+    RP      shift, and go to state 193
+    DPLUS   shift, and go to state 76
+    DMINUS  shift, and go to state 77
+    PLUS    shift, and go to state 78
+    MINUS   shift, and go to state 79
+    STAR    shift, and go to state 80
+    DIV     shift, and go to state 81
+    OR      shift, and go to state 82
+    AND     shift, and go to state 83
 
 
 State 191
@@ -3214,23 +3326,23 @@ State 195
     THIS      [reduce using rule 89 (EMPTY)]
     $default  reduce using rule 89 (EMPTY)
 
-    VarType     go to state 132
-    BaseStm     go to state 196
-    Lines       go to state 134
-    Line        go to state 135
-    BreakStm    go to state 136
-    IfStm       go to state 137
-    WhileStm    go to state 138
-    ForStm      go to state 139
-    DeclareStm  go to state 140
-    VarStm      go to state 141
-    ReturnStm   go to state 142
-    BoolExp     go to state 44
-    Exp         go to state 45
-    Lvalue      go to state 46
-    Constant    go to state 47
-    Call        go to state 48
-    EMPTY       go to state 143
+    VarType     转到状态 132
+    BaseStm     转到状态 196
+    Lines       转到状态 134
+    Line        转到状态 135
+    BreakStm    转到状态 136
+    IfStm       转到状态 137
+    WhileStm    转到状态 138
+    ForStm      转到状态 139
+    DeclareStm  转到状态 140
+    VarStm      转到状态 141
+    ReturnStm   转到状态 142
+    BoolExp     转到状态 44
+    Exp         转到状态 45
+    Lvalue      转到状态 46
+    Constant    转到状态 47
+    Call        转到状态 48
+    EMPTY       转到状态 143
 
 
 State 196

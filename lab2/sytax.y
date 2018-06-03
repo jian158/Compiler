@@ -22,12 +22,14 @@ TreeNode *node;
 
 
 %right ASSIGNOP
+%left DMINUS DPLUS
 %left OR
 %left AND
 %left RELOP
 %left PLUS MINUS
-%left STAR DIV
-%right NOT DMINUS DPLUS
+%left STAR DIV 
+
+%right NOT 
 %left LP RP LB RB DOT
 
 %%
@@ -164,12 +166,12 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
 		|Call{$$=newNode("Ref",1,$1);$$->string_value=new string("THIS");}
 		|ID DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
 		|ID DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
-		|ID{$$=$1;}
+		|ID{$$=$1;cout<<*$1->string_value<<"_____________"<<endl;}
 		|THIS DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string("THIS");}
 		|THIS DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string("THIS");}
         
 		|Lvalue ASSIGNOP Exp{$$=$2;$$->add($1);$$->add($3);  }
-		|Exp PLUS Exp{$$=$2;$$->add($1);$$->add($3);}
+		|Exp PLUS Exp{$$=$2;$$->add($1);$$->add($3);cout<<"%%%%%%%%%%"<<endl;}
         |Exp MINUS Exp{$$=$2;$$->add($1);$$->add($3);}
 		
 		|BoolExp{$$=$1;}
@@ -181,10 +183,12 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
         |MINUS Exp {$$=newNode("Exp",2,$1,$2);}
         |NOT Exp {$$=newNode("Exp",2,$1,$2);}
         |ID ArrayIndex {$$=newNode("Exp",2,$1,$2);adjustNodes($$,1);}
-		|DPLUS ID{$$=newNode("Exp",1,$1);$1->add($2);}
-		|ID DPLUS{$$=newNode("Exp",1,$2);$2->add($1);}
-		|DMINUS ID{$$=newNode("Exp",1,$1);$1->add($2);}
-		|ID DMINUS{$$=newNode("Exp",1,$2);$2->add($1);}
+
+		|DPLUS Exp{$$=newNode("Exp",1,$1);$1->add($2);}
+		|Exp DPLUS{$$=newNode("Exp",1,$2);$2->add($1);cout<<"##############"<<endl;}
+		|DMINUS Exp{$$=newNode("Exp",1,$1);$1->add($2);}
+		|Exp DMINUS{$$=newNode("Exp",1,$2);$2->add($1);}
+
 		|NEW Call{$$=newNode("Exp",2,$1,$2);}
 		|NEW TYPE ArrayIndex{$$=newNode("Exp",3,$1,$2,$3);adjustNodes($$,2);}
         ;

@@ -13,9 +13,10 @@ class Computer extends Base
 
 class Person{
 	String size,name="";
+	int count;
 	void main(){
 		int i=0;
-		i=this.size;
+		count++;
 	}
 }
 

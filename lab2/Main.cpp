@@ -91,6 +91,7 @@ void startSymbolCreate(TreeNode *node){
 	cout<<"******************startSymbolCreate********************"<<endl;
     ScannerClass(node);
 	createSymbolTable(node,symbolRoot,0);
+    cout<<"parser End_______________________"<<endl;
     TravelSymbols(symbolRoot,0);
 	cout<<"******************endSymbolCreate********************"<<endl;
 }
@@ -200,20 +201,29 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 			error(false,symbol->getLine(),string("var ").append(varSymbol->getId()).append(" isn't exit"));
 			tree->symbol->setRealType(ANY);
 		}else{
-			tree->symbol->setRealType(CONST);
-			tree->symbol->setId(globalSymbol->getRealType());
+            tree->symbol=globalSymbol;
+			// tree->symbol->setRealType(CONST);
+			// tree->symbol->setId(globalSymbol->getRealType());
 		}
 		return;
 	}
-	
-	// if(symbol->getId()=="AUTO"){
-		// Symbol* autoSymbol=findSymbol(table,)
-		// return;
-	// }
+
 	
 	for(int i=0;i<tree->size();i++){
 		Reduce(table,tree->get(i));
 	}
+
+    /*  */
+    if(symbol->getId()=="AUTO"){
+        Symbol* firstSymbol=tree->getSymbol(0);
+        if(firstSymbol->getType()!=VAR&&firstSymbol->getRealType()!="int"){
+            error(false,symbol->getLine(),"auto op only supprot var int");
+        }else{
+            tree->symbol=firstSymbol;
+        }
+        
+        return;
+    }
 
 	if(type==VAR){
 		Symbol* targetSymbol=findSymbol(table,symbol->getId());
@@ -222,7 +232,8 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 			((Variable*)symbol)->setVarType("ANY");
 			error(false,symbol->getLine(),string("var ").append(symbol->getId())+" not exit");
 		}else{
-			((Variable*)symbol)->setVarType(((Variable*)targetSymbol)->getVarType());
+			// ((Variable*)symbol)->setVarType(((Variable*)targetSymbol)->getVarType());
+            tree->symbol=targetSymbol;
 		}
 	}
 	
@@ -236,6 +247,8 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 		} 
 		else if(symbol->getId()=="="){
 			if(t1==t2){
+                // if()
+                // tree->symbol=(tree->getSymbol(0)->getType()==VAR||tree->getSymbol(1)->getType()==VAR)?
 				tree->symbol->setRealType(CONST);
 				tree->symbol->setId(t1);
 			}else{
@@ -284,8 +297,9 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 				ReduceFunction(globalSymbol,symbol,tree);
 			}else{
 				Variable* varSymbol=(Variable*)globalSymbol;
-				tree->symbol->setType(CONST);
-				tree->symbol->setId(varSymbol->getRealType());
+                tree->symbol=varSymbol;
+				// tree->symbol->setType(CONST);
+				// tree->symbol->setId(varSymbol->getRealType());
 			}
 		}
 		
