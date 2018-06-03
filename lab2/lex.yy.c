@@ -913,12 +913,12 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 73 "word.l"
-{yylval.node=newNode("DPLUS",0,yylineno); return DPLUS;}
+{yylval.node=newNode("AUTO",0,yylineno); return DPLUS;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 74 "word.l"
-{yylval.node=newNode("DMINUS",0,yylineno); return DMINUS;}
+{yylval.node=newNode("AUTO",0,yylineno); return DMINUS;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP

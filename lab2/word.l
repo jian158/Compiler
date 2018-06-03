@@ -70,8 +70,8 @@ WEAKCOMMENT  "/*"([^*]|\*+[^*/])*\*+"/"
 {STATIC} {yylval.node=newNode("STATIC",0,yylineno); return STATIC;}
 {THIS} {yylval.node=newNode("THIS",0,yylineno); return THIS;}
 {NEW}  {yylval.node=newNode("NEW",0,yylineno); return NEW;}
-{DPLUS} {yylval.node=newNode("DPLUS",0,yylineno); return DPLUS;}
-{DMINUS} {yylval.node=newNode("DMINUS",0,yylineno); return DMINUS;}
+{DPLUS} {yylval.node=newNode("AUTO",0,yylineno); return DPLUS;}
+{DMINUS} {yylval.node=newNode("AUTO",0,yylineno); return DMINUS;}
 {PLUS} {yylval.node=newNode("OP",0,yylineno); return PLUS;}
 {MINUS} {yylval.node=newNode("OP",0,yylineno); return MINUS;}
 {LINECOMMENT} {}

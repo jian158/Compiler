@@ -38,7 +38,7 @@ TreeNode* newNode(const char* name,int argc,...){
             newNode->int_value=strtol(yytext,NULL,16);
             *(newNode->name)="INT";
         }
-        else if(pname=="bool"||pname=="String"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP"||pname=="OP"||pname=="RELOP")
+        else if(pname=="AUTO"||pname=="bool"||pname=="String"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP"||pname=="OP"||pname=="RELOP")
             newNode->string_value=new string(yytext);
         else if(pname=="float")
             newNode->float_value=strtof(yytext,NULL);
@@ -59,7 +59,7 @@ void TravelTree(TreeNode* node,int level){
     if(pname=="int")
         cout<<":"<<node->int_value;
     else if(pname=="bool"||pname=="String"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP"
-            ||pname=="VarType"||pname=="Call"||pname=="Ref"||pname=="Lvalue"||pname=="OP"||pname=="RELOP")
+            ||pname=="VarType"||pname=="Call"||pname=="Ref"||pname=="Lvalue"||pname=="OP"||pname=="RELOP"||pname=="AUTO")
         cout<<":"<<*(node->string_value);
     else if(pname=="float")
         cout<<":"<<node->float_value;
@@ -194,8 +194,23 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 	Symbol* symbol=tree->symbol;
 	Type type=symbol->getType();
 	if(type==REF&&tree->getSymbol(0)->getType()==VAR){
+		Symbol* varSymbol=tree->getSymbol(0);
+		Symbol* globalSymbol=findSymbol(thisClass,varSymbol->getId());
+		if(globalSymbol==NULL||globalSymbol->getType()!=VAR){
+			error(false,symbol->getLine(),string("var ").append(varSymbol->getId()).append(" isn't exit"));
+			tree->symbol->setRealType(ANY);
+		}else{
+			tree->symbol->setRealType(CONST);
+			tree->symbol->setId(globalSymbol->getRealType());
+		}
 		return;
 	}
+	
+	// if(symbol->getId()=="AUTO"){
+		// Symbol* autoSymbol=findSymbol(table,)
+		// return;
+	// }
+	
 	for(int i=0;i<tree->size();i++){
 		Reduce(table,tree->get(i));
 	}
@@ -242,6 +257,7 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 	}
 	else if(type==REF){
 		bool isThis=symbol->getId()=="THIS";
+		cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@type:"<<symbol->getId()<<endl;
 		Symbol* targetSymbol=isThis?thisClass->symbol:findSymbol(table,symbol->getId());
 		if(targetSymbol==NULL){
 			symbol->setRealType(ANY);
@@ -254,6 +270,7 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 				string classId=varSymbol->getVarType();
 				globalSymbol=findSymbol(symbolRoot->get(classId),refSymbol->getId());
 			}else{
+				
 				globalSymbol=findSymbol(thisClass,refSymbol->getId());
 			}
 			
@@ -279,28 +296,11 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 }
 
 SymbolTable *symbolReduce(SymbolTable* table,SymbolTable* tree){
-	// cout<<"$$$$$$$$$$$$$$$$$$$$$"<<endl;
-	// TravelSymbols(tree,0);
-	// cout<<"$$$$$$$$$$$$$$$$$$$$$"<<endl;
+	cout<<"$$$$$$$$$$$$$$$$$$$$$"<<endl;
+	TravelSymbols(tree,0);
+	cout<<"$$$$$$$$$$$$$$$$$$$$$"<<endl;
 	for(int i=0;i<tree->size();i++){
-		
 		Reduce(table,tree->get(i));
-		// cout<<"%%%%%%%%%%%%%%%%%"<<endl;
-		// TravelSymbols(tree->get(i),0);
-		// cout<<"%%%%%%%%%%%%%%%%%"<<endl;
-		// if(tree->symbol->getType()!=EXP){
-			// Symbol* lSymbol=findSymbol(table,tree->symbol->getId());
-			// if(lSymbol==NULL){
-				// error(false,tree->symbol->getLine(),string(tree->symbol->getId()).append(" is not declare"));
-			// }
-			// else if(tree->get(i)->symbol->getRealType()!="ANY"&&tree->get(i)->symbol->getRealType()!=lSymbol->getRealType()){
-				// cout<<"type:"<<tree->get(i)->symbol->getRealType()<<"  %%  "<<lSymbol->getRealType()<<endl;
-				// error(false,tree->symbol->getLine(),string(tree->symbol->getId()).append(" type is ")
-					// .append(tree->get(i)->symbol->getRealType()).append(",").append("exp type is ").append(lSymbol->getRealType()));
-			// }
-		// }
-
-		
 	}	
 
 }
@@ -408,6 +408,7 @@ SymbolTable *parseVarStm(TreeNode *node,vector<string>& list){
         treeNode->symbol->setLine(node->line);
         return treeNode;
     } else if(name=="Ref"){
+		cout<<"*************************type:"<<*node->string_value<<endl;
         treeNode->symbol=new Symbol;
         treeNode->symbol->setLine(node->line);
         treeNode->symbol->setType(REF);
@@ -424,6 +425,13 @@ SymbolTable *parseVarStm(TreeNode *node,vector<string>& list){
         treeNode->symbol->setLine(node->line);
         return treeNode;
     }
+	else if(name=="AUTO"){
+		treeNode->symbol=new Symbol;
+		treeNode->symbol->setType(OP);
+        treeNode->symbol->setLine(node->line);
+        treeNode->symbol->setId(*node->name);
+		return treeNode;
+	}
 	else if(name=="OP"||name=="RELOP"||name=="ASSIGNOP"){
 		treeNode->symbol=new Symbol;
 		treeNode->symbol->setType(OP);

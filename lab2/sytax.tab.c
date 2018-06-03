@@ -1876,13 +1876,13 @@ yyreduce:
 
   case 53:
 #line 160 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=(yyvsp[-1].node);(yyval.node)->add((yyvsp[-2].node));(yyval.node)->add((yyvsp[0].node));}
+    {(yyval.node)=newNode("BoolExp",1,(yyvsp[-1].node));(yyvsp[-1].node)->add((yyvsp[-2].node));(yyvsp[-1].node)->add((yyvsp[0].node));}
 #line 1881 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
 #line 161 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=(yyvsp[-1].node);(yyval.node)->add((yyvsp[-2].node));(yyval.node)->add((yyvsp[0].node));}
+    {(yyval.node)=newNode("BoolExp",1,(yyvsp[-1].node));(yyvsp[-1].node)->add((yyvsp[-2].node));(yyvsp[-1].node)->add((yyvsp[0].node));}
 #line 1887 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1918,13 +1918,13 @@ yyreduce:
 
   case 60:
 #line 168 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("Ref",1,(yyvsp[0].node));(yyval.node)->string_value=new string(*(yyvsp[-2].node)->string_value);}
+    {(yyval.node)=newNode("Ref",1,(yyvsp[0].node));(yyval.node)->string_value=new string("THIS");}
 #line 1923 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
 #line 169 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("Ref",1,(yyvsp[0].node));(yyval.node)->string_value=new string(*(yyvsp[-2].node)->string_value);}
+    {(yyval.node)=newNode("Ref",1,(yyvsp[0].node));(yyval.node)->string_value=new string("THIS");}
 #line 1929 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1990,25 +1990,25 @@ yyreduce:
 
   case 72:
 #line 184 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("Exp",2,(yyvsp[-1].node),(yyvsp[0].node));}
+    {(yyval.node)=newNode("Exp",1,(yyvsp[-1].node));(yyvsp[-1].node)->add((yyvsp[0].node));}
 #line 1995 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
 #line 185 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("Exp",2,(yyvsp[-1].node),(yyvsp[0].node));}
+    {(yyval.node)=newNode("Exp",1,(yyvsp[0].node));(yyvsp[0].node)->add((yyvsp[-1].node));}
 #line 2001 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
 #line 186 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("Exp",2,(yyvsp[-1].node),(yyvsp[0].node));}
+    {(yyval.node)=newNode("Exp",1,(yyvsp[-1].node));(yyvsp[-1].node)->add((yyvsp[0].node));}
 #line 2007 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
 #line 187 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("Exp",2,(yyvsp[-1].node),(yyvsp[0].node));}
+    {(yyval.node)=newNode("Exp",1,(yyvsp[0].node));(yyvsp[0].node)->add((yyvsp[-1].node));}
 #line 2013 "sytax.tab.c" /* yacc.c:1646  */
     break;
 

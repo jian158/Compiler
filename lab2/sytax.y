@@ -157,16 +157,16 @@ Arg:VarType ID{$$=newNode("Arg",2,$1,$2);}
 ;
 
 BoolExp:Exp RELOP Exp{$$=newNode("BoolExp",1,$2);$2->add($1);$2->add($3);}
-	|Exp AND Exp{$$=$2;$$->add($1);$$->add($3);}
-    |Exp OR Exp{$$=$2;$$->add($1);$$->add($3);};
+	|Exp AND Exp{$$=newNode("BoolExp",1,$2);$2->add($1);$2->add($3);}
+    |Exp OR Exp{$$=newNode("BoolExp",1,$2);$2->add($1);$2->add($3);};
 
 Exp:	Constant{$$=newNode("Exp",1,$1);}
 		|Call{$$=newNode("Ref",1,$1);$$->string_value=new string("THIS");}
 		|ID DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
 		|ID DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
 		|ID{$$=$1;}
-		|THIS DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
-		|THIS DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
+		|THIS DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string("THIS");}
+		|THIS DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string("THIS");}
         
 		|Lvalue ASSIGNOP Exp{$$=$2;$$->add($1);$$->add($3);  }
 		|Exp PLUS Exp{$$=$2;$$->add($1);$$->add($3);}
@@ -181,10 +181,10 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
         |MINUS Exp {$$=newNode("Exp",2,$1,$2);}
         |NOT Exp {$$=newNode("Exp",2,$1,$2);}
         |ID ArrayIndex {$$=newNode("Exp",2,$1,$2);adjustNodes($$,1);}
-		|DPLUS ID{$$=newNode("Exp",2,$1,$2);}
-		|ID DPLUS{$$=newNode("Exp",2,$1,$2);}
-		|DMINUS ID{$$=newNode("Exp",2,$1,$2);}
-		|ID DMINUS{$$=newNode("Exp",2,$1,$2);}
+		|DPLUS ID{$$=newNode("Exp",1,$1);$1->add($2);}
+		|ID DPLUS{$$=newNode("Exp",1,$2);$2->add($1);}
+		|DMINUS ID{$$=newNode("Exp",1,$1);$1->add($2);}
+		|ID DMINUS{$$=newNode("Exp",1,$2);$2->add($1);}
 		|NEW Call{$$=newNode("Exp",2,$1,$2);}
 		|NEW TYPE ArrayIndex{$$=newNode("Exp",3,$1,$2,$3);adjustNodes($$,2);}
         ;

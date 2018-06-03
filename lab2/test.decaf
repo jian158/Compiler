@@ -14,16 +14,8 @@ class Computer extends Base
 class Person{
 	String size,name="";
 	void main(){
-		Computer c;
-		String s=c.get("454")*5;
-		size=5*10+s;
-		5;
-		p.get("Hello");
-		int t=c.getName();
-		if(5*10>1){
-			int k=0;
-			
-		}
+		int i=0;
+		i=this.size;
 	}
 }
 
