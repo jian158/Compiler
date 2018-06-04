@@ -85,6 +85,24 @@ public:
 	}
 };
 
+class AnySymbol:public Symbol{
+	static AnySymbol* singleInstance;
+	public:
+	AnySymbol(){
+		setType(ANY);
+	}
+	
+	static AnySymbol *getInstance(){
+		return AnySymbol::singleInstance;
+	}
+	
+	virtual string getRealType(){
+		return "ANY";
+	}
+};
+
+
+
 class Variable:public Symbol{
     bool IsFinal,IsStatic;
     string varType;
@@ -216,10 +234,7 @@ public:
 	string getId(){
 		return symbol->getId();
 	}
-	
-	SymbolTable* getFirst(){
-		return nodes.get(0);
-	}
+
 	
 	SymbolTable* get(const string& Id){
 		return nodes.get(Id);

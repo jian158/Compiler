@@ -14,9 +14,14 @@ class Computer extends Base
 class Person{
 	String size,name="";
 	int count;
+	Person p;
 	void main(){
-		int i=0;
-		count++;
+		int i=0,s;
+		int p;
+		this.p++;
+		++p;
+		Mac m;
+		m.get();
 	}
 }
 

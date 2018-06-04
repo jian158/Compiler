@@ -17,8 +17,8 @@ TreeNode *node;
 
 %token  <node> STATIC ARRAY FINAL BREAK TYPE STRUCT  EXTENDS CLASS RETURN IF ELSE ELIF FOR WHILE ID SPACE SEMI COMMA ASSIGNOP RELOP  DOT NOT LP RP LB RB LC RC AERROR DPLUS DMINUS
 %token  <node> INT FLOAT NULLPTR STR BOOL PLUS MINUS STAR DIV OR AND 
-%token  <node> EOL NEW THIS
-%type   <node> Program EMPTY ClassDefs Class Exp Arg Args ClassStm Fun BaseStm Lines Line IfStm ELIfStm ElseStm ForStm WhileStm BreakStm VarStm DeclareStm  Call CallArgs CallArg Constant ReturnStm VarType ClassStms Arrays ArrayIndex Lvalue BoolExp
+%token  <node> EOL NEW THIS SUPER
+%type   <node> Program IdStm DeclareVarStm ClassPointer EMPTY ClassDefs Class Exp Arg Args ClassStm Fun BaseStm Lines Line IfStm ELIfStm ElseStm ForStm WhileStm BreakStm VarStm DeclareStm  Call CallArgs CallArg Constant ReturnStm VarType ClassStms Arrays ArrayIndex Lvalue BoolExp
 
 
 %right ASSIGNOP
@@ -128,13 +128,17 @@ WhileStm:WHILE LP BoolExp RP LC BaseStm RC{$$=newNode("WhileStm",3,$1,$3,$6);};
 
 ForStm:FOR LP Exp SEMI BoolExp SEMI Exp RP LC BaseStm RC{$$=newNode("ForStm",3,$1,$3,$6);};
 
-DeclareStm:VarType VarStm SEMI{$$=newNode("DeclareStm",1,$2);adjustNodes($$,0);
+DeclareStm:VarType DeclareVarStm SEMI{$$=newNode("DeclareStm",1,$2);adjustNodes($$,0);
 	(*$$->attr)["type"]=*$1->string_value;
 	}
 	|STATIC VarType VarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);(*$$->attr)["type"]=*$2->string_value;(*$$->attr)["static"]=*$1->name;}
 	|FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);(*$$->attr)["type"]=*$2->string_value;(*$$->attr)["final"]=*$1->name;}
 	|STATIC FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",1,$4);adjustNodes($$,0);(*$$->attr)["type"]=*$3->string_value;(*$$->attr)["static"]=*$1->name;(*$$->attr)["final"]=*$2->name;}
 	;
+	
+DeclareVarStm:ID{$$=newNode("VarStm",1,$1);*$1->name="Lvalue";}
+	|ID ASSIGNOP Exp{$$=newNode("VarStm",1,$2);$2->add($1);$2->add($3);*$1->name="Lvalue";}
+	|DeclareVarStm COMMA DeclareVarStm {$$=newNode("VarStm",2,$1,$3);};
 
 VarStm: Exp {$$=newNode("VarStm",1,$1);}
 	|  Exp COMMA  VarStm{$$=newNode("VarStm",1,$1);$$->temp=$3;}
@@ -165,13 +169,10 @@ BoolExp:Exp RELOP Exp{$$=newNode("BoolExp",1,$2);$2->add($1);$2->add($3);}
 Exp:	Constant{$$=newNode("Exp",1,$1);}
 		|Call{$$=newNode("Ref",1,$1);$$->string_value=new string("THIS");}
 		|ID DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
-		|ID DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
-		|ID{$$=$1;cout<<*$1->string_value<<"_____________"<<endl;}
-		|THIS DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string("THIS");}
-		|THIS DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string("THIS");}
-        
+		|ClassPointer DOT Call{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->name);}
+		|IdStm{$$=$1;}
 		|Lvalue ASSIGNOP Exp{$$=$2;$$->add($1);$$->add($3);  }
-		|Exp PLUS Exp{$$=$2;$$->add($1);$$->add($3);cout<<"%%%%%%%%%%"<<endl;}
+		|Exp PLUS Exp{$$=$2;$$->add($1);$$->add($3);}
         |Exp MINUS Exp{$$=$2;$$->add($1);$$->add($3);}
 		
 		|BoolExp{$$=$1;}
@@ -183,21 +184,28 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
         |MINUS Exp {$$=newNode("Exp",2,$1,$2);}
         |NOT Exp {$$=newNode("Exp",2,$1,$2);}
         |ID ArrayIndex {$$=newNode("Exp",2,$1,$2);adjustNodes($$,1);}
-
-		|DPLUS Exp{$$=newNode("Exp",1,$1);$1->add($2);}
-		|Exp DPLUS{$$=newNode("Exp",1,$2);$2->add($1);cout<<"##############"<<endl;}
-		|DMINUS Exp{$$=newNode("Exp",1,$1);$1->add($2);}
-		|Exp DMINUS{$$=newNode("Exp",1,$2);$2->add($1);}
+		|DPLUS IdStm{$$=newNode("Exp",1,$1);$1->add($2);}
+		|IdStm DPLUS{$$=newNode("Exp",1,$2);$2->add($1);}
+		|DMINUS IdStm{$$=newNode("Exp",1,$1);$1->add($2);}
+		|IdStm DMINUS{$$=newNode("Exp",1,$2);$2->add($1);}
 
 		|NEW Call{$$=newNode("Exp",2,$1,$2);}
 		|NEW TYPE ArrayIndex{$$=newNode("Exp",3,$1,$2,$3);adjustNodes($$,2);}
         ;
 		
+IdStm:	ID{$$=$1;}
+		|ID DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
+		|ClassPointer DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->name);};
+		
+ClassPointer:THIS{$$=$1;}
+	|SUPER{$$=$1;};
+		
 ArrayIndex:LB Exp RB{$$=newNode("ArrayIndex",1,$2);}
 		|LB Exp RB ArrayIndex {$$=newNode("ArrayIndex",1,$2);$$->temp=$4;}
 	;
 	
-Lvalue:ID{$$=$1;*$$->name="Lvalue";};
+Lvalue:ID{$$=$1;*$$->name="Lvalue";}
+	|ID ArrayIndex{$$=newNode("LVARRAY",2,$1,$2);};
 		
 Constant:INT {$$=newNode("Constant",1,$1);}
         |FLOAT{$$=newNode("Constant",1,$1);}

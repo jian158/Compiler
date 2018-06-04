@@ -44,7 +44,7 @@ public:
 };
 void createSymbolTable(TreeNode *node,SymbolTable *table,int index);
 SymbolTable *parseVarStm(TreeNode *node,vector<string>& list);
-SymbolTable* getDeclareList(TreeNode* node,vector<string> &list,Rule& rules);
+SymbolTable* getDeclareList(TreeNode* node,vector<string> &list);
 TreeNode* newNode(const char* name,int argc,...);
 void TravelTree(TreeNode* node,int level);
 void adjustNodes(TreeNode* root,int index);

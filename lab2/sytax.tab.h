@@ -89,7 +89,8 @@ extern int yydebug;
     AND = 299,
     EOL = 300,
     NEW = 301,
-    THIS = 302
+    THIS = 302,
+    SUPER = 303
   };
 #endif
 
@@ -102,7 +103,7 @@ union YYSTYPE
 
 TreeNode *node;
 
-#line 106 "sytax.tab.h" /* yacc.c:1909  */
+#line 107 "sytax.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
