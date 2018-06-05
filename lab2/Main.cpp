@@ -184,15 +184,7 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 	Symbol* symbol=tree->symbol;
 	Type type=symbol->getType();
 	if(type==REF&&tree->getSymbol(0)->getType()==VAR){
-		Symbol* varSymbol=tree->getSymbol(0);
-		Symbol* globalSymbol=findSymbol(thisClass,varSymbol->getId());
-		if(globalSymbol==NULL||globalSymbol->getType()!=VAR){
-			error(false,symbol->getLine(),string("var ").append(varSymbol->getId()).append(" don't declare"));
-			tree->symbol=AnySymbol::getInstance();
-		}else{
-            tree->symbol=globalSymbol;
-		}
-		return;
+		goto label;
 	}
 
 	
@@ -212,7 +204,9 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
         return;
     }
 
+label:	
 	if(type==VAR){
+		
 		Symbol* targetSymbol=findSymbol(table,symbol->getId());
 		if(targetSymbol==NULL||targetSymbol->getType()!=VAR){
 			error(false,symbol->getLine(),string("var ").append(symbol->getId())+" don't declare");
@@ -258,6 +252,7 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 		}
 	}
 	else if(type==REF){
+		cout<<"########REF##########:"<<symbol->getId()<<endl;
 		SymbolTable* targetTable=NULL;
 		if(symbol->getId()=="THIS"){
 			targetTable=thisClass;

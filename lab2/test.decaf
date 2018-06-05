@@ -1,4 +1,5 @@
 class Base{
+	bool size;
 	int get(String b){
 		
 	}
@@ -6,12 +7,17 @@ class Base{
 
 class Computer extends Base
 {
+
 	String getName(){
 		
 	}
 }
 
-class Person{
+class Mac{
+	String Id;
+}
+
+class Person extends Computer{
 	String size,name="";
 	int count;
 	Person p;
@@ -20,8 +26,9 @@ class Person{
 		int p;
 		this.p++;
 		++p;
+		int k=super.get("");
 		Mac m;
-		m.get();
+		k=m.Id;
 	}
 }
 
