@@ -60,7 +60,7 @@ void TravelTree(TreeNode* node,int level){
     if(pname=="int")
         cout<<":"<<node->int_value;
     else if(pname=="bool"||pname=="String"||pname=="NULL"||pname=="ID"||pname=="TYPE"||pname=="ASSIGNOP"
-            ||pname=="VarType"||pname=="Call"||pname=="Ref"||pname=="Lvalue"||pname=="OP"||pname=="RELOP"||pname=="AUTO")
+            ||pname=="VarType"||pname=="Call"||pname=="Ref"||pname=="OP"||pname=="RELOP"||pname=="AUTO")
         cout<<":"<<*(node->string_value);
     else if(pname=="float")
         cout<<":"<<node->float_value;
@@ -184,6 +184,16 @@ void ReduceFunction(Symbol* globalSymbol,Symbol* symbol,SymbolTable* tree){
 }
 
 
+void reduceVar(SymbolTable *table,Symbol* symbol,SymbolTable* tree){
+	Symbol* targetSymbol=findSymbol(table,symbol->getId());
+	if(targetSymbol==NULL||targetSymbol->getType()!=VAR){
+		error(false,symbol->getLine(),string("var ").append(symbol->getId())+" don't declare");
+		tree->symbol=AnySymbol::getInstance();
+	}else{
+		tree->symbol=targetSymbol;
+	}
+}
+
 void Reduce(SymbolTable* table,SymbolTable* tree){
 	Symbol* symbol=tree->symbol;
 	Type type=symbol->getType();
@@ -210,21 +220,13 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 
 label:	
 	if(type==VAR){
-		
-		Symbol* targetSymbol=findSymbol(table,symbol->getId());
-		if(targetSymbol==NULL||targetSymbol->getType()!=VAR){
-			error(false,symbol->getLine(),string("var ").append(symbol->getId())+" don't declare");
-			tree->symbol=AnySymbol::getInstance();
-		}else{
-            tree->symbol=targetSymbol;
-		}
+		reduceVar(table,symbol,tree);
 	}
-	
 	else if(type==OP){
 		string t1=tree->getSymbol(0)->getRealType();
 		if(symbol->getId()=="NEW"){
 			Symbol *targetSymbol=tree->getSymbol(0);
-			if(targetSymbol->getType()!=ARRAYINDEX){
+			if(targetSymbol->getType()==FUN){
 				Symbol *classSymbol=findSymbol(symbolRoot,targetSymbol->getId());
 				if(classSymbol==NULL){
 					error(false,symbol->getLine(),string(" No this class ").append(targetSymbol->getId()));
@@ -316,10 +318,17 @@ label:
 			tree->symbol=varSymbol;
 		}
 	}
-	else if(type==ARRAYINDEX){
+	else if(type==NEWARRAY||type==ARRAYINDEX){
 		Symbol* indexSymbol=tree->getSymbol(0);
 		if(indexSymbol->getRealType()!="int"){
 			error(false,symbol->getLine(),"array index must be int");
+		}
+		if(type==ARRAYINDEX){
+			reduceVar(table,symbol,tree);
+			Variable* s=new Variable(symbol->getId());
+			s->setVarType(Symbol::trimArray(tree->symbol->getRealType()));
+			tree->symbol=s;
+			
 		}
 	}
 }
@@ -446,15 +455,21 @@ SymbolTable *parseVarStm(TreeNode *node,vector<string>& list){
         treeNode->symbol->setType(REF);
         treeNode->symbol->setId(*node->string_value);
         return treeNode;
-    }else if (name=="ArrayIndex"){
+    }else if (name=="newArray"){
         treeNode->symbol=new Symbol;
+		treeNode->symbol->setType(NEWARRAY);
+        treeNode->symbol->setLine(node->line);
+        treeNode->symbol->setId(*node->string_value);
+    }
+	else if(name=="ArrayIndex"){
+		treeNode->symbol=new Symbol;
 		treeNode->symbol->setType(ARRAYINDEX);
         treeNode->symbol->setLine(node->line);
         treeNode->symbol->setId(*node->string_value);
-        return treeNode;
-    }else if(name=="Lvalue"){
-        treeNode->symbol=new Variable(*node->string_value);
+	}
+	else if(name=="Lvalue"){
 		list.push_back(*node->string_value);
+        treeNode->symbol=new Variable(*node->string_value);
         treeNode->symbol->setLine(node->line);
         return treeNode;
     }
@@ -466,6 +481,9 @@ SymbolTable *parseVarStm(TreeNode *node,vector<string>& list){
 		return treeNode;
 	}
 	else if(name=="OP"||name=="RELOP"||name=="ASSIGNOP"){
+		if(name=="ASSIGNOP"&&treeNode->getSymbol(0)->getType()==VAR){
+			list.push_back(treeNode->getSymbol(0)->getId());
+		}
 		treeNode->symbol=new Symbol;
 		treeNode->symbol->setType(OP);
         treeNode->symbol->setLine(node->line);

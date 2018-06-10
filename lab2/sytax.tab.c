@@ -1808,13 +1808,13 @@ yyreduce:
 
   case 43:
 #line 135 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("VarStm",1,(yyvsp[0].node));*(yyvsp[0].node)->name="Lvalue";cout<<"############"<<endl;}
+    {(yyval.node)=newNode("Lvalue",0,yylineno);(yyval.node)->string_value=(yyvsp[0].node)->string_value;}
 #line 1813 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
 #line 136 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("VarStm",1,(yyvsp[-1].node));(yyvsp[-1].node)->add((yyvsp[-2].node));(yyvsp[-1].node)->add((yyvsp[0].node));*(yyvsp[-2].node)->name="Lvalue";}
+    {(yyval.node)=(yyvsp[-1].node);(yyvsp[-1].node)->add((yyvsp[-2].node));(yyvsp[-1].node)->add((yyvsp[0].node));}
 #line 1819 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2012,7 +2012,7 @@ yyreduce:
 
   case 76:
 #line 187 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("Exp",1,(yyvsp[-1].node));(yyvsp[-1].node)->add((yyvsp[0].node));}
+    {(yyval.node)=newNode("Exp",1,(yyvsp[-1].node));(yyvsp[-1].node)->add((yyvsp[0].node));*(yyvsp[0].node)->name="newArray";*(yyvsp[0].node)->string_value+="[";}
 #line 2017 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2048,19 +2048,19 @@ yyreduce:
 
   case 82:
 #line 197 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("ArrayIndex",2,(yyvsp[-3].node),(yyvsp[-1].node));(yyval.node)->string_value=new string(*(yyvsp[-3].node)->string_value+"[");}
+    {(yyval.node)=newNode("newArray",1,(yyvsp[-1].node));(yyval.node)->string_value=new string(*(yyvsp[-3].node)->string_value);}
 #line 2053 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
 #line 198 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=newNode("ArrayIndex",2,(yyvsp[-3].node),(yyvsp[-1].node));(yyval.node)->string_value=new string(*(yyvsp[-3].node)->string_value+"[");}
+    {(yyval.node)=newNode("ArrayIndex",1,(yyvsp[-1].node));(yyval.node)->string_value=(yyvsp[-3].node)->string_value;}
 #line 2059 "sytax.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
 #line 201 "sytax.y" /* yacc.c:1646  */
-    {(yyval.node)=(yyvsp[0].node);*(yyval.node)->name="Lvalue";}
+    {(yyval.node)=(yyvsp[0].node);}
 #line 2065 "sytax.tab.c" /* yacc.c:1646  */
     break;
 

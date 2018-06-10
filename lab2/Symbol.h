@@ -12,7 +12,7 @@
 
 using namespace std;
 extern void error(bool e,int line, const string& msg);
-enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT,ARRAYINDEX};
+enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT,NEWARRAY,ARRAYINDEX};
 
 
 typedef union Value{
@@ -74,6 +74,7 @@ public:
 			case _CLASS:result="CLASS";break;
 			case VAR:result="VAR";break;
 			case FUN:result="FUN";break;
+			case NEWARRAY:
 			case ARRAYINDEX:
 			case CONST:result=Id;break;
 			case EXP:result="EXP";break;
@@ -84,6 +85,11 @@ public:
 			default:result="EXP";
 		}
 		return result;
+	}
+	
+	static string trimArray(const string& s){
+		int index=s.find('[');
+		return s.substr(0,index);
 	}
 };
 

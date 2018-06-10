@@ -2,9 +2,9 @@
 
 class Person{
 	void main(){
-		int a=5;
-		
-		int[] p=new int[5.5];
+		int a=5,b;
+		Person[] p=new Person[10];
+		p[a]=new Person();
 	}
 }
 
