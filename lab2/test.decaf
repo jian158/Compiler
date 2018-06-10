@@ -1,34 +1,10 @@
-class Base{
-	bool size;
-	int get(String b){
-		
-	}
-}
 
-class Computer extends Base
-{
 
-	String getName(){
-		
-	}
-}
-
-class Mac{
-	String Id;
-}
-
-class Person extends Computer{
-	String size,name="";
-	int count;
-	Person p;
+class Person{
 	void main(){
-		int i=0,s;
-		int p;
-		this.p++;
-		++p;
-		int k=super.get("");
-		Mac m;
-		k=m.Id;
+		int a=5;
+		
+		int[] p=new int[5.5];
 	}
 }
 

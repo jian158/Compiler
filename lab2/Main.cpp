@@ -113,6 +113,8 @@ void ScannerClass(TreeNode *node){
 		SymbolTable *table=new SymbolTable(symbol,symbolRoot);
 		if(!symbol->getExtClass().empty()&&symbolRoot->get(symbol->getExtClass())!=NULL){
 			table->parent=symbolRoot->get(symbol->getExtClass());
+		}else if(!symbol->getExtClass().empty()){
+			error(false,symbol->getLine(),string("extends class ").append(symbol->getExtClass()).append(" isn't exit"));
 		}
         
         ScannerClassAttr(table,p);
@@ -127,10 +129,11 @@ void ScannerClassAttr(SymbolTable *root,TreeNode *node){
         if(name=="Fun"){
             Fun *symbol=new Fun((*p->attr)["id"]);
             symbol->setVarType((*p->attr)["type"]);
-            symbol->setStatic(!(*p->attr)["static"].empty());
+            symbol->IsStatic=!(*p->attr)["static"].empty();
+			symbol->IsConstruct=!(*p->attr)["construct"].empty();
             symbol->setLine(p->line);
 			
-			if(symbolRoot->get(symbol->getVarType())==NULL){
+			if(!symbol->getVarType().empty()&&symbolRoot->get(symbol->getVarType())==NULL){
 				error(false,symbol->getLine(),string("Unknow type ").append(symbol->getVarType()));
 				symbol->setVarType("ANY");
 			}
@@ -175,8 +178,9 @@ void ReduceFunction(Symbol* globalSymbol,Symbol* symbol,SymbolTable* tree){
 		error(targetTree->size()>fSymbol->size(),symbol->getLine(),"too few arg");
 		error(targetTree->size()<fSymbol->size(),symbol->getLine(),"too many arg");
 	}
-	tree->symbol->setType(CONST);
-	tree->symbol->setId(fSymbol->getRealType());
+	Const *s=new Const();
+	tree->symbol=s;
+	s->setVarType(fSymbol->getRealType());
 }
 
 
@@ -212,15 +216,34 @@ label:
 			error(false,symbol->getLine(),string("var ").append(symbol->getId())+" don't declare");
 			tree->symbol=AnySymbol::getInstance();
 		}else{
-			// ((Variable*)symbol)->setVarType(((Variable*)targetSymbol)->getVarType());
             tree->symbol=targetSymbol;
 		}
 	}
 	
 	else if(type==OP){
-		// cout<<"OP:"<<tree->symbol->getId()<<endl;
 		string t1=tree->getSymbol(0)->getRealType();
+		if(symbol->getId()=="NEW"){
+			Symbol *targetSymbol=tree->getSymbol(0);
+			if(targetSymbol->getType()!=ARRAYINDEX){
+				Symbol *classSymbol=findSymbol(symbolRoot,targetSymbol->getId());
+				if(classSymbol==NULL){
+					error(false,symbol->getLine(),string(" No this class ").append(targetSymbol->getId()));
+				}
+				else if(tree->get(0)->size()!=0){
+					Symbol *constructSymbol=symbolRoot->get(targetSymbol->getId())->getSymbol(targetSymbol->getId());
+					if(constructSymbol==NULL)
+						error(false,symbol->getLine(),string("No this Contruct"));
+					else {
+						ReduceFunction(constructSymbol,symbol,tree);
+					}
+				}
+			}
+			tree->symbol=targetSymbol;
+			return;
+		}
+		
 		string t2=tree->getSymbol(1)->getRealType();
+		// cout<<"OP:"<<tree->symbol->getId()<<endl;
 		// cout<<"Real Type:"<<t1<<"\t"<<t2<<endl;
 		if(t1=="ANY"||t2=="ANY"){
 			tree->symbol=AnySymbol::getInstance();
@@ -252,7 +275,7 @@ label:
 		}
 	}
 	else if(type==REF){
-		cout<<"########REF##########:"<<symbol->getId()<<endl;
+		// cout<<"########REF##########:"<<symbol->getId()<<endl;
 		SymbolTable* targetTable=NULL;
 		if(symbol->getId()=="THIS"){
 			targetTable=thisClass;
@@ -292,10 +315,12 @@ label:
 			Variable* varSymbol=(Variable*)globalSymbol;
 			tree->symbol=varSymbol;
 		}
-		
 	}
-	else if(type==CONST){
-		
+	else if(type==ARRAYINDEX){
+		Symbol* indexSymbol=tree->getSymbol(0);
+		if(indexSymbol->getRealType()!="int"){
+			error(false,symbol->getLine(),"array index must be int");
+		}
 	}
 }
 
@@ -317,8 +342,12 @@ void createSymbolTable(TreeNode *node,SymbolTable *table,int index){
     string name=*p->name;
     if(name=="DeclareStm"){
 		
-		if(symbolRoot->get((*p->attr)["type"])==NULL){
-			error(false,p->line,string("Unknow type ").append((*p->attr)["type"]));
+		string varType=(*p->attr)["type"];
+		int index=varType.find('[');
+		varType=varType.substr(0,index);
+		
+		if(symbolRoot->get(varType)==NULL){
+			error(false,p->line,string("Unknow type ").append(varType));
 		}
 		
         vector<string> declareList;
@@ -419,8 +448,9 @@ SymbolTable *parseVarStm(TreeNode *node,vector<string>& list){
         return treeNode;
     }else if (name=="ArrayIndex"){
         treeNode->symbol=new Symbol;
+		treeNode->symbol->setType(ARRAYINDEX);
         treeNode->symbol->setLine(node->line);
-        treeNode->symbol->setId("[]");
+        treeNode->symbol->setId(*node->string_value);
         return treeNode;
     }else if(name=="Lvalue"){
         treeNode->symbol=new Variable(*node->string_value);
@@ -441,6 +471,12 @@ SymbolTable *parseVarStm(TreeNode *node,vector<string>& list){
         treeNode->symbol->setLine(node->line);
         treeNode->symbol->setId(*node->string_value);
 		return treeNode;
+	}
+	else if(name=="NEW"){
+		treeNode->symbol=new Symbol;
+		treeNode->symbol->setType(OP);
+        treeNode->symbol->setLine(node->line);
+        treeNode->symbol->setId("NEW");
 	}
     else{
         treeNode->symbol=new Symbol;

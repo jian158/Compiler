@@ -12,7 +12,7 @@
 
 using namespace std;
 extern void error(bool e,int line, const string& msg);
-enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT};
+enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT,ARRAYINDEX};
 
 
 typedef union Value{
@@ -74,11 +74,13 @@ public:
 			case _CLASS:result="CLASS";break;
 			case VAR:result="VAR";break;
 			case FUN:result="FUN";break;
+			case ARRAYINDEX:
 			case CONST:result=Id;break;
 			case EXP:result="EXP";break;
 			case REF:result="REF";break;
 			case OP:result="OP";break;
 			case ANY:result="ANY";break;
+
 			default:result="EXP";
 		}
 		return result;
@@ -156,10 +158,13 @@ public:
     void setExtClass(const string& extName){
         extClass=extName;
     }
+	
+	virtual string getRealType(){
+		return getId();
+	}
 };
 
 class Fun:public Symbol{
-    bool IsStatic;
     vector<string> ArgList;
     string returnType;
 public:
@@ -167,15 +172,14 @@ public:
         setType(FUN);
         setId(Id);
     }
+	
+	bool IsStatic;
+	bool IsConstruct;
 
 	string getRealType(){
-		return returnType;
+		return returnType.empty()?getId():returnType;
 	}
 	
-    void setStatic(bool b){
-        IsStatic=b;
-    }
-
     void setVarType(const string& type){
         returnType=type;
     }
@@ -185,7 +189,8 @@ public:
     }
 
     string getVarType()const {
-        return returnType;
+		int index=returnType.find('[');
+        return returnType.substr(0,index);
     }
 
     string get(int index){

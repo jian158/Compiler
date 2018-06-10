@@ -15,7 +15,7 @@ TreeNode *node;
 
 /*declare tokens*/
 
-%token  <node> STATIC ARRAY FINAL BREAK TYPE STRUCT  EXTENDS CLASS RETURN IF ELSE ELIF FOR WHILE ID SPACE SEMI COMMA ASSIGNOP RELOP  DOT NOT LP RP LB RB LC RC AERROR DPLUS DMINUS
+%token  <node> STATIC FINAL BREAK TYPE STRUCT  EXTENDS CLASS RETURN IF ELSE ELIF FOR WHILE ID SPACE SEMI COMMA ASSIGNOP RELOP  DOT NOT LP RP LB RB LC RC AERROR DPLUS DMINUS
 %token  <node> INT FLOAT NULLPTR STR BOOL PLUS MINUS STAR DIV OR AND 
 %token  <node> EOL NEW THIS SUPER
 %type   <node> Program IdStm DeclareVarStm ClassPointer EMPTY ClassDefs Class Exp Arg Args ClassStm Fun BaseStm Lines Line IfStm ELIfStm ElseStm ForStm WhileStm BreakStm VarStm DeclareStm  Call CallArgs CallArg Constant ReturnStm VarType ClassStms Arrays ArrayIndex Lvalue BoolExp
@@ -49,14 +49,11 @@ ClassDefs: Class{$$=$1;}
 	
 	
 Class:CLASS ID LC ClassStms RC{$$=newNode("Class",1,$4);adjustNodes($$,0);
-		//$$->string_value=new string(*$2->string_value);
 		(*$$->attr)["id"]=*$2->string_value;
 	}
 	| CLASS ID EXTENDS ID  LC ClassStms RC{
 		$$=newNode("Class",1,$6);
-		$$->line=$1->line;
 		adjustNodes($$,0);
-		
 		(*$$->attr)["id"]=*$2->string_value;
 		(*$$->attr)["ext"]=*$4->string_value;
 		}
@@ -71,7 +68,7 @@ ClassStm:Fun{$$=$1;}
 	
 Fun:VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$4,$7);$$->line=$1->line;  (*$$->attr)["id"]=*$2->string_value; (*$$->attr)["type"]=*$1->string_value;}
 	|STATIC VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$5,$8);$$->line=$1->line;  (*$$->attr)["id"]=*$3->string_value; (*$$->attr)["type"]=*$2->string_value; (*$$->attr)["static"]=*$1->name;}
-	|ID LP Args RP LC BaseStm RC {$$=newNode("ConstructFun",2,$3,$6);$$->line=$1->line; (*$$->attr)["id"]=*$1->string_value;}
+	|ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$3,$6);(*$$->attr)["id"]=*$1->string_value; (*$$->attr)["construct"]=*$1->string_value; }
     ; 
 	
 VarType:TYPE Arrays{ $$=newNode("VarType",2,$1,$2);adjustNodes($$,1);
@@ -87,10 +84,9 @@ VarType:TYPE Arrays{ $$=newNode("VarType",2,$1,$2);adjustNodes($$,1);
 		}
 	}
 	| TYPE{ $$=newNode("VarType",1,$1);$$->string_value=new string(*$1->string_value);}
-	| ID{ $$=newNode("VarType",1,$1);$$->string_value=new string(*$1->string_value);}
+	| ID{ $$=newNode("VarType",1,$1);$$->string_value=new string(*$1->string_value);};
 	
-Arrays:ARRAY{$$=newNode("Arrays",1,$1);}
-	|ARRAY Arrays{$$=newNode("Arrays",1,$1);$$->temp=$2;};
+Arrays:LB RB{$$=newNode("Arrays",0,yylineno);};
 	
 	
 BaseStm:Lines{$$=newNode("BaseStm",1,$1);adjustNodes($$,0);}
@@ -131,18 +127,16 @@ ForStm:FOR LP Exp SEMI BoolExp SEMI Exp RP LC BaseStm RC{$$=newNode("ForStm",3,$
 DeclareStm:VarType DeclareVarStm SEMI{$$=newNode("DeclareStm",1,$2);adjustNodes($$,0);
 	(*$$->attr)["type"]=*$1->string_value;
 	}
-	|STATIC VarType VarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);(*$$->attr)["type"]=*$2->string_value;(*$$->attr)["static"]=*$1->name;}
-	|FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);(*$$->attr)["type"]=*$2->string_value;(*$$->attr)["final"]=*$1->name;}
-	|STATIC FINAL VarType VarStm SEMI{$$=newNode("DeclareStm",1,$4);adjustNodes($$,0);(*$$->attr)["type"]=*$3->string_value;(*$$->attr)["static"]=*$1->name;(*$$->attr)["final"]=*$2->name;}
+	|STATIC VarType DeclareVarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);(*$$->attr)["type"]=*$2->string_value;(*$$->attr)["static"]=*$1->name;}
+	|FINAL VarType DeclareVarStm SEMI{$$=newNode("DeclareStm",1,$3);adjustNodes($$,0);(*$$->attr)["type"]=*$2->string_value;(*$$->attr)["final"]=*$1->name;}
+	|STATIC FINAL VarType DeclareVarStm SEMI{$$=newNode("DeclareStm",1,$4);adjustNodes($$,0);(*$$->attr)["type"]=*$3->string_value;(*$$->attr)["static"]=*$1->name;(*$$->attr)["final"]=*$2->name;}
 	;
 	
-DeclareVarStm:ID{$$=newNode("VarStm",1,$1);*$1->name="Lvalue";}
+DeclareVarStm:ID{$$=newNode("VarStm",1,$1);*$1->name="Lvalue";cout<<"############"<<endl;}
 	|ID ASSIGNOP Exp{$$=newNode("VarStm",1,$2);$2->add($1);$2->add($3);*$1->name="Lvalue";}
 	|DeclareVarStm COMMA DeclareVarStm {$$=newNode("VarStm",2,$1,$3);};
 
-VarStm: Exp {$$=newNode("VarStm",1,$1);}
-	|  Exp COMMA  VarStm{$$=newNode("VarStm",1,$1);$$->temp=$3;}
-	;
+VarStm: Exp {$$=newNode("VarStm",1,$1);};
 	
 ReturnStm:RETURN SEMI{$$=newNode("ReturnStm",1,$1);}
 	| RETURN Exp SEMI{$$=newNode("ReturnStm",2,$1,$2);}
@@ -183,14 +177,14 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
         |LP Exp RP{$$=newNode("Exp",1,$2);}
         |MINUS Exp {$$=newNode("Exp",2,$1,$2);}
         |NOT Exp {$$=newNode("Exp",2,$1,$2);}
-        |ID ArrayIndex {$$=newNode("Exp",2,$1,$2);adjustNodes($$,1);}
+        |ArrayIndex {$$=newNode("Exp",1,$1);}
 		|DPLUS IdStm{$$=newNode("Exp",1,$1);$1->add($2);}
 		|IdStm DPLUS{$$=newNode("Exp",1,$2);$2->add($1);}
 		|DMINUS IdStm{$$=newNode("Exp",1,$1);$1->add($2);}
 		|IdStm DMINUS{$$=newNode("Exp",1,$2);$2->add($1);}
 
-		|NEW Call{$$=newNode("Exp",2,$1,$2);}
-		|NEW TYPE ArrayIndex{$$=newNode("Exp",3,$1,$2,$3);adjustNodes($$,2);}
+		|NEW Call{$$=newNode("Exp",1,$1);$1->add($2);}
+		|NEW ArrayIndex{$$=newNode("Exp",1,$1);$1->add($2);}
         ;
 		
 IdStm:	ID{$$=$1;}
@@ -200,12 +194,12 @@ IdStm:	ID{$$=$1;}
 ClassPointer:THIS{$$=$1;}
 	|SUPER{$$=$1;};
 		
-ArrayIndex:LB Exp RB{$$=newNode("ArrayIndex",1,$2);}
-		|LB Exp RB ArrayIndex {$$=newNode("ArrayIndex",1,$2);$$->temp=$4;}
+ArrayIndex:TYPE LB Exp RB{$$=newNode("ArrayIndex",2,$1,$3);$$->string_value=new string(*$1->string_value+"[");}
+	| ID LB Exp RB{$$=newNode("ArrayIndex",2,$1,$3);$$->string_value=new string(*$1->string_value+"[");}
 	;
 	
 Lvalue:ID{$$=$1;*$$->name="Lvalue";}
-	|ID ArrayIndex{$$=newNode("LVARRAY",2,$1,$2);};
+	|ArrayIndex{$$=$1;};
 		
 Constant:INT {$$=newNode("Constant",1,$1);}
         |FLOAT{$$=newNode("Constant",1,$1);}
