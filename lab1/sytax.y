@@ -45,11 +45,11 @@ ClassDefs: Class{$$=newNode("ClassDefs",1,$1);}
 	;
 	
 	
-Class:CLASS ID LC ClassStms RC{$$=newNode("Class",3,$1,$2,$4);adjustNodes($$,3);}
+Class:CLASS ID LC ClassStms RC{$$=newNode("Class",3,$1,$2,$4);adjustNodes($$,2);}
 	| CLASS ID EXTENDS ID  LC ClassStms RC{$$=newNode("Class",5,$1,$2,$3,$4,$6);adjustNodes($$,5);}
 	;
 
-ClassStms:ClassStm ClassStms{$$=$1;$$->temp=$2;}
+ClassStms:ClassStm ClassStms{$$=newNode("ClassStms",1,$1);$$->temp=$2;}
 	|EMPTY{};
 	;
 
