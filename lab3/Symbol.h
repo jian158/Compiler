@@ -286,6 +286,8 @@ public:
 	
 };
 
-
-
+#define PRINT(S) cout<<S
+#define ENDL cout<<"\n"
+#define LABEL(x) string("LABEL label")+to_string(x)+" :"
+#define REG(x) string("_t")+to_string(x)
 #endif //UNTITLED_SYBOL_H

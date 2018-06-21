@@ -8,19 +8,19 @@ Terminals unused in grammar
    EOL
 
 
-State 78 conflicts: 1 shift/reduce
-State 82 conflicts: 21 shift/reduce
-State 122 conflicts: 21 shift/reduce, 1 reduce/reduce
-State 124 conflicts: 1 shift/reduce, 22 reduce/reduce
-State 153 conflicts: 21 shift/reduce
-State 154 conflicts: 21 shift/reduce
-State 183 conflicts: 21 shift/reduce
-State 191 conflicts: 21 shift/reduce
-State 193 conflicts: 21 shift/reduce
-State 202 conflicts: 21 shift/reduce
+状态 78conflicts: 1 shift/reduce
+状态 82conflicts: 21 shift/reduce
+状态 122conflicts: 21 shift/reduce, 1 reduce/reduce
+状态 124conflicts: 1 shift/reduce, 22 reduce/reduce
+状态 153conflicts: 21 shift/reduce
+状态 154conflicts: 21 shift/reduce
+状态 183conflicts: 21 shift/reduce
+状态 191conflicts: 21 shift/reduce
+状态 193conflicts: 21 shift/reduce
+状态 202conflicts: 21 shift/reduce
 
 
-Grammar
+语法
 
     0 $accept: Program $end
 
@@ -281,9 +281,9 @@ State 0
 
     CLASS  shift, and go to state 1
 
-    Program    go to state 2
-    ClassDefs  go to state 3
-    Class      go to state 4
+    Program    转到状态 2
+    ClassDefs  转到状态 3
+    Class      转到状态 4
 
 
 State 1
@@ -317,8 +317,8 @@ State 4
 
     $default  reduce using rule 2 (ClassDefs)
 
-    ClassDefs  go to state 7
-    Class      go to state 4
+    ClassDefs  转到状态 7
+    Class      转到状态 4
 
 
 State 5
@@ -334,7 +334,7 @@ State 6
 
     0 $accept: Program $end .
 
-    $default  accept
+    $default  接受
 
 
 State 7
@@ -360,11 +360,11 @@ State 9
     TYPE    shift, and go to state 13
     ID      shift, and go to state 14
 
-    ClassStms   go to state 15
-    ClassStm    go to state 16
-    Fun         go to state 17
-    VarType     go to state 18
-    DeclareStm  go to state 19
+    ClassStms   转到状态 15
+    ClassStm    转到状态 16
+    Fun         转到状态 17
+    VarType     转到状态 18
+    DeclareStm  转到状态 19
 
 
 State 10
@@ -384,7 +384,7 @@ State 11
     TYPE   shift, and go to state 13
     ID     shift, and go to state 22
 
-    VarType  go to state 23
+    VarType  转到状态 23
 
 
 State 12
@@ -394,7 +394,7 @@ State 12
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    VarType  go to state 24
+    VarType  转到状态 24
 
 
 State 13
@@ -406,7 +406,7 @@ State 13
 
     $default  reduce using rule 15 (VarType)
 
-    Arrays  go to state 26
+    Arrays  转到状态 26
 
 
 State 14
@@ -420,7 +420,7 @@ State 14
 
     $default  reduce using rule 16 (VarType)
 
-    Arrays  go to state 28
+    Arrays  转到状态 28
 
 
 State 15
@@ -442,11 +442,11 @@ State 16
 
     $default  reduce using rule 7 (ClassStms)
 
-    ClassStms   go to state 30
-    ClassStm    go to state 16
-    Fun         go to state 17
-    VarType     go to state 18
-    DeclareStm  go to state 19
+    ClassStms   转到状态 30
+    ClassStm    转到状态 16
+    Fun         转到状态 17
+    VarType     转到状态 18
+    DeclareStm  转到状态 19
 
 
 State 17
@@ -463,7 +463,7 @@ State 18
 
     ID  shift, and go to state 31
 
-    DeclareVarStm  go to state 32
+    DeclareVarStm  转到状态 32
 
 
 State 19
@@ -482,11 +482,11 @@ State 20
     TYPE    shift, and go to state 13
     ID      shift, and go to state 14
 
-    ClassStms   go to state 33
-    ClassStm    go to state 16
-    Fun         go to state 17
-    VarType     go to state 18
-    DeclareStm  go to state 19
+    ClassStms   转到状态 33
+    ClassStm    转到状态 16
+    Fun         转到状态 17
+    VarType     转到状态 18
+    DeclareStm  转到状态 19
 
 
 State 21
@@ -496,7 +496,7 @@ State 21
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    VarType  go to state 34
+    VarType  转到状态 34
 
 
 State 22
@@ -508,7 +508,7 @@ State 22
 
     $default  reduce using rule 16 (VarType)
 
-    Arrays  go to state 28
+    Arrays  转到状态 28
 
 
 State 23
@@ -518,7 +518,7 @@ State 23
 
     ID  shift, and go to state 35
 
-    DeclareVarStm  go to state 36
+    DeclareVarStm  转到状态 36
 
 
 State 24
@@ -527,7 +527,7 @@ State 24
 
     ID  shift, and go to state 37
 
-    DeclareVarStm  go to state 38
+    DeclareVarStm  转到状态 38
 
 
 State 25
@@ -553,10 +553,10 @@ State 27
 
     $default  reduce using rule 92 (EMPTY)
 
-    VarType  go to state 40
-    Args     go to state 41
-    Arg      go to state 42
-    EMPTY    go to state 43
+    VarType  转到状态 40
+    Args     转到状态 41
+    Arg      转到状态 42
+    EMPTY    转到状态 43
 
 
 State 28
@@ -614,7 +614,7 @@ State 34
 
     ID  shift, and go to state 37
 
-    DeclareVarStm  go to state 49
+    DeclareVarStm  转到状态 49
 
 
 State 35
@@ -712,14 +712,14 @@ State 44
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 70
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 70
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 45
@@ -731,10 +731,10 @@ State 45
 
     $default  reduce using rule 92 (EMPTY)
 
-    VarType  go to state 40
-    Args     go to state 77
-    Arg      go to state 42
-    EMPTY    go to state 43
+    VarType  转到状态 40
+    Args     转到状态 77
+    Arg      转到状态 42
+    EMPTY    转到状态 43
 
 
 State 46
@@ -750,7 +750,7 @@ State 47
 
     ID  shift, and go to state 37
 
-    DeclareVarStm  go to state 78
+    DeclareVarStm  转到状态 78
 
 
 State 48
@@ -778,10 +778,10 @@ State 50
 
     $default  reduce using rule 92 (EMPTY)
 
-    VarType  go to state 40
-    Args     go to state 80
-    Arg      go to state 42
-    EMPTY    go to state 43
+    VarType  转到状态 40
+    Args     转到状态 80
+    Arg      转到状态 42
+    EMPTY    转到状态 43
 
 
 State 51
@@ -856,14 +856,14 @@ State 57
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 87
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 87
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 58
@@ -885,14 +885,14 @@ State 58
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 88
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 88
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 59
@@ -903,8 +903,8 @@ State 59
     THIS   shift, and go to state 67
     SUPER  shift, and go to state 68
 
-    IdStm         go to state 90
-    ClassPointer  go to state 91
+    IdStm         转到状态 90
+    ClassPointer  转到状态 91
 
 
 State 60
@@ -915,8 +915,8 @@ State 60
     THIS   shift, and go to state 67
     SUPER  shift, and go to state 68
 
-    IdStm         go to state 92
-    ClassPointer  go to state 91
+    IdStm         转到状态 92
+    ClassPointer  转到状态 91
 
 
 State 61
@@ -966,14 +966,14 @@ State 65
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 93
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 93
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 66
@@ -984,8 +984,8 @@ State 66
     TYPE  shift, and go to state 55
     ID    shift, and go to state 94
 
-    ArrayIndex  go to state 95
-    Call        go to state 96
+    ArrayIndex  转到状态 95
+    Call        转到状态 96
 
 
 State 67
@@ -1122,8 +1122,8 @@ State 81
     TYPE  shift, and go to state 13
     ID    shift, and go to state 22
 
-    VarType  go to state 40
-    Arg      go to state 110
+    VarType  转到状态 40
+    Arg      转到状态 110
 
 
 State 82
@@ -1175,26 +1175,26 @@ State 82
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 92 (EMPTY)
 
-    VarType       go to state 119
-    BaseStm       go to state 120
-    Lines         go to state 121
-    Line          go to state 122
-    BreakStm      go to state 123
-    IfStm         go to state 124
-    WhileStm      go to state 125
-    ForStm        go to state 126
-    DeclareStm    go to state 127
-    VarStm        go to state 128
-    ReturnStm     go to state 129
-    BoolExp       go to state 69
-    Exp           go to state 130
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    EMPTY         go to state 131
+    VarType       转到状态 119
+    BaseStm       转到状态 120
+    Lines         转到状态 121
+    Line          转到状态 122
+    BreakStm      转到状态 123
+    IfStm         转到状态 124
+    WhileStm      转到状态 125
+    ForStm        转到状态 126
+    DeclareStm    转到状态 127
+    VarStm        转到状态 128
+    ReturnStm     转到状态 129
+    BoolExp       转到状态 69
+    Exp           转到状态 130
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    EMPTY         转到状态 131
 
 
 State 83
@@ -1216,14 +1216,14 @@ State 83
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 132
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 132
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 84
@@ -1233,7 +1233,7 @@ State 84
 
     ID  shift, and go to state 133
 
-    Call  go to state 134
+    Call  转到状态 134
 
 
 State 85
@@ -1257,17 +1257,17 @@ State 85
 
     $default  reduce using rule 92 (EMPTY)
 
-    BoolExp       go to state 69
-    Exp           go to state 135
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    CallArgs      go to state 136
-    CallArg       go to state 137
-    EMPTY         go to state 138
+    BoolExp       转到状态 69
+    Exp           转到状态 135
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    CallArgs      转到状态 136
+    CallArg       转到状态 137
+    EMPTY         转到状态 138
 
 
 State 86
@@ -1289,14 +1289,14 @@ State 86
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 139
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 139
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 87
@@ -1424,14 +1424,14 @@ State 97
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 143
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 143
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 98
@@ -1453,14 +1453,14 @@ State 98
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 144
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 144
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 99
@@ -1482,14 +1482,14 @@ State 99
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 145
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 145
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 100
@@ -1511,14 +1511,14 @@ State 100
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 146
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 146
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 101
@@ -1540,14 +1540,14 @@ State 101
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 147
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 147
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 102
@@ -1569,14 +1569,14 @@ State 102
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 148
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 148
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 103
@@ -1598,14 +1598,14 @@ State 103
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 149
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 149
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 104
@@ -1629,7 +1629,7 @@ State 106
 
     ID  shift, and go to state 150
 
-    Call  go to state 151
+    Call  转到状态 151
 
 
 State 107
@@ -1651,14 +1651,14 @@ State 107
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 152
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 152
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 108
@@ -1691,7 +1691,7 @@ State 111
     TYPE   shift, and go to state 13
     ID     shift, and go to state 22
 
-    VarType  go to state 155
+    VarType  转到状态 155
 
 
 State 112
@@ -1711,7 +1711,7 @@ State 113
 
     $default  reduce using rule 15 (VarType)
 
-    Arrays  go to state 26
+    Arrays  转到状态 26
 
 
 State 114
@@ -1735,14 +1735,14 @@ State 114
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 159
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 159
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 115
@@ -1783,7 +1783,7 @@ State 118
     ID        reduce using rule 16 (VarType)
     $default  reduce using rule 74 (IdStm)
 
-    Arrays  go to state 28
+    Arrays  转到状态 28
 
 
 State 119
@@ -1792,7 +1792,7 @@ State 119
 
     ID  shift, and go to state 37
 
-    DeclareVarStm  go to state 32
+    DeclareVarStm  转到状态 32
 
 
 State 120
@@ -1861,25 +1861,25 @@ State 122
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 19 (Lines)
 
-    VarType       go to state 119
-    Lines         go to state 165
-    Line          go to state 122
-    BreakStm      go to state 123
-    IfStm         go to state 124
-    WhileStm      go to state 125
-    ForStm        go to state 126
-    DeclareStm    go to state 127
-    VarStm        go to state 128
-    ReturnStm     go to state 129
-    BoolExp       go to state 69
-    Exp           go to state 130
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    EMPTY         go to state 131
+    VarType       转到状态 119
+    Lines         转到状态 165
+    Line          转到状态 122
+    BreakStm      转到状态 123
+    IfStm         转到状态 124
+    WhileStm      转到状态 125
+    ForStm        转到状态 126
+    DeclareStm    转到状态 127
+    VarStm        转到状态 128
+    ReturnStm     转到状态 129
+    BoolExp       转到状态 69
+    Exp           转到状态 130
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    EMPTY         转到状态 131
 
 
 State 123
@@ -1943,8 +1943,8 @@ State 124
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 22 (Line)
 
-    ElseStm  go to state 167
-    EMPTY    go to state 168
+    ElseStm  转到状态 167
+    EMPTY    转到状态 168
 
 
 State 125
@@ -2346,26 +2346,26 @@ State 153
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 92 (EMPTY)
 
-    VarType       go to state 119
-    BaseStm       go to state 176
-    Lines         go to state 121
-    Line          go to state 122
-    BreakStm      go to state 123
-    IfStm         go to state 124
-    WhileStm      go to state 125
-    ForStm        go to state 126
-    DeclareStm    go to state 127
-    VarStm        go to state 128
-    ReturnStm     go to state 129
-    BoolExp       go to state 69
-    Exp           go to state 130
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    EMPTY         go to state 131
+    VarType       转到状态 119
+    BaseStm       转到状态 176
+    Lines         转到状态 121
+    Line          转到状态 122
+    BreakStm      转到状态 123
+    IfStm         转到状态 124
+    WhileStm      转到状态 125
+    ForStm        转到状态 126
+    DeclareStm    转到状态 127
+    VarStm        转到状态 128
+    ReturnStm     转到状态 129
+    BoolExp       转到状态 69
+    Exp           转到状态 130
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    EMPTY         转到状态 131
 
 
 State 154
@@ -2417,26 +2417,26 @@ State 154
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 92 (EMPTY)
 
-    VarType       go to state 119
-    BaseStm       go to state 177
-    Lines         go to state 121
-    Line          go to state 122
-    BreakStm      go to state 123
-    IfStm         go to state 124
-    WhileStm      go to state 125
-    ForStm        go to state 126
-    DeclareStm    go to state 127
-    VarStm        go to state 128
-    ReturnStm     go to state 129
-    BoolExp       go to state 69
-    Exp           go to state 130
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    EMPTY         go to state 131
+    VarType       转到状态 119
+    BaseStm       转到状态 177
+    Lines         转到状态 121
+    Line          转到状态 122
+    BreakStm      转到状态 123
+    IfStm         转到状态 124
+    WhileStm      转到状态 125
+    ForStm        转到状态 126
+    DeclareStm    转到状态 127
+    VarStm        转到状态 128
+    ReturnStm     转到状态 129
+    BoolExp       转到状态 69
+    Exp           转到状态 130
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    EMPTY         转到状态 131
 
 
 State 155
@@ -2445,7 +2445,7 @@ State 155
 
     ID  shift, and go to state 37
 
-    DeclareVarStm  go to state 36
+    DeclareVarStm  转到状态 36
 
 
 State 156
@@ -2476,14 +2476,14 @@ State 157
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 132
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 132
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 158
@@ -2533,14 +2533,14 @@ State 160
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 179
-    Exp           go to state 180
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 179
+    Exp           转到状态 180
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 161
@@ -2562,14 +2562,14 @@ State 161
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 181
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 181
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 162
@@ -2591,14 +2591,14 @@ State 162
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 182
-    Exp           go to state 180
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 182
+    Exp           转到状态 180
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 163
@@ -2622,14 +2622,14 @@ State 163
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 139
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 139
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 164
@@ -2700,15 +2700,15 @@ State 171
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 135
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    CallArg       go to state 184
+    BoolExp       转到状态 69
+    Exp           转到状态 135
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    CallArg       转到状态 184
 
 
 State 172
@@ -2869,26 +2869,26 @@ State 183
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 92 (EMPTY)
 
-    VarType       go to state 119
-    BaseStm       go to state 190
-    Lines         go to state 121
-    Line          go to state 122
-    BreakStm      go to state 123
-    IfStm         go to state 124
-    WhileStm      go to state 125
-    ForStm        go to state 126
-    DeclareStm    go to state 127
-    VarStm        go to state 128
-    ReturnStm     go to state 129
-    BoolExp       go to state 69
-    Exp           go to state 130
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    EMPTY         go to state 131
+    VarType       转到状态 119
+    BaseStm       转到状态 190
+    Lines         转到状态 121
+    Line          转到状态 122
+    BreakStm      转到状态 123
+    IfStm         转到状态 124
+    WhileStm      转到状态 125
+    ForStm        转到状态 126
+    DeclareStm    转到状态 127
+    VarStm        转到状态 128
+    ReturnStm     转到状态 129
+    BoolExp       转到状态 69
+    Exp           转到状态 130
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    EMPTY         转到状态 131
 
 
 State 184
@@ -2938,14 +2938,14 @@ State 188
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 192
-    Exp           go to state 180
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 192
+    Exp           转到状态 180
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 189
@@ -3011,26 +3011,26 @@ State 191
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 92 (EMPTY)
 
-    VarType       go to state 119
-    BaseStm       go to state 195
-    Lines         go to state 121
-    Line          go to state 122
-    BreakStm      go to state 123
-    IfStm         go to state 124
-    WhileStm      go to state 125
-    ForStm        go to state 126
-    DeclareStm    go to state 127
-    VarStm        go to state 128
-    ReturnStm     go to state 129
-    BoolExp       go to state 69
-    Exp           go to state 130
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    EMPTY         go to state 131
+    VarType       转到状态 119
+    BaseStm       转到状态 195
+    Lines         转到状态 121
+    Line          转到状态 122
+    BreakStm      转到状态 123
+    IfStm         转到状态 124
+    WhileStm      转到状态 125
+    ForStm        转到状态 126
+    DeclareStm    转到状态 127
+    VarStm        转到状态 128
+    ReturnStm     转到状态 129
+    BoolExp       转到状态 69
+    Exp           转到状态 130
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    EMPTY         转到状态 131
 
 
 State 192
@@ -3092,26 +3092,26 @@ State 193
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 92 (EMPTY)
 
-    VarType       go to state 119
-    BaseStm       go to state 197
-    Lines         go to state 121
-    Line          go to state 122
-    BreakStm      go to state 123
-    IfStm         go to state 124
-    WhileStm      go to state 125
-    ForStm        go to state 126
-    DeclareStm    go to state 127
-    VarStm        go to state 128
-    ReturnStm     go to state 129
-    BoolExp       go to state 69
-    Exp           go to state 130
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    EMPTY         go to state 131
+    VarType       转到状态 119
+    BaseStm       转到状态 197
+    Lines         转到状态 121
+    Line          转到状态 122
+    BreakStm      转到状态 123
+    IfStm         转到状态 124
+    WhileStm      转到状态 125
+    ForStm        转到状态 126
+    DeclareStm    转到状态 127
+    VarStm        转到状态 128
+    ReturnStm     转到状态 129
+    BoolExp       转到状态 69
+    Exp           转到状态 130
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    EMPTY         转到状态 131
 
 
 State 194
@@ -3147,14 +3147,14 @@ State 196
     THIS    shift, and go to state 67
     SUPER   shift, and go to state 68
 
-    BoolExp       go to state 69
-    Exp           go to state 199
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
+    BoolExp       转到状态 69
+    Exp           转到状态 199
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
 
 
 State 197
@@ -3255,26 +3255,26 @@ State 202
     SUPER     [reduce using rule 92 (EMPTY)]
     $default  reduce using rule 92 (EMPTY)
 
-    VarType       go to state 119
-    BaseStm       go to state 203
-    Lines         go to state 121
-    Line          go to state 122
-    BreakStm      go to state 123
-    IfStm         go to state 124
-    WhileStm      go to state 125
-    ForStm        go to state 126
-    DeclareStm    go to state 127
-    VarStm        go to state 128
-    ReturnStm     go to state 129
-    BoolExp       go to state 69
-    Exp           go to state 130
-    IdStm         go to state 71
-    ClassPointer  go to state 72
-    ArrayIndex    go to state 73
-    Lvalue        go to state 74
-    Constant      go to state 75
-    Call          go to state 76
-    EMPTY         go to state 131
+    VarType       转到状态 119
+    BaseStm       转到状态 203
+    Lines         转到状态 121
+    Line          转到状态 122
+    BreakStm      转到状态 123
+    IfStm         转到状态 124
+    WhileStm      转到状态 125
+    ForStm        转到状态 126
+    DeclareStm    转到状态 127
+    VarStm        转到状态 128
+    ReturnStm     转到状态 129
+    BoolExp       转到状态 69
+    Exp           转到状态 130
+    IdStm         转到状态 71
+    ClassPointer  转到状态 72
+    ArrayIndex    转到状态 73
+    Lvalue        转到状态 74
+    Constant      转到状态 75
+    Call          转到状态 76
+    EMPTY         转到状态 131
 
 
 State 203

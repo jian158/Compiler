@@ -45,8 +45,32 @@ class Person extends Base{
 		return 1.5;
 	}
 	
-	void print(String s,int a){ //不需要返回值
-		return s;
+	void print(String s,int a){ 
+		
+	}
+}
+
+
+class Main extends Base{
+	void main(){
+		int k=this.count;
+		k++;
+		if(k>0){
+			int[] arr=new int[k];
+			Mac m=new Mac();
+			m.test();
+			if(k==5){
+				k=arr[k];
+				arr[5]=0;
+			}
+		}else{
+			
+		}
+		while(k-->=0){
+			Mac[] ms=new Mac[10];
+			Mac m=ms[k];
+			m.test();
+		}
 	}
 }
 

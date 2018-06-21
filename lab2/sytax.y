@@ -53,6 +53,7 @@ Class:CLASS ID LC ClassStms RC{$$=newNode("Class",1,$4);adjustNodes($$,0);
 	}
 	| CLASS ID EXTENDS ID  LC ClassStms RC{
 		$$=newNode("Class",1,$6);
+		$$->line=$1->line;
 		adjustNodes($$,0);
 		(*$$->attr)["id"]=*$2->string_value;
 		(*$$->attr)["ext"]=*$4->string_value;
@@ -68,7 +69,7 @@ ClassStm:Fun{$$=$1;}
 	
 Fun:VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$4,$7);$$->line=$1->line;  (*$$->attr)["id"]=*$2->string_value; (*$$->attr)["type"]=*$1->string_value;}
 	|STATIC VarType ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$5,$8);$$->line=$1->line;  (*$$->attr)["id"]=*$3->string_value; (*$$->attr)["type"]=*$2->string_value; (*$$->attr)["static"]=*$1->name;}
-	|ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$3,$6);(*$$->attr)["id"]=*$1->string_value; (*$$->attr)["construct"]=*$1->string_value; }
+	|ID LP Args RP LC BaseStm RC {$$=newNode("Fun",2,$3,$6);(*$$->attr)["id"]=*$1->string_value; }
     ; 
 	
 VarType:TYPE Arrays{ $$=newNode("VarType",2,$1,$2);adjustNodes($$,1);
@@ -189,13 +190,14 @@ Exp:	Constant{$$=newNode("Exp",1,$1);}
         ;
 		
 IdStm:	ID{$$=$1;}
+		|ArrayIndex DOT ID{$$=newNode("Ref",1,$3);$$->string_value=$1->string_value;}
 		|ID DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->string_value);}
 		|ClassPointer DOT ID{$$=newNode("Ref",1,$3);$$->string_value=new string(*$1->name);};
 		
 ClassPointer:THIS{$$=$1;}
 	|SUPER{$$=$1;};
 		
-ArrayIndex:TYPE LB Exp RB{$$=newNode("newArray",1,$3);$$->string_value=new string(*$1->string_value);}
+ArrayIndex:TYPE LB Exp RB{$$=newNode("newArray",1,$3);$$->string_value=$1->string_value;}
 	| ID LB Exp RB{$$=newNode("ArrayIndex",1,$3);$$->string_value=$1->string_value;}
 	;
 	

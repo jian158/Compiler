@@ -3,6 +3,7 @@ AnySymbol *(AnySymbol::singleInstance)=new AnySymbol;
 SymbolTable *symbolRoot;
 SymbolTable *thisClass,*thisFun; 
 
+unsigned int label= 0;
 
 void startSymbolCreate(TreeNode *node){
 	cout<<"******************startSymbolCreate********************"<<endl;
@@ -165,8 +166,6 @@ label:
 		}
 		
 		string t2=tree->getSymbol(1)->getRealType();
-		// cout<<"OP:"<<tree->symbol->getId()<<endl;
-		// cout<<"Real Type:"<<t1<<"\t"<<t2<<endl;
 		if(t1=="ANY"||t2=="ANY"){
 			tree->symbol=AnySymbol::getInstance();
 		} 
@@ -312,7 +311,7 @@ void createSymbolTable(TreeNode *node,SymbolTable *table,int index){
 		vector<string> declareList;
         SymbolTable* varTree=getDeclareList(p,declareList);
 		symbolReduce(table,varTree);
-	}else if(name=="IfStm"||name=="ELIfStm"||name=="ElseStm"||name=="WhileStm"){
+	}else if(name=="IfStm"||name=="ElseStm"||name=="WhileStm"){
 		Symbol* symbol=new Segment(to_string(table->size()).append(name));
 		SymbolTable* T=new SymbolTable(symbol,table);
 		createSymbolTable(p,T,0);

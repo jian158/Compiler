@@ -112,7 +112,7 @@ class AnySymbol:public Symbol{
 
 
 class Variable:public Symbol{
-    bool IsFinal,IsStatic;
+    // bool IsStatic;
     string varType;
 public:
     Variable(const string& Id){
@@ -132,21 +132,15 @@ public:
         return varType;
     }
 
-    bool isFinal() const {
-        return IsFinal;
-    }
 
-    bool isStatic() const{
-        return IsStatic;
-    }
+    // bool isStatic() const{
+        // return IsStatic;
+    // }
 
-    void setFinal(bool b){
-        IsFinal=b;
-    }
 
-    void setStatic(bool b){
-        IsStatic=b;
-    }
+    // void setStatic(bool b){
+        // IsStatic=b;
+    // }
 
 };
 

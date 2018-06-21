@@ -48,7 +48,7 @@ SymbolTable* getDeclareList(TreeNode* node,vector<string> &list);
 TreeNode* newNode(const char* name,int argc,...);
 void TravelTree(TreeNode* node,int level);
 void adjustNodes(TreeNode* root,int index);
-void TravelSymbols(SymbolTable* table,int level);
+void TravelSymbols(SymbolTable* table,int level,int index);
 void startSymbolCreate(TreeNode *node);
 
 void ScannerClass(TreeNode *node);
