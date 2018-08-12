@@ -1,37 +1,56 @@
-class fruit
-{
-    int kind;
-    int taste;
-    int value(int m, int n)
-    {
-        int result;
-        kind = 1;
-        if (m > 0)
-        {
-            if (m == 1){
-                result = n * taste + kind;
-            }
-            else{
-                result = n * taste;
-            }
-        }
-        else{
-            result = n * taste - kind;
-        }
-        return result;
-    }
+
+class Base{
+	int count=0;
 }
 
-class Main
-{
-    void main()
-    {
-        int x;
-        int y;
-        fruit apple;
-        apple = new fruit();
-        apple.kind = 2;
-        apple.taste = 6;
-        apple.value(x, y);
-    }
+class Mac{
+	void test(int a,bool b){
+		int a;
+		super.count=5;  //无super指针
+	}
 }
+
+class People extends MAC {  //MAC不存在
+	String Id;
+}
+
+class Person extends Base{
+	void main(){
+		int i,j,k;
+		String s;
+		get();  //未定义成员函数
+
+		int i;  //重复定义
+		
+		i=s;  //赋值类型不同
+		
+		k=i+1.5; //运算类型不同
+		
+		k=arr[i];  //未定义arr
+		
+		print(s,1.7); //函数参数不一致
+		print(s);     //参数少
+		print(s,i,8); //参数多
+		
+		int[] arr=new int[20];
+		
+		arr[s]=10;  //数组下标必须数字
+		
+		MAC m;   //未定义的类
+		
+		s++;   //++、--自增只支持int
+		
+	}
+	
+	int getAge(){  //返回值不对
+		int a;
+		return 1.5;
+	}
+	
+	void print(String s,int a){ 
+		
+	}
+}
+
+
+

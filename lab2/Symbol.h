@@ -12,37 +12,23 @@
 
 using namespace std;
 extern void error(bool e,int line, const string& msg);
-enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT,NEWARRAY,ARRAYINDEX};
+enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT,NEWARRAY,ARRAYINDEX,AUTO};
 
-
-typedef union Value{
-    string *string_value;
-    int int_value;
-    float float_value;
-}Value;
 
 class Symbol{
 protected:
     Type  type;
     string Id;
     int line;
-    Value value;
-    bool isNull;
 public:
 	Symbol(){
-		setType(EXP);
+		setType(ANY);
 	}
     virtual Type getType(){
         return type;
     }
     virtual string getId(){
         return Id;
-    }
-    virtual Value getValue(){
-        return value;
-    }
-    virtual void setNull(bool b){
-        isNull=b;
     }
 
     void setType(Type type){
@@ -59,10 +45,6 @@ public:
     void setId(string Id){
         this->Id=Id;
     }
-	
-	virtual void setRealType(Type type){
-		this->type=type;
-	}
 	
 	virtual string getRealType(){
 		return toString();
@@ -131,16 +113,6 @@ public:
     string getVarType()const {
         return varType;
     }
-
-
-    // bool isStatic() const{
-        // return IsStatic;
-    // }
-
-
-    // void setStatic(bool b){
-        // IsStatic=b;
-    // }
 
 };
 

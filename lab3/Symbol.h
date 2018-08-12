@@ -12,37 +12,23 @@
 
 using namespace std;
 extern void error(bool e,int line, const string& msg);
-enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT,NEWARRAY,ARRAYINDEX};
+enum Type{_CLASS,VAR,FUN,CONST,REF,EXP,OP,ANY,SEGMENT,NEWARRAY,ARRAYINDEX,AUTO};
 
-
-typedef union Value{
-    string *string_value;
-    int int_value;
-    float float_value;
-}Value;
 
 class Symbol{
 protected:
     Type  type;
     string Id;
     int line;
-    Value value;
-    bool isNull;
 public:
 	Symbol(){
-		setType(EXP);
+		setType(ANY);
 	}
     virtual Type getType(){
         return type;
     }
     virtual string getId(){
         return Id;
-    }
-    virtual Value getValue(){
-        return value;
-    }
-    virtual void setNull(bool b){
-        isNull=b;
     }
 
     void setType(Type type){
@@ -59,10 +45,6 @@ public:
     void setId(string Id){
         this->Id=Id;
     }
-	
-	virtual void setRealType(Type type){
-		this->type=type;
-	}
 	
 	virtual string getRealType(){
 		return toString();
@@ -112,7 +94,7 @@ class AnySymbol:public Symbol{
 
 
 class Variable:public Symbol{
-    bool IsFinal,IsStatic;
+    // bool IsStatic;
     string varType;
 public:
     Variable(const string& Id){
@@ -130,22 +112,6 @@ public:
 
     string getVarType()const {
         return varType;
-    }
-
-    bool isFinal() const {
-        return IsFinal;
-    }
-
-    bool isStatic() const{
-        return IsStatic;
-    }
-
-    void setFinal(bool b){
-        IsFinal=b;
-    }
-
-    void setStatic(bool b){
-        IsStatic=b;
     }
 
 };
@@ -286,8 +252,6 @@ public:
 	
 };
 
-#define PRINT(S) cout<<S
-#define ENDL cout<<"\n"
-#define LABEL(x) string("LABEL label")+to_string(x)+" :"
-#define REG(x) string("_t")+to_string(x)
+
+
 #endif //UNTITLED_SYBOL_H

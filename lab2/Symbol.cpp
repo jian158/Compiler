@@ -16,7 +16,7 @@ void startSymbolCreate(TreeNode *node){
 	cout<<"******************endSymbolCreate********************"<<endl;
 }
 
-void ScannerClass(TreeNode *node){
+void ScannerClass(TreeNode *node){  //把类添加到符号表
     symbolRoot=new SymbolTable;
 	new SymbolTable(new Class("int"),symbolRoot);
 	new SymbolTable(new Class("float"),symbolRoot);
@@ -41,7 +41,7 @@ void ScannerClass(TreeNode *node){
 
 }
 
-void ScannerClassAttr(SymbolTable *root,TreeNode *node){
+void ScannerClassAttr(SymbolTable *root,TreeNode *node){ //把函数添加到符号表
     for (int i = 0; i < node->size(); ++i) {
         TreeNode *p=node->getChild(i);
         string name=*p->name;
@@ -65,7 +65,7 @@ void ScannerClassAttr(SymbolTable *root,TreeNode *node){
     }
 }
 
-Symbol* findSymbol(SymbolTable* table,const string& target){
+Symbol* findSymbol(SymbolTable* table,const string& target){ //查找符号
 	if(table==NULL){
 		return NULL;
 	}
@@ -76,7 +76,7 @@ Symbol* findSymbol(SymbolTable* table,const string& target){
 	return findSymbol(table->parent,target);
 }
 
-void ReduceFunction(Symbol* globalSymbol,Symbol* symbol,SymbolTable* tree){
+void ReduceFunction(Symbol* globalSymbol,Symbol* symbol,SymbolTable* tree){ //规约函数
 	Fun *fSymbol=(Fun*)globalSymbol;
 	SymbolTable* targetTree=tree->get(0);
 	if(targetTree->size()==fSymbol->size()){
@@ -102,7 +102,7 @@ void ReduceFunction(Symbol* globalSymbol,Symbol* symbol,SymbolTable* tree){
 }
 
 
-void reduceVar(SymbolTable *table,Symbol* symbol,SymbolTable* tree){
+void reduceVar(SymbolTable *table,Symbol* symbol,SymbolTable* tree){  //规约变量
 	Symbol* targetSymbol=findSymbol(table,symbol->getId());
 	if(targetSymbol==NULL||targetSymbol->getType()!=VAR){
 		error(false,symbol->getLine(),string("var ").append(symbol->getId())+" don't declare");
@@ -112,7 +112,7 @@ void reduceVar(SymbolTable *table,Symbol* symbol,SymbolTable* tree){
 	}
 }
 
-void Reduce(SymbolTable* table,SymbolTable* tree){
+void Reduce(SymbolTable* table,SymbolTable* tree){  //规约
 	Symbol* symbol=tree->symbol;
 	Type type=symbol->getType();
 	if(type==REF&&tree->getSymbol(0)->getType()==VAR){
@@ -124,10 +124,10 @@ void Reduce(SymbolTable* table,SymbolTable* tree){
 	}
 
     /*  */
-    if(symbol->getId()=="AUTO"){
+    if(type==AUTO){
         Symbol* firstSymbol=tree->getSymbol(0);
         if(!(firstSymbol->getType()==VAR&&firstSymbol->getRealType()=="int")){
-            error(false,symbol->getLine(),"auto op only supprot var int");
+            error(false,symbol->getLine(),string(symbol->getId())+" only supprot var int");
 			tree->symbol=AnySymbol::getInstance();
         }else{
             tree->symbol=firstSymbol;
@@ -401,9 +401,9 @@ SymbolTable *parseVarStm(TreeNode *node,vector<string>& list){
     }
 	else if(name=="AUTO"){
 		treeNode->symbol=new Symbol;
-		treeNode->symbol->setType(OP);
+		treeNode->symbol->setType(AUTO);
         treeNode->symbol->setLine(node->line);
-        treeNode->symbol->setId(*node->name);
+        treeNode->symbol->setId(*node->string_value);
 		return treeNode;
 	}
 	else if(name=="OP"||name=="RELOP"||name=="ASSIGNOP"){

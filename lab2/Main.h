@@ -16,7 +16,6 @@ extern int yylineno;
 extern int yyparse();
 extern SymbolTable *symbolRoot;
 
-typedef map<string,bool> Rule;
 class TreeNode {
 public:
     int line;
